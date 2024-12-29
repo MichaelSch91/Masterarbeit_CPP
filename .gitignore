@@ -51,3 +51,10 @@ LogisticMap/x64/Debug/LogisticMap.tlog/LogisticMap.lastbuildstate
 LogisticMap/x64/Debug/LogisticMap.tlog/link.write.1.tlog
 LogisticMap/x64/Debug/LogisticMap.tlog/link.secondary.1.tlog
 LogisticMap/x64/Debug/LogisticMap.tlog/link.read.1.tlog
+*.ilk
+*.tlog
+/x64/Debug/LogisticMap.pdb
+/LogisticMap/x64/Debug/LogisticMap.ilk
+/LogisticMap/x64/Debug/LogisticMap.tlog/link.read.1.tlog
+/LogisticMap/x64/Debug/vc143.idb
+/LogisticMap/x64/Debug/vc143.pdb
