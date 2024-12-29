@@ -391,7 +391,7 @@ int main()
     }
     else {
         std::cout << "Es wurden keine CSV-Dateien erstellt.";
-    }
+    }.
 
     */
 }
