@@ -16,7 +16,7 @@ bool create_csv = 0;
 
 class Logisticmap {
 public:
-    int i = 100'000'000;
+    int i = 100'000;
     long double r = 3.9;
     long double s = 0.1;
     long double start_step = 0.01;

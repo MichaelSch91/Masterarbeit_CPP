@@ -1,6 +1,6 @@
 ﻿  LogisticMap.cpp
-C:\Users\micha\source\repos\LogisticMap\LogisticMap.cpp(83,17): warning C4244: "Initialisierung": Konvertierung von "long double" in "float", möglicher Datenverlust
-C:\Users\micha\source\repos\LogisticMap\LogisticMap.cpp(86,68): warning C4244: "Argument": Konvertierung von "long double" in "float", möglicher Datenverlust
-C:\Users\micha\source\repos\LogisticMap\LogisticMap.cpp(350,1): warning C4715: "list_check_iteration": Nicht alle Codepfade geben einen Wert zurück.
-C:\Users\micha\source\repos\LogisticMap\LogisticMap.cpp(336,1): warning C4715: "list_check_value": Nicht alle Codepfade geben einen Wert zurück.
-  LogisticMap.vcxproj -> C:\Users\micha\source\repos\LogisticMap\x64\Debug\LogisticMap.exe
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.cpp(83,17): warning C4244: "Initialisierung": Konvertierung von "long double" in "float", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.cpp(86,68): warning C4244: "Argument": Konvertierung von "long double" in "float", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.cpp(336,1): warning C4715: "list_check_value": Nicht alle Codepfade geben einen Wert zurück.
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.cpp(350,1): warning C4715: "list_check_iteration": Nicht alle Codepfade geben einen Wert zurück.
+  LogisticMap.vcxproj -> C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\x64\Debug\LogisticMap.exe
