@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +28,7 @@
               "RelativeDocumentMoniker": "LogisticMap.cpp",
               "ToolTip": "C:\\Users\\micha\\source\\repos\\LogisticMap\\Masterarbeit_CPP\\LogisticMap.cpp",
               "RelativeToolTip": "LogisticMap.cpp",
-              "ViewState": "AgIAAGsBAAAAAAAAAAAAABQAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAHoBAAAAAAAAAAAAAI0BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-12-29T00:07:41.787Z",
               "EditorCaption": ""
