@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\micha\\source\\repos\\LogisticMap\\Masterarbeit_CPP\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{A9A763FC-4EAF-4C95-8A77-DA7DB8AD7411}|LogisticMap.vcxproj|C:\\Users\\micha\\source\\repos\\LogisticMap\\Masterarbeit_CPP\\LogisticMap.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A9A763FC-4EAF-4C95-8A77-DA7DB8AD7411}|LogisticMap.vcxproj|solutionrelative:LogisticMap.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,24 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LogisticMap.cpp",
-              "DocumentMoniker": "C:\\Users\\micha\\source\\repos\\LogisticMap\\Masterarbeit_CPP\\LogisticMap.cpp",
-              "RelativeDocumentMoniker": "LogisticMap.cpp",
-              "ToolTip": "C:\\Users\\micha\\source\\repos\\LogisticMap\\Masterarbeit_CPP\\LogisticMap.cpp",
-              "RelativeToolTip": "LogisticMap.cpp",
-              "ViewState": "AgIAAHoBAAAAAAAAAAAAAI0BAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-12-29T00:07:41.787Z",
-              "EditorCaption": ""
             }
           ]
         }
