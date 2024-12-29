@@ -363,6 +363,7 @@ static void list_check_value_iteration(std::list<long double> list) {
 
 int main()
 {
+    std::cout << "Start" << '\n';
     // Logisticmap_float logisticmap_float;
     Logisticmap_double logisticmap_double;
     // Logisticmap_long_double logisticmap_long_double;
@@ -394,4 +395,5 @@ int main()
     }
 
     */
+    std::cout << "End" << '\n';
 }
