@@ -12,7 +12,7 @@
 
 //config
 static int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in der Ausgabe
-bool create_csv = 0;
+bool create_csv = 1;
 
 class Logisticmap {
 public:
@@ -349,6 +349,8 @@ static int list_check_iteration(std::list<long double> list, long double value) 
     }
 }
 
+// check_value und check_iteration in eine Methode packen, die ein Tupel zurück gibt, damit es nicht mehrfach durch die Liste iterieren muss.
+// check_list eventuell auslassen und nur diese Methode aufrufen. Wenn keine Dopplung gefunden wird, einfach ausgeben.
 static void list_check_value_iteration(std::list<long double> list) {
     if (list_check(list)) {
         long double multiple_value = list_check_value(list);
@@ -364,36 +366,46 @@ static void list_check_value_iteration(std::list<long double> list) {
 int main()
 {
     std::cout << "Start" << '\n';
-    // Logisticmap_float logisticmap_float;
+
     Logisticmap_double logisticmap_double;
-    // Logisticmap_long_double logisticmap_long_double;
+    std::cout << "Double:" << '\n';
+    list_check_value_iteration(logisticmap_double.get_long_double_List());
+    writeDoubleListToCSV(logisticmap_double.getList());
+
+
+    /*
+    Logisticmap_float logisticmap_float;
+    Logisticmap_double logisticmap_double;
+    Logisticmap_long_double logisticmap_long_double;
 
     // loop finder / Periodizität
     std::cout << "Float:" << '\n';
-    // list_check_value_iteration(logisticmap_float.get_long_double_List());
+    list_check_value_iteration(logisticmap_float.get_long_double_List());
 
     std::cout << "Double:" <<  '\n';
     list_check_value_iteration(logisticmap_double.get_long_double_List());
     
     std::cout << "Long Double:" << '\n';
-    // list_check_value_iteration(logisticmap_long_double.get_long_double_List());
-    /*
+    list_check_value_iteration(logisticmap_long_double.get_long_double_List());
+    
     // Abweichungen / Deltas / Vergleiche: 
     std::list<long double> eval_longDouble_double_list = abweichungsRechner(logisticmap_long_double.get_long_double_List(), logisticmap_double.get_long_double_List());
     std::list<long double> eval_double_float_list = abweichungsRechner(logisticmap_double.get_long_double_List(), logisticmap_float.get_long_double_List());
     
     // CSV-Dateien erstellen
     if (create_csv) {
+        std::cout << "CSV-Dateien werden erstellt.";
         writeFloatListToCSV(logisticmap_float.getList());
         writeDoubleListToCSV(logisticmap_double.getList());
         writeLongDoubleListToCSV(logisticmap_long_double.getList());
         writeDeltaLongDoubleListToCSV(eval_longDouble_double_list);
         writeDeltaLongDoubleListToCSV_double_float(eval_double_float_list);
-    }
-    else {
+    }else {
         std::cout << "Es wurden keine CSV-Dateien erstellt.";
     }
-
     */
+   
+    
+
     std::cout << "End" << '\n';
 }
