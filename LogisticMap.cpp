@@ -9,20 +9,23 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
+#include <tuple>
+#include <cmath>
+
+#include "Zahlendarstellung.h"
 
 //config
-static int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in der Ausgabe
+int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in der Ausgabe
 bool create_csv = 1;
 
 class Logisticmap {
 public:
-    int i = 100'000'000;
+    int i = 10'000;
     long double r = 3.9;
     long double s = 0.1;
     long double start_step = 0.01;
     long double r_step = 0.01;
 
-public:
     // Getter for i
     int getI() const {
         return i;
@@ -212,7 +215,7 @@ static void writeDoubleListToCSV(std::list<double> list) {
     // Check if the file was opened successfully
     if (!outputFile.is_open()) {
         std::cerr << "Error: Could not open output file." << std::endl;
-        return ;
+        return;
     }
     // Write data to the CSV file
     for (double d : list) {
@@ -298,6 +301,7 @@ static std::list<long double> abweichungsRechner(std::list<long double> list_eva
     return list;
 }
 
+/*
 static std::list<double> abweichungsRechnerDoubleFloat(std::list<double> list_eval, std::list<double> list_calc) {
     std::list<double> list = {};
     long double d = 0;
@@ -307,6 +311,7 @@ static std::list<double> abweichungsRechnerDoubleFloat(std::list<double> list_ev
     }
     return list;
 }
+*/
 
 // Methode mit Hashtabelle
 static bool hasDuplicatesWithHash(std::list<long double> list) {
@@ -320,11 +325,63 @@ static bool hasDuplicatesWithHash(std::list<long double> list) {
     return false;
    }
 
-static bool list_check(std::list<long double> checked_list) {
+// returns true, wenn die Liste Duplikate enthält
+// kann eigentlich auch mit std::get<0>(list_screen_duplicates(std::list<long double> list)) geprüft werden
+static bool list_check_for_duplicates(std::list<long double> checked_list) {
     std::list<long double> list(checked_list);
     return hasDuplicatesWithHash(list);
 }
 
+static int search_first_occurrence(std::list<long double> list, long double value) {
+    int iteration = 0;
+    for (long double num : list) {
+        if (num == value) {
+            return iteration;
+        }
+        iteration++;
+    }
+}
+
+// Tupel: <hat Dopplung, Wert der ersten Dopplung, Iteration erstes Vorkommen, Iteration zweites Vorkommen>
+static std::tuple<bool, long double, int, int> list_screen_duplicates(std::list<long double> list) {
+
+    std::unordered_set<long double> seen;
+    int iteration = 0;
+    long double value = 0.0;
+    bool has_duplicate = 0;
+    int first_iteration = 0;
+    int last_iteration = 0;
+
+    for (long double num : list) {
+        if (seen.count(num)) {
+            value = num;
+            has_duplicate = 1;
+            last_iteration = iteration;
+            break;
+        }
+        seen.insert(num);
+        iteration++;
+    }
+    if (has_duplicate) {
+        first_iteration = search_first_occurrence(list, value);
+    }
+    return std::tuple<bool, long double, int, int>(has_duplicate, value, first_iteration, last_iteration);
+}
+
+// gibt die Daten aus, wann sich eine Liste, mit welchem Wert wiederholt
+static void list_screen(std::list<long double> checked_list) {
+    std::list<long double> list(checked_list);
+    std::tuple<bool, long double, int, int> tuple = list_screen_duplicates(list);
+    if (std::get<0>(tuple)){
+    std::cout << "Liste hat Wert doppelt: " << std::get<1>(tuple) << " bei " << std::get<2>(tuple) << " und " << std::get<3>(tuple) << " iterations." << '\n';;
+    }else {
+        std::cout << "Liste hat keinen Wert doppelt" << '\n';
+    }
+}
+
+/*
+* durch list_screen ersetzt
+* 
 static long double list_check_value(std::list<long double> list) {
     std::unordered_set<long double> seen;
     for (long double num : list) {
@@ -335,32 +392,36 @@ static long double list_check_value(std::list<long double> list) {
     }
 }
 
-static int list_check_iteration(std::list<long double> list, long double value) {
+static std::tuple<int, int> list_check_iteration(std::list<long double> list, long double value) {
     int twice = 0;
     int iteration = 0;
+    int first_occur = 0;
     for (long double d:list) {
         if (d == value) {
             if (twice > 0) {
-                return iteration;
+                return std::tuple<int,int>(first_occur,iteration);
             }
+            first_occur = iteration;
             twice++;
         }
         iteration++;
     }
 }
 
-// check_value und check_iteration in eine Methode packen, die ein Tupel zurück gibt, damit es nicht mehrfach durch die Liste iterieren muss.
+// check_value und check_iteration ggf in eine Methode packen, die ein Tupel zurück gibt, damit es nicht mehrfach durch die Liste iterieren muss.
 // check_list eventuell auslassen und nur diese Methode aufrufen. Wenn keine Dopplung gefunden wird, einfach ausgeben.
+// ggf testen, ob schneller
 static void list_check_value_iteration(std::list<long double> list) {
-    if (list_check(list)) {
+    if (list_check_for_duplicates(list)) {
         long double multiple_value = list_check_value(list);
-        int multiple_iteration = list_check_iteration(list, multiple_value);
-        std::cout << "Liste hat Wert doppelt: " << multiple_value << " after " << multiple_iteration << " iterations." << '\n';
+        std::tuple<int,int> multiple_iteration = list_check_iteration(list, multiple_value);
+        std::cout << "Liste hat Wert doppelt: " << multiple_value << " bei " << std::get<0>(multiple_iteration) << " und " << std::get<1>(multiple_iteration) << " iterations." << '\n';
     }
     else {
         std::cout << "Liste hat keinen Wert doppelt" << '\n';
     }
 }
+*/
     
 
 int main()
@@ -369,8 +430,12 @@ int main()
 
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
-    list_check_value_iteration(logisticmap_double.get_long_double_List());
-    writeDoubleListToCSV(logisticmap_double.getList());
+    list_screen(logisticmap_double.get_long_double_List());
+    // writeDoubleListToCSV(logisticmap_double.getList());
+
+    Logisticmap_float logisticmap_float;
+    std::cout << "Float:" << '\n';
+    list_screen(logisticmap_float.get_long_double_List());
 
 
     /*
