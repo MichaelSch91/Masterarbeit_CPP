@@ -6,11 +6,11 @@
 #include <cmath>
 class Default32 {
 public:
-	Default32(int base, int bias, int mantissa_bits, int exponent_bits);
+	Default32(int ba, int bi, int mant_bits, int exp_bits);
 
-	Default32(int base, int bias, int mantissa_bits, int exponent_bits, int s, int m, int e);
+	Default32(int ba, int bi, int mant_bits, int exp_bits, int s, int m, int e);
 
-	double setValues(int s, int m, int e);
+	void setValues(int s, int m, int e);
 
 	double calcX() const;
 
@@ -29,9 +29,9 @@ public:
 	int getExponent_bits();
 
 private:
-	int sign;  // Vorzeichen
-	int mantissa;  // Mantisse
-	int exponent; // Exponent
+	int sign{};  // Vorzeichen
+	int mantissa{};  // Mantisse
+	int exponent{}; // Exponent
 	const int base;  // Basis
 	const int bias;  // Biaswert für Exponent
 	const int mantissa_bits;  // Bits Mantisse
