@@ -13,6 +13,7 @@
 #include <cmath>
 
 #include "Zahlendarstellung.h"
+#include "Zahlenverteilung.h"
 
 //config
 int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in der Ausgabe
@@ -427,7 +428,19 @@ static void list_check_value_iteration(std::list<long double> list) {
 int main()
 {
     std::cout << "Start" << '\n';
+   
+    Zahlenverteilung zahlenverteilung(0.0,4.0,0.001);
 
+    Zahlendarstellung fl(0, 0, 0);
+
+    zahlenverteilung.berechne_zahlenverteilung(fl);
+    
+    zahlenverteilung.print_zahlenverteilung();
+
+    zahlenverteilung.print_zahlenverteilung_csv_format();
+    
+    
+    /*
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
     list_screen(logisticmap_double.get_long_double_List());
@@ -438,7 +451,7 @@ int main()
     list_screen(logisticmap_float.get_long_double_List());
 
 
-    /*
+    
     Logisticmap_float logisticmap_float;
     Logisticmap_double logisticmap_double;
     Logisticmap_long_double logisticmap_long_double;

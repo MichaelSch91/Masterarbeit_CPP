@@ -1,12 +1,11 @@
-#ifndef ZAHLENDARSTELLUNG_H
-#define ZAHLENDARSTELLUNG_H
+#ifndef FLOAT16_H
+#define FLOAT16_H
 
 #include <iostream>
 #include <cmath>
-//todo
-class Zahlendarstellung {
+class Float16 {
 public:
-	Zahlendarstellung(int s, int m, int e);
+	Float16(int s, int m, int e);
 
 	double calcX() const;
 
@@ -29,9 +28,9 @@ private:
 	int mantissa;  // Mantisse
 	int exponent; // Exponent
 	static constexpr int base = 2;  // Basis
-	static constexpr int bias = 127;  // Biaswert für Exponent
-	static constexpr int mantissa_bits = 23;  // Bits Mantisse
-	static constexpr int exponent_bits = 8;  // Bits Mantisse
+	static constexpr int bias = 15;  // Biaswert für Exponent
+	static constexpr int mantissa_bits = 10;  // Bits Mantisse
+	static constexpr int exponent_bits = 5;  // Bits Mantisse
 
 	double berechneMantisseDezimalwert() const;
 };

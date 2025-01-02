@@ -1,12 +1,12 @@
-#ifndef ZAHLENDARSTELLUNG_H
-#define ZAHLENDARSTELLUNG_H
+#ifndef FLOAT32_H
+#define FLOAT32_H
 
 #include <iostream>
 #include <cmath>
 //todo
-class Zahlendarstellung {
+class Float32 {
 public:
-	Zahlendarstellung(int s, int m, int e);
+	Float32(int s, int m, int e);
 
 	double calcX() const;
 
