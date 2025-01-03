@@ -14,6 +14,10 @@
 
 #include "Zahlendarstellung.h"
 #include "Zahlenverteilung.h"
+#include "Float16.h"
+#include "Float32.h"
+#include "ExperimentalDefault.h"
+#include "Default32squareroot.h"
 
 //config
 int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in der Ausgabe
@@ -431,7 +435,7 @@ int main()
    
     Zahlenverteilung zahlenverteilung(0.0,4.0,0.001);
 
-    Zahlendarstellung fl(0, 0, 0);
+    ExperimentalDefault fl(3, 13, 2, 0, 0, 0);
 
     zahlenverteilung.berechne_zahlenverteilung(fl);
     

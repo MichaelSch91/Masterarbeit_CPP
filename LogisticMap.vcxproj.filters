@@ -30,7 +30,7 @@
     <ClCompile Include="Float16.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Default32.cpp">
+    <ClCompile Include="ExperimentalDefault.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Default32squareroot.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="Float16.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Default32.h">
+    <ClInclude Include="ExperimentalDefault.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Default32squareroot.h">

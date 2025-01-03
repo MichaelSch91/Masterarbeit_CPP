@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Default32.cpp" />
+    <ClCompile Include="ExperimentalDefault.cpp" />
     <ClCompile Include="Default32squareroot.cpp" />
     <ClCompile Include="Float16.cpp" />
     <ClCompile Include="Float32.cpp" />
@@ -136,7 +136,7 @@
     <ClCompile Include="Zahlenverteilung.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Default32.h" />
+    <ClInclude Include="ExperimentalDefault.h" />
     <ClInclude Include="Default32squareroot.h" />
     <ClInclude Include="Float16.h" />
     <ClInclude Include="Float32.h" />

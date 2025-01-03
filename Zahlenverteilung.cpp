@@ -1,8 +1,14 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <iomanip>
 #include "Zahlenverteilung.h"
 #include "Zahlendarstellung.h"
+#include "Float16.h"
+#include "Float32.h"
+#include "ExperimentalDefault.h"
+#include "Default32squareroot.h"
+
 
 Zahlenverteilung::Zahlenverteilung(double min, double max, double st){
 	this->minimum = min;
@@ -45,7 +51,139 @@ void Zahlenverteilung::berechne_zahlenverteilung(Zahlendarstellung fl) {
 		fl.setExponent(fl.getExponent() + 1);
 		fl.setMantissa(0);
 	}
-	std::cout << "Liste Zahlenverteilung erstellt";
+	std::cout << "Liste Zahlenverteilung erstellt" << '\n';
+}
+
+// wegen Performanz alles in einer Methode
+void Zahlenverteilung::berechne_zahlenverteilung(Float16 fl) {
+	std::cout << "Berechnung Zahlenverteilung Start" << '\n';
+	init_list_zahlenverteilung();
+	double x = 0.0;
+
+	int max_exponent = pow(fl.getBase(), fl.getExponent_bits());
+	int max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
+
+	while (fl.getExponent() < max_exponent) {
+		while (fl.getMantissa() < max_mantissa) {
+			x = fl.calcX();
+			if (x > this->maximum) {
+				break;
+			}
+			// std::cout << "x: " << x << '\n';
+			for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
+				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
+				if ((x >= this->list_klassen[i]) and (x < this->list_klassen[i + 1])) {
+					this->list_zahlenverteilung[i]++;
+					//std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
+				}
+			}
+			fl.setMantissa(fl.getMantissa() + 1);
+		}
+		std::cout << "Exponent: " << fl.getExponent() << '\n';
+		// this->print_zahlenverteilung();
+		fl.setExponent(fl.getExponent() + 1);
+		fl.setMantissa(0);
+	}
+	std::cout << "Liste Zahlenverteilung erstellt" << '\n';
+}
+
+// wegen Performanz alles in einer Methode
+void Zahlenverteilung::berechne_zahlenverteilung(Float32 fl) {
+	std::cout << "Berechnung Zahlenverteilung Start" << '\n';
+	init_list_zahlenverteilung();
+	double x = 0.0;
+
+	int max_exponent = pow(fl.getBase(), fl.getExponent_bits());
+	int max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
+
+	while (fl.getExponent() < max_exponent) {
+		while (fl.getMantissa() < max_mantissa) {
+			x = fl.calcX();
+			if (x > this->maximum) {
+				break;
+			}
+			// std::cout << "x: " << x << '\n';
+			for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
+				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
+				if ((x >= this->list_klassen[i]) and (x < this->list_klassen[i + 1])) {
+					this->list_zahlenverteilung[i]++;
+					//std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
+				}
+			}
+			fl.setMantissa(fl.getMantissa() + 1);
+		}
+		std::cout << "Exponent: " << fl.getExponent() << '\n';
+		// this->print_zahlenverteilung();
+		fl.setExponent(fl.getExponent() + 1);
+		fl.setMantissa(0);
+	}
+	std::cout << "Liste Zahlenverteilung erstellt" << '\n';
+}
+
+// wegen Performanz alles in einer Methode
+void Zahlenverteilung::berechne_zahlenverteilung(ExperimentalDefault fl) {
+	std::cout << "Berechnung Zahlenverteilung Start" << '\n';
+	init_list_zahlenverteilung();
+	long double x = 0.0;
+
+	long long max_exponent = pow(fl.getBase(), fl.getExponent_bits());
+	long long max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
+
+	while (fl.getExponent() < max_exponent) {
+		while (fl.getMantissa() < max_mantissa) {
+			x = fl.calcX();
+			if (x > this->maximum) {
+				break;
+			}
+			// std::cout << "x: " << x << '\n';
+			for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
+				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
+				if ((x >= this->list_klassen[i]) and (x < this->list_klassen[i + 1])) {
+					this->list_zahlenverteilung[i]++;
+					//std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
+				}
+			}
+			fl.setMantissa(fl.getMantissa() + 1);
+		}
+		std::cout << "Exponent: " << fl.getExponent() << '\n';
+		this->print_zahlenverteilung();
+		fl.setExponent(fl.getExponent() + 1);
+		fl.setMantissa(0);
+	}
+	std::cout << "Liste Zahlenverteilung erstellt" << '\n';
+}
+
+// wegen Performanz alles in einer Methode
+void Zahlenverteilung::berechne_zahlenverteilung(Default32squareroot fl) {
+	std::cout << "Berechnung Zahlenverteilung Start" << '\n';
+	init_list_zahlenverteilung();
+	double x = 0.0;
+
+	int max_exponent = pow(fl.getBase(), fl.getExponent_bits());
+	int max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
+
+	while (fl.getExponent() < max_exponent) {
+		while (fl.getMantissa() < max_mantissa) {
+			x = fl.calcX();
+			if (x > this->maximum) {
+				break;
+			}
+			// std::cout << "x: " << x << '\n';
+			for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
+				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
+				if ((x >= this->list_klassen[i]) and (x < this->list_klassen[i + 1])) {
+					this->list_zahlenverteilung[i]++;
+					//std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
+				}
+			}
+			fl.setMantissa(fl.getMantissa() + 1);
+		}
+		std::cout << "Exponent: " << fl.getExponent() << '\n';
+		// this->print_zahlenverteilung();
+		fl.setExponent(fl.getExponent() + 1);
+		fl.setMantissa(0);
+	}
+	std::cout << "Liste Zahlenverteilung erstellt" << '\n';
 }
 
 void Zahlenverteilung::print_zahlenverteilung() {

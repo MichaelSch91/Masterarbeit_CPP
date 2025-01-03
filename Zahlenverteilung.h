@@ -5,11 +5,20 @@
 #include <cmath>
 #include <vector>
 #include "Zahlendarstellung.h"
+#include "Float16.h"
+#include "Float32.h"
+#include "ExperimentalDefault.h"
+#include "Default32squareroot.h"
+
 class Zahlenverteilung {
 public:
 	Zahlenverteilung(double min, double max, double st);
 
 	void berechne_zahlenverteilung(Zahlendarstellung fl);
+	void berechne_zahlenverteilung(Float32 fl);
+	void berechne_zahlenverteilung(Float16 fl);
+	void berechne_zahlenverteilung(ExperimentalDefault fl);
+	void berechne_zahlenverteilung(Default32squareroot fl);
 
 	void print_zahlenverteilung();
 
@@ -18,8 +27,8 @@ public:
 	std::vector<double> getList_klassen();
 
 private:
-	int minimum;  // Untere Grenze, die dargestellt werden soll
-	int maximum;  // Obere Grenze der Zahlen, die dargestellt werden sollen
+	double minimum;  // Untere Grenze, die dargestellt werden soll
+	double maximum;  // Obere Grenze der Zahlen, die dargestellt werden sollen
 	double steps; // Schritte für die Realisierung der einzelnen (Histogramm-)Klassen
 	std::vector<int> list_zahlenverteilung; // Liste mit der Anzahl der Vorkommen in der jeweiligen Klasse
 	std::vector<double> list_klassen; // Liste mit der Anzahl der Vorkommen in der jeweiligen Klasse
