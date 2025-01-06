@@ -503,14 +503,23 @@ int main()
     // writeDoubleListToCSV(logisticmap_double.getList());
     */
 
-    Float16 flA(0, 573, 13);
-    Float16 flB(0, 573, 13);
-
-    Float16 flC = flA + flB;
-
-    std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX();
+    Float16 fl(0, 0, 0);
+    fl.test_Float16_operator_plus();
 
     /*
+    a groesser, Shift = -1
+Exponent = 29 Mantisse = 353
+A = 4780 B = 14432 A + B = 22032
+Abweichung!
+ A + B = 19212 Float16 A + B = 22032
+
+ Mantisse sollte Mantisse /=2 sein
+    */
+
+    
+
+    /*
+    * todo: als Funktion einarbeiten
     Logisticmap_float logisticmap_float;
 
     std::cout << "Float \n r,Startwert,Wert,Iteration(erstes Vorkommen),Iteration(zweites Vorkommen) \n";

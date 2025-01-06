@@ -58,19 +58,63 @@ int Float16::berechneMantisseBinärwert(double dezimalwert) {
 	return (int)(dezimalwert*pow(this->base, this->mantissa_bits));
 }
 
+void Float16::test_Float16_operator_plus() {
+	int e1 = 0;
+	int e2 = 0;
+	int m1 = 0;
+	int m2 = 0;
 
-// todo: funktioniert nur für gleiche Exponenten
+	Float16 flA(0, m1, e1);
+	Float16 flB(0, m2, e2);
+
+	Float16 flC = flA + flB;
+
+	for (int i = 0; i < 1000; i++) {
+		e1 = rand() % 22;
+		e2 = rand() % 22;
+		m1 = rand() % 1023;
+		m2 = rand() % 1023;
+
+		Float16 flA(0, m1, e1);
+		Float16 flB(0, m2, e2);
+
+		Float16 flC = flA + flB;
+		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
+		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.05) {
+			std::cout << "Abweichung!" << '\n';
+			std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Float16 A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+		}
+	}
+}
+
+
+// todo: funktioniert, aber einmal beim Testen trat auf, dass Mantisse um 1 zu niedrig war (Rundungsfehler?)
+// Tests schreiben?
 Float16 Float16::operator+(Float16 a) {
+	int one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse
 	int mantissa = this->getMantissa();
 	int exponent = this->getExponent();
 	int sign = this->getSign();
 	
 	int shift = this->getExponent() - a.getExponent();
 	if (shift < 0) {
-
+		std::cout << "a groesser, Shift = " << shift << '\n';
+		mantissa = std::floor((this->getMantissa() + one_dot )/ pow(2,abs(shift))) + a.getMantissa();
+		exponent = a.getExponent();
+		while (mantissa > one_dot) {
+			mantissa -= one_dot;
+			mantissa /= 2;
+			exponent++;
+		}
 	}
 	if (shift > 0) {
-
+		std::cout << "a kleiner, Shift = " << shift << '\n';
+		mantissa = std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift))) + this->getMantissa();
+		while (mantissa > one_dot) {
+			mantissa -= one_dot;
+			mantissa /= 2;
+			exponent++;
+		}
 	}
 	if (shift == 0) {
 		mantissa = this->getMantissa() + a.getMantissa();
@@ -78,6 +122,8 @@ Float16 Float16::operator+(Float16 a) {
 		mantissa /= 2;
 	}
 	
+	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+
 	Float16 sum(sign, mantissa, exponent);
 	return sum;
 }

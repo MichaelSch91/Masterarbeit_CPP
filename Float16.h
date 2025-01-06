@@ -25,6 +25,9 @@ public:
 	int getMantissa_bits();
 	int getExponent_bits();
 
+	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
+	void test_Float16_operator_plus();
+
 private:
 	int sign;  // Vorzeichen
 	int mantissa;  // Mantisse
