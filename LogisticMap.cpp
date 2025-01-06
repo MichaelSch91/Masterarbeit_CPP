@@ -26,9 +26,9 @@ bool create_csv = 1;
 class Logisticmap {
 public:
     int i = 10'000;
-    long double r = 3.9;
+    long double r = 3.8;
     long double s = 0.1;
-    long double start_step = 0.01;
+    long double start_step = 0.1;
     long double r_step = 0.01;
 
     // Getter for i
@@ -89,7 +89,7 @@ private:
 
     std::list<float> logistischeAbbildungFloat() {
         float x = this->s;
-        std::list<float> list = {};
+        std::list<float> list = {x};
         for (int j = 0; j <= i; j++) {
             list.push_back(logistischeAbbildungRechnerFloat(x, this->r)); // Übergabe von this->r statt Aufruf mit this in Methode, weil sonst Datentyp aus Klasse LogisticMap übergeben wird.
             x = list.back();
@@ -117,22 +117,36 @@ public:
     std::list<float> getList() {
         return this->list;
     }
+
+    void setList(std::list<float> newList) {
+        this->list = newList;
+        this->calcLongDoubleList();
+    }
+
+    std::list<float> calcNewList() {
+        return this->logistischeAbbildungFloat();
+    }
+
     std::list<long double> get_long_double_List() {
         return this->long_double_list;
+    }
+
+    void calcLongDoubleList() {
+        this->long_double_list = this->cast_list(this->getList());
     }
 };
 
 class Logisticmap_double : public Logisticmap {
 private:
-    std::list<double> list = logistischeAbbildungDouble(this->i, this->r, this->s);
+    std::list<double> list = logistischeAbbildungDouble();
     std::list<long double> long_double_list = cast_list(this->list);
 
     // mit Startwert s
-    std::list<double> logistischeAbbildungDouble(int i, double r, double s) {
-        double x = s;
-        std::list<double> list = {};
-        for (int j = 0; j <= i; j++) {
-            list.push_back(logistischeAbbildungRechnerDouble(x, r));
+    std::list<double> logistischeAbbildungDouble() {
+        double x = this->s;
+        std::list<double> list = {x};
+        for (int j = 0; j <= this->i; j++) {
+            list.push_back(logistischeAbbildungRechnerDouble(x, this->r));
             // std::cout << list.back() << '\n';
             x = list.back();
             // std::cout << x << '\n';
@@ -159,19 +173,32 @@ public:
     std::list<long double> get_long_double_List() {
         return this->long_double_list;
     }
+
+    std::list<double> calcNewList() {
+        return this->logistischeAbbildungDouble();
+    }
+
+    void setList(std::list<double> newList) {
+        this->list = newList;
+        this->calcLongDoubleList();
+    }
+
+    void calcLongDoubleList() {
+        this->long_double_list = this->cast_list(this->getList());
+    }
 };
 
 class Logisticmap_long_double : public Logisticmap {
 private:
-    std::list<long double> list = logistischeAbbildungLongDouble(this->i, this->r, this->s);
+    std::list<long double> list = logistischeAbbildungLongDouble();
     std::list<long double> long_double_list = this->list;
 
     // mit Startwert s
-    std::list<long double> logistischeAbbildungLongDouble(int i, long double r, long double s) {
-        long double x = s;
-        std::list<long double> list = {};
-        for (int j = 0; j <= i; j++) {
-            list.push_back(logistischeAbbildungRechnerLongDouble(x, r));
+    std::list<long double> logistischeAbbildungLongDouble() {
+        long double x = this->s;
+        std::list<long double> list = {x};
+        for (int j = 0; j <= this->i; j++) {
+            list.push_back(logistischeAbbildungRechnerLongDouble(x, this->r));
             x = list.back();
             // std::cout << x << '\n';
         }
@@ -188,6 +215,19 @@ public:
     }
     std::list<long double> get_long_double_List() {
         return this->long_double_list;
+    }
+
+    std::list<long double> calcNewList() {
+        return this->logistischeAbbildungLongDouble();
+    }
+
+    void setList(std::list<long double> newList) {
+        this->list = newList;
+        this->calcLongDoubleList();
+    }
+
+    void calcLongDoubleList() {
+        this->long_double_list = this->getList();
     }
 };
 
@@ -384,6 +424,18 @@ static void list_screen(std::list<long double> checked_list) {
     }
 }
 
+// Listenwerte +1, falls Zählung nicht ab 0: std::cout << std::get<1>(tuple) << ',' << (std::get<2>(tuple)+1) << ',' << (std::get<3>(tuple)+1) << '\n';
+static void list_screen_csv_format(std::list<long double> checked_list) {
+    std::list<long double> list(checked_list);
+    std::tuple<bool, long double, int, int> tuple = list_screen_duplicates(list);
+    if (std::get<0>(tuple)) {
+        std::cout << std::get<1>(tuple) << ',' << std::get<2>(tuple) << ',' << std::get<3>(tuple) << '\n';
+    }
+    else {
+        std::cout << "Liste hat keinen Wert doppelt" << '\n';
+    }
+}
+
 /*
 * durch list_screen ersetzt
 * 
@@ -432,28 +484,51 @@ static void list_check_value_iteration(std::list<long double> list) {
 int main()
 {
     std::cout << "Start" << '\n';
-   
+   /*
     Zahlenverteilung zahlenverteilung(0.0,4.0,0.001);
 
-    ExperimentalDefault fl(3, 13, 2, 0, 0, 0);
+    Float16 fl(0, 0, 0);
 
     zahlenverteilung.berechne_zahlenverteilung(fl);
     
     zahlenverteilung.print_zahlenverteilung();
 
     zahlenverteilung.print_zahlenverteilung_csv_format();
-    
+    */
     
     /*
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
     list_screen(logisticmap_double.get_long_double_List());
     // writeDoubleListToCSV(logisticmap_double.getList());
+    */
 
+    Float16 flA(0, 573, 13);
+    Float16 flB(0, 573, 13);
+
+    Float16 flC = flA + flB;
+
+    std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX();
+
+    /*
     Logisticmap_float logisticmap_float;
-    std::cout << "Float:" << '\n';
-    list_screen(logisticmap_float.get_long_double_List());
 
+    std::cout << "Float \n r,Startwert,Wert,Iteration(erstes Vorkommen),Iteration(zweites Vorkommen) \n";
+
+    while (logisticmap_float.getR() < 3.99) {
+        while (logisticmap_float.getS() < 0.99) {
+            logisticmap_float.setList(logisticmap_float.calcNewList());
+            //std::cout << "Float, r = " << logisticmap_float.getR() << " Startwert = " << logisticmap_float.getS() << '\n';
+            std::cout << logisticmap_float.getR() << ',' << logisticmap_float.getS() << ',';
+            list_screen_csv_format(logisticmap_float.get_long_double_List());
+            logisticmap_float.setS(logisticmap_float.getS() + logisticmap_float.getStartStep());
+        }
+        logisticmap_float.setR(logisticmap_float.getR() + logisticmap_float.getRStep());
+        logisticmap_float.setS(0.1);
+    }
+    */
+
+    /*
 
     
     Logisticmap_float logisticmap_float;
@@ -489,5 +564,5 @@ int main()
    
     
 
-    std::cout << "End" << '\n';
+    std::cout << '\n' << "End" << '\n';
 }

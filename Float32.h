@@ -8,7 +8,7 @@ class Float32 {
 public:
 	Float32(int s, int m, int e);
 
-	double calcX() const;
+	double calcX();
 
 	int getSign();
 	void setSign(int s);

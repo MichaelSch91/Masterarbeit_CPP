@@ -15,7 +15,7 @@ public:
 
 	void setValues(int s, int m, int e);
 
-	double calcX() const;
+	double calcX();
 
 	int getSign();
 	void setSign(int s);

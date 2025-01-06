@@ -14,7 +14,7 @@ public:
 
 	void setValues(int s, long m, long e);
 
-	long double calcX() const;
+	long double calcX();
 	long double calcX_with_In_Out() const;
 
 	int getSign();

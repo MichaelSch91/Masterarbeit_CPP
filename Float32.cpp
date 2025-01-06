@@ -43,8 +43,11 @@ int Float32::getExponent_bits() {
 	return this->exponent_bits;
 }
 
-double Float32::calcX() const {
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+double Float32::calcX() {
+	if (this->getExponent() == 0) {
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+	}
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
 }
 
 double Float32::berechneMantisseDezimalwert() const {

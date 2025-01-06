@@ -7,7 +7,9 @@ class Float16 {
 public:
 	Float16(int s, int m, int e);
 
-	double calcX() const;
+	double calcX();
+
+	Float16 operator+(Float16 a);
 
 	int getSign();
 	void setSign(int s);
@@ -30,9 +32,11 @@ private:
 	static constexpr int base = 2;  // Basis
 	static constexpr int bias = 15;  // Biaswert für Exponent
 	static constexpr int mantissa_bits = 10;  // Bits Mantisse
-	static constexpr int exponent_bits = 5;  // Bits Mantisse
+	static constexpr int exponent_bits = 5;  // Bits Exponent
 
-	double berechneMantisseDezimalwert() const;
+	double berechneMantisseDezimalwert();
+
+	int berechneMantisseBinärwert(double dezimalwert);
 };
 
 #endif

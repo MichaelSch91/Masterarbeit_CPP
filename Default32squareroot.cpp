@@ -48,8 +48,11 @@ int Default32squareroot::getExponent_bits() {
 	return this->exponent_bits;
 }
 
-double Default32squareroot::calcX() const {
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+double Default32squareroot::calcX() {
+	if (this->getExponent() == 0) {
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+	}
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
 }
 
 double Default32squareroot::berechneMantisseDezimalwert() const {
