@@ -47,13 +47,13 @@ int main()
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
     LogisticmapCalc::list_screen(logisticmap_double.get_long_double_List());
-    // writeDoubleListToCSV(logisticmap_double.getList());
+    CSV_data::writeDoubleListToCSV(logisticmap_double.getList());
     
     
-    Float16 fl(0, 0, 0);
+    // Float16 fl(0, 0, 0);
     fl.test_Float16_operator_plus();
+    
     */
- 
 
     
 

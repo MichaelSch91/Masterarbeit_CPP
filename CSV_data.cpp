@@ -14,7 +14,7 @@ int precision = 50000; // setzt die Genauigkeit (Anzahl der Nachkommazahlen) in 
 
 void CSV_data::writeFloatListToCSV(std::list<float> list) {
     // create filename
-    std::string filename = "float_precision.csv";
+    std::string filename = "\CSV\\float_precision.csv";
     // Open the output file in write mode
     std::ofstream outputFile(filename);
     // Check if the file was opened successfully
@@ -35,7 +35,7 @@ void CSV_data::writeFloatListToCSV(std::list<float> list) {
 
 void CSV_data::writeDoubleListToCSV(std::list<double> list) {
     // create filename
-    std::string filename = "double_precision.csv";
+    std::string filename = "\CSV\\double_precision.csv";
     // Open the output file in write mode
     std::ofstream outputFile(filename);
     // Check if the file was opened successfully
@@ -56,7 +56,7 @@ void CSV_data::writeDoubleListToCSV(std::list<double> list) {
 
 void CSV_data::writeLongDoubleListToCSV(std::list<long double> list) {
     // create filename
-    std::string filename = "long_double_precision.csv";
+    std::string filename = "\CSV\\long_double_precision.csv";
     // Open the output file in write mode
     std::ofstream outputFile(filename);
     // Check if the file was opened successfully
@@ -77,7 +77,7 @@ void CSV_data::writeLongDoubleListToCSV(std::list<long double> list) {
 
 void CSV_data::writeDeltaLongDoubleListToCSV(std::list<long double> list) {
     // create filename
-    std::string filename = "delta_long_double_precision.csv";
+    std::string filename = "\CSV\\delta_long_double_precision.csv";
     // Open the output file in write mode
     std::ofstream outputFile(filename);
     // Check if the file was opened successfully
@@ -98,7 +98,7 @@ void CSV_data::writeDeltaLongDoubleListToCSV(std::list<long double> list) {
 
 void CSV_data::writeDeltaLongDoubleListToCSV_double_float(std::list<long double> list) {
     // create filename
-    std::string filename = "delta_double_float_precision.csv";
+    std::string filename = "\CSV\\delta_double_float_precision.csv";
     // Open the output file in write mode
     std::ofstream outputFile(filename);
     // Check if the file was opened successfully
