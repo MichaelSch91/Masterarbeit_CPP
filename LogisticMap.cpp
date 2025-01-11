@@ -30,7 +30,8 @@ bool create_csv = 1;
 int main()
 {
     std::cout << "Start" << '\n';
-   /*
+    
+    /*
     Zahlenverteilung zahlenverteilung(0.0,4.0,0.001);
 
     Float16 fl(0, 0, 0);
@@ -45,27 +46,19 @@ int main()
     
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
-    list_screen(logisticmap_double.get_long_double_List());
+    LogisticmapCalc::list_screen(logisticmap_double.get_long_double_List());
     // writeDoubleListToCSV(logisticmap_double.getList());
     
     
     Float16 fl(0, 0, 0);
     fl.test_Float16_operator_plus();
-
-    
-    a groesser, Shift = -1
-Exponent = 29 Mantisse = 353
-A = 4780 B = 14432 A + B = 22032
-Abweichung!
- A + B = 19212 Float16 A + B = 22032
-
- Mantisse sollte Mantisse /=2 sein
     */
+ 
 
     
 
     
-    //todo: als Funktion einarbeiten
+    //todo: als Funktion in LogisticmapCalc oder Unterklassen einarbeiten
     Logisticmap_float logisticmap_float;
 
     std::cout << "Float \n r,Startwert,Wert,Iteration(erstes Vorkommen),Iteration(zweites Vorkommen) \n";
@@ -81,37 +74,36 @@ Abweichung!
         logisticmap_float.setR(logisticmap_float.getR() + logisticmap_float.getRStep());
         logisticmap_float.setS(0.1);
     }
+
     
 
     /*
-
-    
     Logisticmap_float logisticmap_float;
     Logisticmap_double logisticmap_double;
     Logisticmap_long_double logisticmap_long_double;
 
     // loop finder / Periodizität
     std::cout << "Float:" << '\n';
-    list_check_value_iteration(logisticmap_float.get_long_double_List());
+    LogisticmapCalc::list_screen(logisticmap_float.get_long_double_List());
 
     std::cout << "Double:" <<  '\n';
-    list_check_value_iteration(logisticmap_double.get_long_double_List());
+    LogisticmapCalc::list_screen(logisticmap_double.get_long_double_List());
     
     std::cout << "Long Double:" << '\n';
-    list_check_value_iteration(logisticmap_long_double.get_long_double_List());
+    LogisticmapCalc::list_screen(logisticmap_long_double.get_long_double_List());
     
     // Abweichungen / Deltas / Vergleiche: 
-    std::list<long double> eval_longDouble_double_list = abweichungsRechner(logisticmap_long_double.get_long_double_List(), logisticmap_double.get_long_double_List());
-    std::list<long double> eval_double_float_list = abweichungsRechner(logisticmap_double.get_long_double_List(), logisticmap_float.get_long_double_List());
+    std::list<long double> eval_longDouble_double_list = LogisticmapCalc::abweichungsRechner(logisticmap_long_double.get_long_double_List(), logisticmap_double.get_long_double_List());
+    std::list<long double> eval_double_float_list = LogisticmapCalc::abweichungsRechner(logisticmap_double.get_long_double_List(), logisticmap_float.get_long_double_List());
     
     // CSV-Dateien erstellen
     if (create_csv) {
         std::cout << "CSV-Dateien werden erstellt.";
-        writeFloatListToCSV(logisticmap_float.getList());
-        writeDoubleListToCSV(logisticmap_double.getList());
-        writeLongDoubleListToCSV(logisticmap_long_double.getList());
-        writeDeltaLongDoubleListToCSV(eval_longDouble_double_list);
-        writeDeltaLongDoubleListToCSV_double_float(eval_double_float_list);
+        CSV_data::writeFloatListToCSV(logisticmap_float.getList());
+        CSV_data::writeDoubleListToCSV(logisticmap_double.getList());
+        CSV_data::writeLongDoubleListToCSV(logisticmap_long_double.getList());
+        CSV_data::writeDeltaLongDoubleListToCSV(eval_longDouble_double_list);
+        CSV_data::writeDeltaLongDoubleListToCSV_double_float(eval_double_float_list);
     }else {
         std::cout << "Es wurden keine CSV-Dateien erstellt.";
     }

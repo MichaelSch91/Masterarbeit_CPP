@@ -6,8 +6,8 @@
 #include <vector>
 
 Logisticmap_long_double::Logisticmap_long_double() {
-        this->list = logistischeAbbildungLongDouble();
-        this->long_double_list = this->list; // ggf. copy sinnvoller, aber Verweis schneller
+        this->list, this->long_double_list = logistischeAbbildungLongDouble();
+        // ggf. copy sinnvoller, aber Verweis schneller
     }
 
     std::list<long double> Logisticmap_long_double::getList() {
