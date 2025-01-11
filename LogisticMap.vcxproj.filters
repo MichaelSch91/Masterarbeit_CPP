@@ -13,11 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\Header_Logmap">
+      <UniqueIdentifier>{3b269204-0a22-4e99-a628-ad126896c1a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Quelldateien_Logmap">
+      <UniqueIdentifier>{f0d69ea9-14f0-4a4c-98fa-ad516776502a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Main">
+      <UniqueIdentifier>{227af83f-5c1d-484b-a189-ddafbedf5bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Header_Helper">
+      <UniqueIdentifier>{41e899ab-f6b7-43dd-be9f-bc82594557f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Quelldateien_Helper">
+      <UniqueIdentifier>{9e74c135-3870-49bf-9ccd-8e507b40237f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LogisticMap.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Zahlendarstellung.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -35,6 +47,27 @@
     </ClCompile>
     <ClCompile Include="Default32squareroot.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="LogisticMap.cpp">
+      <Filter>Quelldateien\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="LogisticmapCalc.cpp">
+      <Filter>Quelldateien\Quelldateien_Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Logisticmap_float.cpp">
+      <Filter>Quelldateien\Quelldateien_Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Logisticmap_long_double.h">
+      <Filter>Headerdateien\Header_Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Logisticmap_double.cpp">
+      <Filter>Quelldateien\Quelldateien_Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Logisticmap_long_double.cpp">
+      <Filter>Quelldateien\Quelldateien_Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="CSV_data.cpp">
+      <Filter>Quelldateien\Quelldateien_Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +88,18 @@
     </ClInclude>
     <ClInclude Include="Default32squareroot.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticmapCalc.h">
+      <Filter>Headerdateien\Header_Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Logisticmap_float.h">
+      <Filter>Headerdateien\Header_Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Logisticmap_double.h">
+      <Filter>Headerdateien\Header_Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="CSV_data.h">
+      <Filter>Headerdateien\Header_Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

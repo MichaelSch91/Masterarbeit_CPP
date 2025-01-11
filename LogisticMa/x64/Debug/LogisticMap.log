@@ -1,0 +1,29 @@
+﻿  ExperimentalDefault.cpp
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\ExperimentalDefault.cpp(69,19): warning C4244: "return": Konvertierung von "double" in "int", möglicher Datenverlust
+  Default32squareroot.cpp
+  Float16.cpp
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Float16.cpp(102,78): warning C4244: "=": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Float16.cpp(112,75): warning C4244: "=": Konvertierung von "double" in "int", möglicher Datenverlust
+  Float32.cpp
+  LogisticMap.cpp
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.h(69,17): warning C4244: "Initialisierung": Konvertierung von "long double" in "float", möglicher Datenverlust
+  (Quelldatei „LogisticMap.cpp“ wird kompiliert)
+  
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.h(72,68): warning C4244: "Argument": Konvertierung von "long double" in "float", möglicher Datenverlust
+  (Quelldatei „LogisticMap.cpp“ wird kompiliert)
+  
+  Zahlendarstellung.cpp
+  Zahlenverteilung.cpp
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(30,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(31,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(63,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(64,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(96,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(97,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(129,25): warning C4244: "Initialisierung": Konvertierung von "double" in "__int64", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(130,25): warning C4244: "Initialisierung": Konvertierung von "double" in "__int64", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(162,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\Zahlenverteilung.cpp(163,19): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+  Code wird generiert...
+C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\LogisticMap.cpp(181,1): warning C4715: "search_first_occurrence": Nicht alle Codepfade geben einen Wert zurück.
+  LogisticMap.vcxproj -> C:\Users\micha\source\repos\LogisticMap\Masterarbeit_CPP\x64\Debug\LogisticMa.exe
