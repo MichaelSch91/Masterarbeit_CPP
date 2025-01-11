@@ -22,32 +22,20 @@
     <Filter Include="Quelldateien\Main">
       <UniqueIdentifier>{227af83f-5c1d-484b-a189-ddafbedf5bb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\Header_Helper">
-      <UniqueIdentifier>{41e899ab-f6b7-43dd-be9f-bc82594557f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Quelldateien\Quelldateien_Helper">
       <UniqueIdentifier>{9e74c135-3870-49bf-9ccd-8e507b40237f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Zahlendarstellungen">
+      <UniqueIdentifier>{4c528f82-81c8-46e1-9ae6-3ff0e57943cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Zahlendarstellungen">
+      <UniqueIdentifier>{d6b2233b-7afd-4ff0-98fd-98162765a6f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Header_Helper">
+      <UniqueIdentifier>{41e899ab-f6b7-43dd-be9f-bc82594557f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Zahlendarstellung.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Zahlenverteilung.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Float32.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Float16.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentalDefault.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Default32squareroot.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="LogisticMap.cpp">
       <Filter>Quelldateien\Main</Filter>
     </ClCompile>
@@ -69,26 +57,26 @@
     <ClCompile Include="CSV_data.cpp">
       <Filter>Quelldateien\Quelldateien_Helper</Filter>
     </ClCompile>
+    <ClCompile Include="ExperimentalDefault.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
+    <ClCompile Include="Default32squareroot.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
+    <ClCompile Include="Float16.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
+    <ClCompile Include="Float32.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
+    <ClCompile Include="Zahlendarstellung.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
+    <ClCompile Include="Zahlenverteilung.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Zahlendarstellung.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Zahlenverteilung.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Float32.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Float16.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentalDefault.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Default32squareroot.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="LogisticmapCalc.h">
       <Filter>Headerdateien\Header_Logmap</Filter>
     </ClInclude>
@@ -100,6 +88,24 @@
     </ClInclude>
     <ClInclude Include="CSV_data.h">
       <Filter>Headerdateien\Header_Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentalDefault.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Default32squareroot.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Float16.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Float32.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Zahlendarstellung.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Zahlenverteilung.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
