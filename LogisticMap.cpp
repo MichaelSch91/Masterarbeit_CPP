@@ -51,18 +51,19 @@ int main()
     */
     
     Float16 fl(0, 0, 0);
-    // fl.test_Float16_operator_multiply();
+    fl.test_Float16_operator_multiply();
     // fl.test_Float16_operator_plus();
 
-    
-    Float16 flA(0, 514, 0);
-    Float16 flB(0, 0, 16);
+    /*
+    Float16 flA(0, 515, 0);
+    Float16 flB(0, 3, 30);
     Float16 flC=flA*flB;
 
     std::cout << "A = " << flA.calcX() << '\n';
     std::cout << "B = " << flB.calcX() << '\n';
     std::cout << "C = " << flC.calcX() << '\n';
-    
+    */
+
     /*
     
     //todo: als Funktion in LogisticmapCalc oder Unterklassen einarbeiten

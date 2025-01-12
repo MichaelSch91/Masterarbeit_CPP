@@ -113,7 +113,7 @@ void Float16::test_Float16_operator_multiply() {
 
 		Float16 flC = flA * flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
-		if (abs(flC.calcX() - (flA.calcX() * flB.calcX())) > 0.05) {
+		if (abs(flC.calcX() - (flA.calcX() * flB.calcX())) > 0.0000005) {
 			std::cout << "Abweichung!" << '\n';
 			std::cout << " A + B = " << (flA.calcX() * flB.calcX()) << " Float16 A * B = " << flC.calcX() << '\n' << '\n' << '\n';
 		}
@@ -209,41 +209,40 @@ Float16 Float16::operator*(Float16 a) {
 	else if (this->getExponent() == 0) {
 		// todo, ggf Mock notwendig
 		// keine Info, wie das berechnet wird
-		mantissa = 0;
-		/*
+		// mantissa = 0;
+		
 		std::cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
 		mantissa = this->getMantissa() * (a.getMantissa() + one_dot);
 		mantissa = std::floor(mantissa / one_dot);
 		std::cout << "Mantisse = " << mantissa << '\n';
-
-		while (mantissa < (one_dot)) {
-			mantissa += one_dot;
-			exponent--;
-			std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
-			std::cout << "Exponent = " << exponent << " in Nachberechnung " << '\n';
-
+		// Komma verschieben, bis Mantisse größer 0,5 (512)
+		mantissa *= 2;
+		exponent--;
+		while (mantissa >= one_dot) {
+			mantissa -= one_dot;
+			exponent++;
 		}
-		mantissa -= one_dot;
-		*/
 	}
 	else if (a.getExponent() == 0) {
 		// todo, ggf Mock notwendig
 		// keine Info, wie das berechnet wird
-		mantissa = 0;
-		/*
+		// mantissa = 0;
+
 		mantissa = (this->getMantissa() + one_dot) * a.getMantissa();
 		mantissa = std::floor(mantissa / one_dot);
-		while (mantissa < (one_dot)) {
-			mantissa += one_dot;
-			exponent--;
-			std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
+		std::cout << "Mantisse = " << mantissa << '\n';
+		// Komma verschieben, bis Mantisse größer 0,5 (512)
+		mantissa *= 2;
+		exponent--;
+		while (mantissa >= one_dot) {
+			mantissa -= one_dot;
+			exponent++;
 		}
-		mantissa -= one_dot;
-		*/
 	}
 	else {
+		std::cout << "Mantissenberechnung Standard " << '\n';
 		mantissa = (this->getMantissa() + one_dot) * (a.getMantissa() + one_dot);
-		mantissa = std::floor(mantissa / one_dot);
+		mantissa = std::ceil(mantissa / one_dot);
 		// std::cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
 		while (mantissa >= (2 * one_dot)) { // Schleife eigentlich irrelevant, weil Wert nie größer 2 * one_dot wird
 			mantissa /= 2;
@@ -251,14 +250,20 @@ Float16 Float16::operator*(Float16 a) {
 			std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
 		}
 		// std::cout << "Mantisse = " << mantissa << " nach Nachberechnung " << '\n';
-		mantissa -= one_dot; // Mantisse wieder normalisieren (1. vorne wegnehmen)
+		if (exponent < 0) {
+			mantissa /= 2; // Mantisse wieder normalisieren (1. vorne wegnehmen)
+		}
+		else {
+			mantissa -= one_dot;
+		}
 		// std::cout << "Mantisse = " << mantissa << " Endergebnis " << '\n';
 	}
 
 	// bei negativem Exponenten normalisieren
+	// todo: noch fehlerhaft
 	if (exponent < 0) {
 		while (exponent < 0) {
-			mantissa /= 2;
+			mantissa = std::ceil(mantissa/ 2);
 			exponent++;
 			std::cout << "Mantisse = " << mantissa << " in Exponent normalisieren " << '\n';
 			std::cout << "Exponent = " << exponent << " in Exponent normalisieren " << '\n';
