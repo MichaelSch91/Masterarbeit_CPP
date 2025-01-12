@@ -29,6 +29,7 @@ public:
 
 	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
 	void test_Float16_operator_plus();
+	void test_Float16_operator_minus();
 	void test_Float16_operator_multiply();
 private:
 	int sign;  // Vorzeichen

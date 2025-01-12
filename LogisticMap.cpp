@@ -51,8 +51,9 @@ int main()
     */
     
     Float16 fl(0, 0, 0);
-    fl.test_Float16_operator_multiply();
+    // fl.test_Float16_operator_multiply();
     // fl.test_Float16_operator_plus();
+    fl.test_Float16_operator_minus();
 
     /*
     Float16 flA(0, 515, 0);
