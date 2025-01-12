@@ -39,6 +39,8 @@ int Zahlendarstellung::getExponent_bits() {
 	return this->exponent_bits;
 }
 
+// Allgemeine Implementierung,
+// im Gegensatz zu IEEE754 wird hier auf den +1 Shift der Mantisse bei Exponent >= 1 verzichtet
 double Zahlendarstellung::calcX() const {
 	return pow(-1,this->sign) * pow(this->base,(this->exponent - this->bias)) * (this->mantissa/pow(this->base,this->mantissa_bits));
 }

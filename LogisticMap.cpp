@@ -41,22 +41,29 @@ int main()
     zahlenverteilung.print_zahlenverteilung();
 
     zahlenverteilung.print_zahlenverteilung_csv_format();
+    */
     
-    
-    
+    /*
     Logisticmap_double logisticmap_double;
     std::cout << "Double:" << '\n';
     LogisticmapCalc::list_screen(logisticmap_double.get_long_double_List());
     CSV_data::writeDoubleListToCSV(logisticmap_double.getList());
-    
-    
-    // Float16 fl(0, 0, 0);
-    fl.test_Float16_operator_plus();
-    
     */
+    
+    Float16 fl(0, 0, 0);
+    // fl.test_Float16_operator_multiply();
+    // fl.test_Float16_operator_plus();
 
     
+    Float16 flA(0, 514, 0);
+    Float16 flB(0, 0, 16);
+    Float16 flC=flA*flB;
 
+    std::cout << "A = " << flA.calcX() << '\n';
+    std::cout << "B = " << flB.calcX() << '\n';
+    std::cout << "C = " << flC.calcX() << '\n';
+    
+    /*
     
     //todo: als Funktion in LogisticmapCalc oder Unterklassen einarbeiten
     Logisticmap_float logisticmap_float;
@@ -77,7 +84,7 @@ int main()
 
     
 
-    /*
+    
     Logisticmap_float logisticmap_float;
     Logisticmap_double logisticmap_double;
     Logisticmap_long_double logisticmap_long_double;

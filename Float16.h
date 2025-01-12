@@ -10,6 +10,8 @@ public:
 	double calcX();
 
 	Float16 operator+(Float16 a);
+	Float16 operator-(Float16 a);
+	Float16 operator*(Float16 a);
 
 	int getSign();
 	void setSign(int s);
@@ -27,7 +29,7 @@ public:
 
 	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
 	void test_Float16_operator_plus();
-
+	void test_Float16_operator_multiply();
 private:
 	int sign;  // Vorzeichen
 	int mantissa;  // Mantisse
