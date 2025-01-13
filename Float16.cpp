@@ -126,6 +126,7 @@ Float16 Float16::operator+(Float16 a) {
 		if (a.getExponent() == 0) {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift))) + this->getMantissa() + one_dot;
+			exponent = this->getExponent();
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
@@ -135,6 +136,7 @@ Float16 Float16::operator+(Float16 a) {
 		else {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift))) + this->getMantissa() + one_dot;
+			exponent = this->getExponent();
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
@@ -147,6 +149,7 @@ Float16 Float16::operator+(Float16 a) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0 and a.getExponent() == 0) {
 			mantissa = this->getMantissa() + a.getMantissa();
+			exponent = this->getExponent();
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
@@ -155,6 +158,7 @@ Float16 Float16::operator+(Float16 a) {
 		}
 		else {
 			mantissa = this->getMantissa() + one_dot + a.getMantissa() + one_dot;
+			exponent = this->getExponent();
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
@@ -162,7 +166,7 @@ Float16 Float16::operator+(Float16 a) {
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
 		}
 	}
-	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float16(sign, exponent, mantissa);
 }
 
@@ -173,15 +177,15 @@ Float16 Float16::operator+(Float16 a) {
 Float16 Float16::operator-(Float16 a) {
 	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
-		std::cout << "this - (-a) = this + a" << '\n';
+		// std::cout << "this - (-a) = this + a" << '\n';
 		return this->operator+(Float16(0, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
-	if (this->getSign() == 1 and a.getSign() == 1) { // - this - (-a) = a - this
-		std::cout << "- this - (-a) = a - this" << '\n';
-		return Float16(0, a.getExponent(), a.getMantissa()).operator-(*this); // neues Objekt, um Objekt a nicht zu verändern
+	if (this->getSign() == 1 and a.getSign() == 1) { // - this - (-a) = a + (-this)
+		// std::cout << "- this - (-a) = a - this" << '\n';
+		return Float16(0, a.getExponent(), a.getMantissa()).operator+(*this); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	if (this->getSign() == 1 and a.getSign() == 0) { // - this - (+a) = - this + (-a)
-		std::cout << "- this - (+a) = - this + (-a)" << '\n';
+		// std::cout << "- this - (+a) = - this + (-a)" << '\n';
 		return this->operator+(Float16(1, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
 
@@ -193,16 +197,6 @@ Float16 Float16::operator-(Float16 a) {
 	// Exponentenverschiebung (für Mantissen)
 	int shift = this->getExponent() - a.getExponent();
 
-	// Vorzeichen: (Einfache Lösung)
-	/*
-	int sign = 0;
-	// todo: hardwarenahe / realistischere Lösung
-	if (this->calcX() < a.calcX()) {
-		sign = 1;
-	}
-	std::cout << "Sign = " << sign << '\n';
-	*/
-
 	// Vorzeichen:
 	int sign = 0;
 	if (shift < 0) {
@@ -213,70 +207,70 @@ Float16 Float16::operator-(Float16 a) {
 			sign = 1;
 		}
 	}
-	std::cout << "Sign = " << sign << '\n';
+	// std::cout << "Sign = " << sign << '\n';
 
 	if (shift < 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
-			std::cout << "a groesser, Shift = " << shift << '\n';
+			// std::cout << "a groesser, Shift = " << shift << '\n';
 			mantissa = (a.getMantissa() + one_dot) - std::floor((this->getMantissa()) / pow(2, abs(shift)));
 			exponent = a.getExponent();
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			std::cout << "a groesser, Shift = " << shift << '\n';
+			// std::cout << "a groesser, Shift = " << shift << '\n';
 			mantissa = (a.getMantissa() + one_dot) - std::floor((this->getMantissa() + one_dot) / pow(2, abs(shift)));
 			exponent = a.getExponent();
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	if (shift > 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
-			std::cout << "a kleiner, Shift = " << shift << '\n';
+			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = (this->getMantissa() + one_dot) - std::floor((a.getMantissa()) / pow(2, abs(shift)));
 			exponent = this->getExponent();
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			std::cout << "a kleiner, Shift = " << shift << '\n';
+			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = (this->getMantissa() + one_dot) - std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift)));
 			exponent = this->getExponent();
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	if (shift == 0) {
-		std::cout << "kein Shift, Shift = " << shift << '\n';
+		// std::cout << "kein Shift, Shift = " << shift << '\n';
 		// Mantisse: this > a
 		if (this->getMantissa() > a.getMantissa()) { // Zahlen sortieren, dass von größerer Mantisse die kleinere abgezogen wird
 			if (this->getExponent() == 0 and a.getExponent() == 0) {
 				mantissa = this->getMantissa() - a.getMantissa();
 				exponent = this->getExponent();
-				std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 				while (mantissa >= (2 * one_dot)) {
 					mantissa /= 2;
 					exponent++;
@@ -286,7 +280,7 @@ Float16 Float16::operator-(Float16 a) {
 			else {
 				mantissa = (this->getMantissa() + one_dot) - (a.getMantissa() + one_dot);
 				exponent = this->getExponent();
-				std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 				while (mantissa >= (2 * one_dot)) {
 					mantissa /= 2;
 					exponent++;
@@ -299,7 +293,7 @@ Float16 Float16::operator-(Float16 a) {
 			if (this->getExponent() == 0 and a.getExponent() == 0) {
 				mantissa = a.getMantissa() - this->getMantissa();
 				exponent = this->getExponent();
-				std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 				while (mantissa >= (2 * one_dot)) {
 					mantissa /= 2;
 					exponent++;
@@ -309,7 +303,7 @@ Float16 Float16::operator-(Float16 a) {
 			else {
 				mantissa = (a.getMantissa() + one_dot) - (this->getMantissa() + one_dot);
 				exponent = this->getExponent();
-				std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 				while (mantissa >= (2 * one_dot)) {
 					mantissa /= 2;
 					exponent++;
@@ -318,7 +312,7 @@ Float16 Float16::operator-(Float16 a) {
 			}
 		}
 	}
-	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float16(sign, exponent, mantissa);
 }
 
@@ -336,17 +330,17 @@ Float16 Float16::operator*(Float16 a) {
 	// Exponent berechnen
 	exponent = this->getExponent() + a.getExponent() - this->getBias();
 
-	std::cout << "Exponent = " << exponent << " exp_1 = " << this->getExponent() << " exp_2 = " << a.getExponent() << '\n';
+	// std::cout << "Exponent = " << exponent << " exp_1 = " << this->getExponent() << " exp_2 = " << a.getExponent() << '\n';
 
 	// Mantisse berechnen
 	if (this->getExponent() == 0 and a.getExponent() == 0) {
 		mantissa = 0; // Wert ist für die Darstellung zu klein
 	}
 	else if (this->getExponent() == 0) {
-		std::cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
+		// std::cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
 		mantissa = this->getMantissa() * (a.getMantissa() + one_dot);
 		mantissa = std::floor(mantissa / one_dot);
-		std::cout << "Mantisse = " << mantissa << '\n';
+		// std::cout << "Mantisse = " << mantissa << '\n';
 		// Komma verschieben, bis Mantisse größer 0,5 (512)
 		mantissa *= 2;
 		exponent--;
@@ -358,7 +352,7 @@ Float16 Float16::operator*(Float16 a) {
 	else if (a.getExponent() == 0) {
 		mantissa = (this->getMantissa() + one_dot) * a.getMantissa();
 		mantissa = std::floor(mantissa / one_dot);
-		std::cout << "Mantisse = " << mantissa << '\n';
+		// std::cout << "Mantisse = " << mantissa << '\n';
 		// Komma verschieben, bis Mantisse größer 0,5 (512)
 		mantissa *= 2;
 		exponent--;
@@ -368,14 +362,14 @@ Float16 Float16::operator*(Float16 a) {
 		}
 	}
 	else {
-		std::cout << "Mantissenberechnung Standard " << '\n';
+		// std::cout << "Mantissenberechnung Standard " << '\n';
 		mantissa = (this->getMantissa() + one_dot) * (a.getMantissa() + one_dot);
 		mantissa = std::ceil(mantissa / one_dot);
 		// std::cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
 		while (mantissa >= (2 * one_dot)) { // Schleife eigentlich irrelevant, weil Wert nie größer 2 * one_dot wird
 			mantissa /= 2;
 			exponent++;
-			std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
+			// std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
 		}
 		// std::cout << "Mantisse = " << mantissa << " nach Nachberechnung " << '\n';
 		if (exponent < 0) {
@@ -391,35 +385,39 @@ Float16 Float16::operator*(Float16 a) {
 		while (exponent < 0) {
 			mantissa = std::ceil(mantissa / 2);
 			exponent++;
-			std::cout << "Mantisse = " << mantissa << " in Exponent normalisieren " << '\n';
-			std::cout << "Exponent = " << exponent << " in Exponent normalisieren " << '\n';
+			// std::cout << "Mantisse = " << mantissa << " in Exponent normalisieren " << '\n';
+			// std::cout << "Exponent = " << exponent << " in Exponent normalisieren " << '\n';
 		}
 	}
-	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float16(sign, exponent, mantissa);
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
 // da bei größerer Zahl nur noch wenige Nachkommastellen dargestellt werden können.
 void Float16::test_Float16_operator_plus() {
+	int s1 = 0;
+	int s2 = 0;
 	int e1 = 0;
 	int e2 = 0;
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, e1, m1);
-	Float16 flB(0, e2, m2);
+	Float16 flA(s1, e1, m1);
+	Float16 flB(s2, e2, m2);
 
 	Float16 flC = flA + flB;
 
 	for (int i = 0; i < 1000; i++) {
+		s1 = rand() % 2;
+		s2 = rand() % 2;
 		e1 = rand() % 22;
 		e2 = rand() % 22;
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, e1, m1);
-		Float16 flB(0, e2, m2);
+		Float16 flA(s1, e1, m1);
+		Float16 flB(s2, e2, m2);
 
 		Float16 flC = flA + flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
@@ -433,24 +431,28 @@ void Float16::test_Float16_operator_plus() {
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
 // da bei größerer Zahl nur noch wenige Nachkommastellen dargestellt werden können.
 void Float16::test_Float16_operator_minus() {
+	int s1 = 0;
+	int s2 = 0;
 	int e1 = 0;
 	int e2 = 0;
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, e1, m1);
-	Float16 flB(0, e2, m2);
+	Float16 flA(s1, e1, m1);
+	Float16 flB(s2, e2, m2);
 
 	Float16 flC = flA - flB;
 
 	for (int i = 0; i < 1000; i++) {
+		s1 = rand() % 2;
+		s2 = rand() % 2;
 		e1 = rand() % 22;
 		e2 = rand() % 22;
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, e1, m1);
-		Float16 flB(0, e2, m2);
+		Float16 flA(s1, e1, m1);
+		Float16 flB(s2, e2, m2);
 
 		Float16 flC = flA - flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
@@ -468,24 +470,28 @@ void Float16::test_Float16_operator_minus() {
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
 // da bei größerer Zahl nur noch wenige Nachkommastellen dargestellt werden können.
 void Float16::test_Float16_operator_multiply() {
+	int s1 = 0;
+	int s2 = 0;
 	int e1 = 0;
 	int e2 = 0;
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, e1, m1);
-	Float16 flB(0, e2, m2);
+	Float16 flA(s1, e1, m1);
+	Float16 flB(s2, e2, m2);
 
 	Float16 flC = flA * flB;
 
 	for (int i = 0; i < 1000; i++) {
+		s1 = rand() % 2;
+		s2 = rand() % 2;
 		e1 = rand() % 22;
 		e2 = rand() % 22;
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, e1, m1);
-		Float16 flB(0, e2, m2);
+		Float16 flA(s1, e1, m1);
+		Float16 flB(s2, e2, m2);
 
 		Float16 flC = flA * flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';

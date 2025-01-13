@@ -10,10 +10,14 @@ public:
 
 	double calcX();
 
+	Float32 operator+(Float32 a);
+	Float32 operator-(Float32 a);
+	Float32 operator*(Float32 a);
+
 	int getSign();
 	void setSign(int s);
 
-	int getMantissa();
+	unsigned long long getMantissa();
 	void setMantissa(int m);
 
 	int getExponent();
@@ -23,6 +27,11 @@ public:
 	int getBias();
 	int getMantissa_bits();
 	int getExponent_bits();
+
+	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
+	void test_Float32_operator_plus();
+	void test_Float32_operator_minus();
+	void test_Float32_operator_multiply();
 
 private:
 	int sign;  // Vorzeichen
