@@ -11,9 +11,9 @@ class Default32squareroot {
 public:
 	Default32squareroot(int ba, int bi, int mant_bits, int exp_bits);
 
-	Default32squareroot(int ba, int bi, int mant_bits, int exp_bits, int s, int m, int e);
+	Default32squareroot(int ba, int bi, int mant_bits, int exp_bits, int s, int e, int m);
 
-	void setValues(int s, int m, int e);
+	void setValues(int s, int e, int m);
 
 	double calcX();
 

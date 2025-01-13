@@ -8,11 +8,11 @@ class ExperimentalDefault {
 public:
 	ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits);
 
-	ExperimentalDefault(int ba, int mant_bits, int exp_bits, int s, long m, long e);
+	ExperimentalDefault(int ba, int mant_bits, int exp_bits, int s, long e, long m);
 
-	ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits, int s, long m, long e);
+	ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits, int s, long e, long m);
 
-	void setValues(int s, long m, long e);
+	void setValues(int s, long e, long m);
 
 	long double calcX();
 	long double calcX_with_In_Out() const;

@@ -4,14 +4,14 @@
 
 // todo
 
-Default32squareroot::Default32squareroot(int ba, int bi, int mant_bits, int exp_bits) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits) {};
+Default32squareroot::Default32squareroot(int ba, int bi, int mant_bits, int exp_bits) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(0), exponent(0), mantissa(0) {};
 
-Default32squareroot::Default32squareroot(int ba, int bi, int mant_bits, int exp_bits, int s, int m, int e) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), mantissa(m), exponent(e) {};
+Default32squareroot::Default32squareroot(int ba, int bi, int mant_bits, int exp_bits, int s, int e, int m) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), exponent(e), mantissa(m) {};
 
-void Default32squareroot::setValues(int s, int m, int e) {
+void Default32squareroot::setValues(int s, int e, int m) {
 	this->sign = s;
-	this->mantissa = m;
 	this->exponent = e;
+	this->mantissa = m;
 }
 
 int Default32squareroot::getSign() {

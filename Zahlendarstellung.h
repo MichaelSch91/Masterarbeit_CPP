@@ -6,7 +6,7 @@
 //todo
 class Zahlendarstellung {
 public:
-	Zahlendarstellung(int s, int m, int e);
+	Zahlendarstellung(int s, int e, int m);
 
 	double calcX() const;
 

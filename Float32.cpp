@@ -47,6 +47,7 @@ double Float32::calcX() {
 	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
 }
 
+// denormalisiert, sonst +1 für exp > 0
 double Float32::berechneMantisseDezimalwert() const {
 	return this->mantissa / pow(this->base, this->mantissa_bits);
 }

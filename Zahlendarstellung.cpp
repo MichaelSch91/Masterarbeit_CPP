@@ -3,7 +3,7 @@
 #include "Zahlendarstellung.h"
 
 
-Zahlendarstellung::Zahlendarstellung(int s, int m, int e) : sign(s), mantissa(m), exponent(e) {};
+Zahlendarstellung::Zahlendarstellung(int s, int e, int m) : sign(s), exponent(e), mantissa(m) {};
 
 int Zahlendarstellung::getSign() {
 	return this->sign;

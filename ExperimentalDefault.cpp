@@ -2,16 +2,16 @@
 #include <iostream>
 #include "ExperimentalDefault.h"
 
-ExperimentalDefault::ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(0), mantissa(0), exponent(0) {};
+ExperimentalDefault::ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(0), exponent(0), mantissa(0) {};
 
-ExperimentalDefault::ExperimentalDefault(int ba, int mant_bits, int exp_bits, int s, long m, long e) : base(ba), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), mantissa(m), exponent(e), bias(this->berechneBias(ba, exp_bits)) {};
+ExperimentalDefault::ExperimentalDefault(int ba, int mant_bits, int exp_bits, int s, long e, long m) : base(ba), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), exponent(e), mantissa(m), bias(this->berechneBias(ba, exp_bits)) {};
 
-ExperimentalDefault::ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits, int s, long  m, long e) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), mantissa(m), exponent(e) {};
+ExperimentalDefault::ExperimentalDefault(int ba, int bi, int mant_bits, int exp_bits, int s, long e, long  m) : base(ba), bias(bi), mantissa_bits(mant_bits), exponent_bits(exp_bits), sign(s), exponent(e), mantissa(m) {};
 
-void ExperimentalDefault::setValues(int s, long m, long e) {
+void ExperimentalDefault::setValues(int s, long e, long m) {
 	this->sign = s;
-	this->mantissa = m;
 	this->exponent = e;
+	this->mantissa = m;
 }
 
 int ExperimentalDefault::getSign() {
