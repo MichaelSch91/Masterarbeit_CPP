@@ -50,11 +50,14 @@ int main()
     CSV_data::writeDoubleListToCSV(logisticmap_double.getList());
     */
     
-    Float16 fl(0, 0, 0);
+    Float16 fl(0, 142, 0);
     // fl.test_Float16_operator_multiply();
     // fl.test_Float16_operator_plus();
-    fl.test_Float16_operator_minus();
+    // fl.test_Float16_operator_minus();
 
+    Float32 fl32 = fl.convert_to_Float32();
+
+    std::cout << fl.calcX() << " = " << fl32.calcX() << '\n';
     /*
     Float16 flA(0, 515, 0);
     Float16 flB(0, 3, 30);

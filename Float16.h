@@ -3,9 +3,11 @@
 
 #include <iostream>
 #include <cmath>
+#include "Float32.h"
+
 class Float16 {
 public:
-	Float16(int s, int m, int e);
+	Float16(int s, int e, int m);
 
 	double calcX();
 
@@ -26,6 +28,8 @@ public:
 	int getBias();
 	int getMantissa_bits();
 	int getExponent_bits();
+
+	Float32 convert_to_Float32();
 
 	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
 	void test_Float16_operator_plus();

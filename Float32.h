@@ -6,7 +6,7 @@
 //todo
 class Float32 {
 public:
-	Float32(int s, int m, int e);
+	Float32(int s, int e, int m);
 
 	double calcX();
 

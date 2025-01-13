@@ -1,12 +1,10 @@
 #include <cmath>
 #include <iostream>
 #include "Float16.h"
+#include "Float32.h"
 
 
-Float16::Float16(int s, int m, int e) : sign(s), mantissa(m), exponent(e) {
-	this->sign = s;
-	this->mantissa = m;
-	this->exponent = e;
+Float16::Float16(int s, int e, int m) : sign(s), exponent(e), mantissa(m) {
 };
 
 int Float16::getSign() {
@@ -58,6 +56,18 @@ int Float16::berechneMantisseBinärwert(double dezimalwert) {
 	return (int)(dezimalwert * pow(this->base, this->mantissa_bits));
 }
 
+Float32 Float16::convert_to_Float32() {
+	Float32 fl32(0, 0, 0); // Instanziiert, um Bias und Base als Rückgabe zu erhalten, übersichtliche Berechnung der Werte, 
+	// ginge auch schneller mit Übergabe der Formeln im Setter
+	int exponent = this->getExponent() - this->getBias() + fl32.getBias();
+	int mantissa = (int)(this->getMantissa() * pow(fl32.getBase(), fl32.getMantissa_bits()) / pow(this->getBase(), this->getMantissa_bits()));
+
+	fl32.setSign(this->getSign());
+	fl32.setExponent(exponent);
+	fl32.setMantissa(mantissa);
+
+	return fl32;
+}
 
 
 // todo: funktioniert, aber einmal beim Testen trat auf, dass Mantisse um 1 zu niedrig war (Rundungsfehler?)
@@ -75,10 +85,10 @@ Float16 Float16::operator+(Float16 a) {
 
 	if (this->getSign() != a.getSign()) {
 		if (this->getSign() == 1) { // -this + a = a - (+this)
-			return a.operator-(Float16(0, this->getMantissa(), this->getExponent()));
+			return a.operator-(Float16(0, this->getExponent(), this->getMantissa()));
 		}
 		if (a.getSign() == 1) { // this + (-a) = this - (+a)
-			return this->operator-(Float16(0, a.getMantissa(), a.getExponent()));
+			return this->operator-(Float16(0, a.getExponent(), a.getMantissa()));
 		}
 		throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
 	}
@@ -152,7 +162,7 @@ Float16 Float16::operator+(Float16 a) {
 		}
 	}
 	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
-	return Float16(sign, mantissa, exponent);
+	return Float16(sign, exponent, mantissa);
 }
 
 // ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
@@ -163,15 +173,15 @@ Float16 Float16::operator-(Float16 a) {
 	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
 		std::cout << "this - (-a) = this + a" << '\n';
-		return this->operator+(Float16(0, a.getMantissa(), a.getExponent())); // neues Objekt, um Objekt a nicht zu verändern
+		return this->operator+(Float16(0, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	if (this->getSign() == 1 and a.getSign() == 1) { // - this - (-a) = a - this
 		std::cout << "- this - (-a) = a - this" << '\n';
-		return Float16(0, a.getMantissa(), a.getExponent()).operator-(*this); // neues Objekt, um Objekt a nicht zu verändern
+		return Float16(0, a.getExponent(), a.getMantissa()).operator-(*this); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	if (this->getSign() == 1 and a.getSign() == 0) { // - this - (+a) = - this + (-a)
 		std::cout << "- this - (+a) = - this + (-a)" << '\n';
-		return this->operator+(Float16(1, a.getMantissa(), a.getExponent())); // neues Objekt, um Objekt a nicht zu verändern
+		return this->operator+(Float16(1, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
 
 	int one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
@@ -308,7 +318,7 @@ Float16 Float16::operator-(Float16 a) {
 		}
 	}
 	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
-	return Float16(sign, mantissa, exponent);
+	return Float16(sign, exponent, mantissa);
 }
 
 Float16 Float16::operator*(Float16 a) {
@@ -385,7 +395,7 @@ Float16 Float16::operator*(Float16 a) {
 		}
 	}
 	std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
-	return Float16(sign, mantissa, exponent);
+	return Float16(sign, exponent, mantissa);
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -396,8 +406,8 @@ void Float16::test_Float16_operator_plus() {
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, m1, e1);
-	Float16 flB(0, m2, e2);
+	Float16 flA(0, e1, m1);
+	Float16 flB(0, e2, m2);
 
 	Float16 flC = flA + flB;
 
@@ -407,8 +417,8 @@ void Float16::test_Float16_operator_plus() {
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, m1, e1);
-		Float16 flB(0, m2, e2);
+		Float16 flA(0, e1, m1);
+		Float16 flB(0, e2, m2);
 
 		Float16 flC = flA + flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
@@ -427,8 +437,8 @@ void Float16::test_Float16_operator_minus() {
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, m1, e1);
-	Float16 flB(0, m2, e2);
+	Float16 flA(0, e1, m1);
+	Float16 flB(0, e2, m2);
 
 	Float16 flC = flA - flB;
 
@@ -438,8 +448,8 @@ void Float16::test_Float16_operator_minus() {
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, m1, e1);
-		Float16 flB(0, m2, e2);
+		Float16 flA(0, e1, m1);
+		Float16 flB(0, e2, m2);
 
 		Float16 flC = flA - flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
@@ -462,8 +472,8 @@ void Float16::test_Float16_operator_multiply() {
 	int m1 = 0;
 	int m2 = 0;
 
-	Float16 flA(0, m1, e1);
-	Float16 flB(0, m2, e2);
+	Float16 flA(0, e1, m1);
+	Float16 flB(0, e2, m2);
 
 	Float16 flC = flA * flB;
 
@@ -473,8 +483,8 @@ void Float16::test_Float16_operator_multiply() {
 		m1 = rand() % 1023;
 		m2 = rand() % 1023;
 
-		Float16 flA(0, m1, e1);
-		Float16 flB(0, m2, e2);
+		Float16 flA(0, e1, m1);
+		Float16 flB(0, e2, m2);
 
 		Float16 flC = flA * flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';

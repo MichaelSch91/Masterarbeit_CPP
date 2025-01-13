@@ -3,10 +3,7 @@
 #include "Float32.h"
 
 
-Float32::Float32(int s, int m, int e) : sign(s), mantissa(m), exponent(e) {
-	this->sign = s;
-	this->mantissa = m;
-	this->exponent = e;
+Float32::Float32(int s, int e, int m) : sign(s), exponent(e), mantissa(m) {
 };
 
 int Float32::getSign() {
