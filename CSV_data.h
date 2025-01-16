@@ -17,6 +17,8 @@ public:
 
     static void writeDoubleListToCSV(std::list<double> list);
 
+    static void writeDoubleListToCSV(std::list<long double> list);
+
     static void writeLongDoubleListToCSV(std::list<long double> list);
 
     static void writeDeltaLongDoubleListToCSV(std::list<long double> list);

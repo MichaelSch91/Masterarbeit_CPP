@@ -75,6 +75,9 @@
     <ClCompile Include="Zahlenverteilung.cpp">
       <Filter>Quelldateien\Zahlendarstellungen</Filter>
     </ClCompile>
+    <ClCompile Include="Logisticmap_float32.cpp">
+      <Filter>Quelldateien\Logmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Zahlenverteilung.h">
       <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Logisticmap_float32.h">
+      <Filter>Headerdateien\Logmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

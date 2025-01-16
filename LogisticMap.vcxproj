@@ -137,6 +137,7 @@
     <ClCompile Include="LogisticmapCalc.cpp" />
     <ClCompile Include="Logisticmap_double.cpp" />
     <ClCompile Include="Logisticmap_float.cpp" />
+    <ClCompile Include="Logisticmap_float32.cpp" />
     <ClCompile Include="Logisticmap_long_double.cpp" />
     <ClCompile Include="Logisticmap_long_double.h" />
     <ClCompile Include="Zahlendarstellung.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="LogisticmapCalc.h" />
     <ClInclude Include="Logisticmap_double.h" />
     <ClInclude Include="Logisticmap_float.h" />
+    <ClInclude Include="Logisticmap_float32.h" />
     <ClInclude Include="Zahlendarstellung.h" />
     <ClInclude Include="Zahlenverteilung.h" />
   </ItemGroup>

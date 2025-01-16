@@ -9,10 +9,13 @@ public:
 	Float32(int s, int e, int m);
 
 	double calcX();
+	long double calcX_long_double();
 
 	Float32 operator+(Float32 a);
 	Float32 operator-(Float32 a);
 	Float32 operator*(Float32 a);
+
+	bool operator==(Float32 a);
 
 	int getSign();
 	void setSign(int s);
