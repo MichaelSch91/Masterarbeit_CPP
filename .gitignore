@@ -78,3 +78,5 @@ CSV/double_precision.csv
 CSV/long_double_precision.csv
 /CSV/double_precision.csv
 /CSV/long_double_precision.csv
+/CSV/delta_double_float_precision.csv
+/CSV/float_precision.csv

@@ -73,10 +73,10 @@ int main()
 	*/
 
 
-	Logisticmap_double lm_d;
-	std::cout << "Start = " << lm_d.getS() << " r = " << lm_d.getR() << '\n';
-	LogisticmapCalc::list_screen(lm_d.get_long_double_List());
-	CSV_data::writeDoubleListToCSV(lm_d.getList());
+	Logisticmap_float lm_f;
+	std::cout << "Start = " << lm_f.getS() << " r = " << lm_f.getR() << '\n';
+	LogisticmapCalc::list_screen(lm_f.get_long_double_List());
+	CSV_data::writeFloatListToCSV(lm_f.getList());
 
 
 
@@ -85,7 +85,7 @@ int main()
 	LogisticmapCalc::list_screen(fl.get_long_double_List());
 	
 
-	CSV_data::writeDoubleListToCSV(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_d.get_long_double_List()));
+	CSV_data::writeDeltaLongDoubleListToCSV_double_float(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_f.get_long_double_List()));
 
 	/*
 
