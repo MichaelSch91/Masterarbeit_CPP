@@ -165,6 +165,7 @@ void Zahlenverteilung::berechne_zahlenverteilung(Default32squareroot fl) {
 	while (fl.getExponent() < max_exponent) {
 		while (fl.getMantissa() < max_mantissa) {
 			x = fl.calcX();
+			std::cout << std::setprecision(100000) << x << '\n';
 			if (x > this->maximum) {
 				break;
 			}
@@ -173,7 +174,7 @@ void Zahlenverteilung::berechne_zahlenverteilung(Default32squareroot fl) {
 				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
 				if ((x >= this->list_klassen[i]) and (x < this->list_klassen[i + 1])) {
 					this->list_zahlenverteilung[i]++;
-					//std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
+					// std::cout << "Listenwert: " << this->list_zahlenverteilung[i] << '\n';
 				}
 			}
 			fl.setMantissa(fl.getMantissa() + 1);

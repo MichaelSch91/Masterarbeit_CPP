@@ -6,21 +6,39 @@
 
 #include <iostream>
 #include <cmath>
+#include "Default32squareroot.h"
 // todo
 class Default32squareroot {
 public:
-	Default32squareroot(int ba, int bi, int mant_bits, int exp_bits);
+	Default32squareroot(int ba);
 
-	Default32squareroot(int ba, int bi, int mant_bits, int exp_bits, int s, int e, int m);
+	Default32squareroot(int ba, int s, int e, int m);
+
+	Default32squareroot(int s, int e, int m);
 
 	void setValues(int s, int e, int m);
 
 	double calcX();
+	double calcX_oddExponent();
+	double calcX_evenExponent();
+	double calc_pow_oddExponent();
+	int calc_pow_evenExponent();
+	double calc_pow_negative_evenExponent();
+
+	Default32squareroot operator+(Default32squareroot a);
+	Default32squareroot plus_different_operator(Default32squareroot a);
+
+	Default32squareroot operator-(Default32squareroot a);
+	Default32squareroot minus_different_operator(Default32squareroot a);
+
+	Default32squareroot operator*(Default32squareroot a);
+
+	bool operator==(Default32squareroot a);
 
 	int getSign();
 	void setSign(int s);
 
-	int getMantissa();
+	unsigned long long getMantissa();
 	void setMantissa(int m);
 
 	int getExponent();
@@ -31,14 +49,21 @@ public:
 	int getMantissa_bits();
 	int getExponent_bits();
 
+	// richtige Tests erstellen, zumindest für die Methoden der entwickelten Zahlendarstellung
+	void test_Default32squareroot_operator_plus();
+	void test_Default32squareroot_operator_minus();
+	void test_Default32squareroot_operator_multiply();
+
+
+
 private:
-	int sign{};  // Vorzeichen
-	int mantissa{};  // Mantisse
-	int exponent{}; // Exponent
-	const int base;  // Basis
-	const int bias;  // Biaswert für Exponent
-	const int mantissa_bits;  // Bits Mantisse
-	const int exponent_bits;  // Bits Mantisse
+	int sign;  // Vorzeichen
+	int mantissa;  // Mantisse
+	int exponent; // Exponent
+	int base;  // Basis
+	static constexpr int bias = 127;  // Biaswert für Exponent
+	static constexpr int mantissa_bits = 23;  // Bits Mantisse
+	static constexpr int exponent_bits = 8;  // Bits Mantisse
 
 	double berechneMantisseDezimalwert() const;
 };

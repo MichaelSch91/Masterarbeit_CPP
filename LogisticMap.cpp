@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <tuple>
 #include <cmath>
+#include <iomanip>
 
 #include "LogisticMapCalc.h"
 #include "Logisticmap_float.h"
@@ -72,20 +73,29 @@ int main()
 	std::cout << "C = " << flC.calcX() << '\n';
 	*/
 
-
+	/*
 	Logisticmap_float lm_f;
 	std::cout << "Start = " << lm_f.getS() << " r = " << lm_f.getR() << '\n';
 	LogisticmapCalc::list_screen(lm_f.get_long_double_List());
 	CSV_data::writeFloatListToCSV(lm_f.getList());
+	*/
 
 
+	Zahlenverteilung zahlenverteilung(0.0, 4.0, 0.1);
+	Default32squareroot square(2,0,0,0);
+	square.test_Default32squareroot_operator_plus();
+
+	// zahlenverteilung.berechne_zahlenverteilung(square);
+
+	Float32 flx(0, 0, 0);
+	// flx.test_Float32_operator_minus();
 
 	Logisticmap_float32 fl;
 	std::cout << "Start = " << fl.getS().calcX() << " r = " << fl.getR().calcX() << '\n';
-	LogisticmapCalc::list_screen(fl.get_long_double_List());
+	// LogisticmapCalc::list_screen(fl.get_long_double_List());
 	
 
-	CSV_data::writeDeltaLongDoubleListToCSV_double_float(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_f.get_long_double_List()));
+	// CSV_data::writeDeltaLongDoubleListToCSV_double_float(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_f.get_long_double_List()));
 
 	/*
 

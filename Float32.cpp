@@ -61,6 +61,18 @@ double Float32::berechneMantisseDezimalwert() const {
 }
 
 
+Float32 Float32::plus_different_operator(Float32 a) {
+	if (this->getSign() == 1) { // -this + a = a - (+this)
+		// std::cout << "plus case 1";
+		return a.operator-(Float32(0, this->getExponent(), this->getMantissa()));
+	}
+	if (a.getSign() == 1) { // this + (-a) = this - (+a)
+		// std::cout << "plus case 2";
+		return this->operator-(Float32(0, a.getExponent(), a.getMantissa()));
+	}
+	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+}
+
 // todo: funktioniert, aber einmal beim Testen trat auf, dass Mantisse um 1 zu niedrig war (Rundungsfehler?)
 // Tests schreiben?
 // Vorzeichen muss bei beiden Summanden gleich sein (Implementierung von Addition einer negativen Zahl über operator-)
@@ -77,15 +89,7 @@ Float32 Float32::operator+(Float32 a) {
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
 	if (this->getSign() != a.getSign()) {
-		if (this->getSign() == 1) { // -this + a = a - (+this)
-			// std::cout << "plus case 1";
-			return a.operator-(Float32(0, this->getExponent(), this->getMantissa()));
-		}
-		if (a.getSign() == 1) { // this + (-a) = this - (+a)
-			// std::cout << "plus case 2";
-			return this->operator-(Float32(0, a.getExponent(), a.getMantissa()));
-		}
-		throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+		return this->plus_different_operator(a);
 	}
 
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
@@ -179,12 +183,8 @@ Float32 Float32::operator+(Float32 a) {
 	return Float32(sign, exponent, mantissa);
 }
 
-// ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
-// damit es übersichtlicher wird, aber vermutlich dadurch Performanz schlechter
-// 
-// nur "+this - (+a)" wird hier in der Methode berechnet, alle anderen Fälle werden übergeben
-Float32 Float32::operator-(Float32 a) {
-	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
+
+Float32 Float32::minus_different_operator(Float32 a) {
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
 		// std::cout << "this - (-a) = this + a" << '\n';
 		return this->operator+(Float32(0, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
@@ -197,7 +197,19 @@ Float32 Float32::operator-(Float32 a) {
 		// std::cout << "- this - (+a) = - this + (-a)" << '\n';
 		return this->operator+(Float32(1, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
+	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+}
 
+// ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
+// damit es übersichtlicher wird, aber vermutlich dadurch Performanz schlechter
+// 
+// nur "+this - (+a)" wird hier in der Methode berechnet, alle anderen Fälle werden übergeben
+Float32 Float32::operator-(Float32 a) {
+	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
+	if (!(this->getSign() == 0 and a.getSign() == 0)) {
+		return this->minus_different_operator(a);
+	}
+	
 	unsigned long long one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
 	unsigned long long mantissa = 0;
 	int exponent = 0;
@@ -562,7 +574,7 @@ void Float32::test_Float32_operator_multiply() {
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
 		if (abs(flC.calcX() - (flA.calcX() * flB.calcX())) > 0.00005) {
 			std::cout << "Abweichung!" << '\n';
-			std::cout << " A + B = " << (flA.calcX() * flB.calcX()) << " Float32 A * B = " << flC.calcX() << '\n' << '\n' << '\n';
+			std::cout << " A * B = " << (flA.calcX() * flB.calcX()) << " Float32 A * B = " << flC.calcX() << '\n' << '\n' << '\n';
 		}
 	}
 }

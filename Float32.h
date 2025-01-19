@@ -12,7 +12,11 @@ public:
 	long double calcX_long_double();
 
 	Float32 operator+(Float32 a);
+	Float32 plus_different_operator(Float32 a);
+
 	Float32 operator-(Float32 a);
+	Float32 minus_different_operator(Float32 a);
+
 	Float32 operator*(Float32 a);
 
 	bool operator==(Float32 a);
