@@ -97,7 +97,7 @@ Float32 Float32::operator+(Float32 a) {
 	// Exponentenverschiebung (für Mantissen)
 	int shift = this->getExponent() - a.getExponent();
 
-	unsigned long long bit_shift = (unsigned long long)pow(2, abs(shift));
+	unsigned long long bit_shift = (unsigned long long)pow(this->base, abs(shift));
 
 	if (shift < 0) {
 		// denormalisierte Mantisse (Exponent = 0)

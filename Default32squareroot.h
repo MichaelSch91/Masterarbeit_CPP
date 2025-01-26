@@ -19,11 +19,15 @@ public:
 	void setValues(int s, int e, int m);
 
 	double calcX();
+	double calcX_highExponent();
 	double calcX_oddExponent();
 	double calcX_evenExponent();
-	double calc_pow_oddExponent();
-	int calc_pow_evenExponent();
-	double calc_pow_negative_evenExponent();
+	double calcX_negativeExponent();
+	long double calc_pow_oddExponent();
+	unsigned long long int calc_pow_evenExponent();
+	long double calc_pow_negativeExponent();
+
+	long double simpleCalcX();
 
 	Default32squareroot operator+(Default32squareroot a);
 	Default32squareroot plus_different_operator(Default32squareroot a);
@@ -44,7 +48,7 @@ public:
 	int getExponent();
 	void setExponent(int e);
 
-	int getBase();
+	long long getBase();
 	int getBias();
 	int getMantissa_bits();
 	int getExponent_bits();
@@ -53,6 +57,8 @@ public:
 	void test_Default32squareroot_operator_plus();
 	void test_Default32squareroot_operator_minus();
 	void test_Default32squareroot_operator_multiply();
+	
+	void test_Default32squareroot_calcX();
 
 
 

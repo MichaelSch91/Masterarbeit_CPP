@@ -82,8 +82,12 @@ int main()
 
 
 	Zahlenverteilung zahlenverteilung(0.0, 4.0, 0.1);
-	Default32squareroot square(2,0,0,0);
+	Default32squareroot square(2,0,256, 8388608);
+	// std::cout << square.calcX()<< '\n';
+
+	// square.test_Default32squareroot_calcX();
 	square.test_Default32squareroot_operator_plus();
+	// square.test_Default32squareroot_operator_multiply();
 
 	// zahlenverteilung.berechne_zahlenverteilung(square);
 
