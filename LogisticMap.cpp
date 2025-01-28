@@ -23,6 +23,7 @@
 #include "ExperimentalDefault.h"
 #include "Default32squareroot.h"
 #include "Logisticmap_float32.h"
+#include "Logisticmap_Default32squareroot.h"
 
 #include "CSV_data.h"
 
@@ -82,11 +83,12 @@ int main()
 
 
 	Zahlenverteilung zahlenverteilung(0.0, 4.0, 0.1);
-	Default32squareroot square(2,0,256, 8388608);
+	Default32squareroot square(2,0,0, 0);
 	// std::cout << square.calcX()<< '\n';
 
 	// square.test_Default32squareroot_calcX();
-	square.test_Default32squareroot_operator_plus();
+	// square.test_Default32squareroot_operator_plus();
+	// square.test_Default32squareroot_operator_minus();
 	// square.test_Default32squareroot_operator_multiply();
 
 	// zahlenverteilung.berechne_zahlenverteilung(square);
@@ -94,9 +96,9 @@ int main()
 	Float32 flx(0, 0, 0);
 	// flx.test_Float32_operator_minus();
 
-	Logisticmap_float32 fl;
-	std::cout << "Start = " << fl.getS().calcX() << " r = " << fl.getR().calcX() << '\n';
-	// LogisticmapCalc::list_screen(fl.get_long_double_List());
+	Logisticmap_Default32squareroot def_sqrt;
+	std::cout << "Start = " << def_sqrt.getS().calcX() << " r = " << def_sqrt.getR().calcX() << '\n';
+	LogisticmapCalc::list_screen(def_sqrt.get_long_double_List());
 	
 
 	// CSV_data::writeDeltaLongDoubleListToCSV_double_float(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_f.get_long_double_List()));

@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Converter32.cpp" />
     <ClCompile Include="CSV_data.cpp" />
     <ClCompile Include="ExperimentalDefault.cpp" />
     <ClCompile Include="Default32squareroot.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="Float32.cpp" />
     <ClCompile Include="LogisticMap.cpp" />
     <ClCompile Include="LogisticmapCalc.cpp" />
+    <ClCompile Include="Logisticmap_Default32squareroot.cpp" />
     <ClCompile Include="Logisticmap_double.cpp" />
     <ClCompile Include="Logisticmap_float.cpp" />
     <ClCompile Include="Logisticmap_float32.cpp" />
@@ -145,11 +147,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSV_data.h" />
+    <ClInclude Include="Converter32.h" />
     <ClInclude Include="ExperimentalDefault.h" />
     <ClInclude Include="Default32squareroot.h" />
     <ClInclude Include="Float16.h" />
     <ClInclude Include="Float32.h" />
     <ClInclude Include="LogisticmapCalc.h" />
+    <ClInclude Include="Logisticmap_Default32squareroot.h" />
     <ClInclude Include="Logisticmap_double.h" />
     <ClInclude Include="Logisticmap_float.h" />
     <ClInclude Include="Logisticmap_float32.h" />

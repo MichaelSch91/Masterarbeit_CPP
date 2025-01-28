@@ -1,0 +1,133 @@
+#include "Logisticmap_Default32squareroot.h"
+
+#include <iostream>
+#include <list>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <unordered_set>
+#include "Default32squareroot.h"
+
+Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(): s(Default32squareroot(2, 0, 123, 5033165)), r(Default32squareroot(2, 0, 128, 7969178)) {
+	this->list = logistischeAbbildungDefault32squareroot();
+	this->long_double_list = cast_list(this->list);
+}
+
+Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(Default32squareroot start, Default32squareroot parmeter_r) : s(start), r(parmeter_r) {
+	this->list = logistischeAbbildungDefault32squareroot();
+	this->long_double_list = cast_list(this->list);
+};
+
+std::list<Default32squareroot> Logisticmap_Default32squareroot::getList() {
+	return this->list;
+}
+std::list<long double> Logisticmap_Default32squareroot::get_long_double_List() {
+	return this->long_double_list;
+}
+
+Default32squareroot Logisticmap_Default32squareroot::getS() {
+	return this->s;
+}
+
+Default32squareroot Logisticmap_Default32squareroot::getR() {
+	return this->r;
+}
+
+std::list<Default32squareroot> Logisticmap_Default32squareroot::calcNewList() {
+	return this->logistischeAbbildungDefault32squareroot();
+}
+
+void Logisticmap_Default32squareroot::setList(std::list<Default32squareroot> newList) {
+	this->list = newList;
+	this->calcLongDoubleList();
+}
+
+void Logisticmap_Default32squareroot::calcLongDoubleList() {
+	this->long_double_list = this->cast_list(this->getList());
+}
+
+// mit Startwert s
+std::list<Default32squareroot> Logisticmap_Default32squareroot::logistischeAbbildungDefault32squareroot() {
+	// std::cout << "s = " << this->getS().calcX() << " r = " << this->getR().calcX() << '\n';
+	Default32squareroot x = this->s;
+	std::list<Default32squareroot> list = { x };
+	for (int j = 0; j <= this->i; j++) {
+		// std::cout << "x = " << x.calcX() << " r = " << this->getR().calcX() << '\n';
+		list.push_back(logistischeAbbildungRechnerDefault32squareroot(x, this->r));
+		// std::cout << list.back() << '\n';
+		x = list.back();
+		// std::cout << x.calcX() << '\n';
+	}
+	return list;
+}
+
+Default32squareroot Logisticmap_Default32squareroot::logistischeAbbildungRechnerDefault32squareroot(Default32squareroot x, Default32squareroot r) {
+	// std::cout << "r*x*(1-x) =  " << this->getR().calcX() << " * " << x.calcX() << " * ( " << Default32squareroot(0, 127, 0).calcX() << " - " << x.calcX() << ")" << '\n';
+	// std::cout << "Double r*x*(1-x) =  " << this->getR().calcX()*x.calcX()*(Default32squareroot(0, 127, 0).calcX()-x.calcX()) << '\n';
+	// std::cout << "Double (1-x) =  " << (Default32squareroot(0, 127, 0).calcX() - x.calcX())<< " Default32squareroot (1-x) = " << (Default32squareroot(0, 127, 0)-x).calcX() << '\n';
+	// std::cout << "Double r*x =  " << this->getR().calcX() * x.calcX() << " Default32squareroot r*x = " << (this->getR() * x).calcX() << '\n';
+
+
+	return r * x * (Default32squareroot(0, 127, 0) - x);
+}
+
+std::list<long double> Logisticmap_Default32squareroot::cast_list(std::list<Default32squareroot> Default32squarerootList) {
+	std::list<long double> list = {};
+	for (Default32squareroot d : Default32squarerootList) {
+		list.push_back(d.calcX_long_double());
+	}
+	return list;
+}
+
+void Logisticmap_Default32squareroot::list_screen(std::list<Default32squareroot> checked_list) {
+	std::list<Default32squareroot> list(checked_list);
+	std::tuple<bool, Default32squareroot, int, int> tuple = list_screen_duplicates(list);
+	if (std::get<0>(tuple)) {
+		std::cout << "Liste hat Wert doppelt: " << std::get<1>(tuple).calcX() << " bei " << std::get<2>(tuple) << " und " << std::get<3>(tuple) << " iterations." << '\n';;
+	}
+	else {
+		std::cout << "Liste hat keinen Wert doppelt" << '\n';
+	}
+}
+
+// Tupel: <hat Dopplung, Wert der ersten Dopplung, Iteration erstes Vorkommen, Iteration zweites Vorkommen>
+std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot::list_screen_duplicates(std::list<Default32squareroot> list) {
+	int iteration_i = 0;
+	int iteration_j = 0;
+	Default32squareroot value(0, 0, 0);
+	bool has_duplicate = 0;
+	int first_iteration = 0;
+	int last_iteration = 0;
+
+	for (Default32squareroot obj_i : list) {
+		for (Default32squareroot obj_j : list) {
+			if (obj_i == obj_j) {
+				value = obj_i;
+				has_duplicate = 1;
+				first_iteration = iteration_i;
+				last_iteration = iteration_j;
+				break;
+			}
+			iteration_j++;
+		}
+		if (has_duplicate) {
+			break;
+		}
+	}
+	/*
+	if (has_duplicate) {
+		first_iteration = search_first_occurrence(list, value);
+	}
+	*/
+	return std::tuple<bool, Default32squareroot, int, int>(has_duplicate, value, first_iteration, last_iteration);
+}
+
+int Logisticmap_Default32squareroot::search_first_occurrence(std::list<Default32squareroot> list, Default32squareroot value) {
+	int iteration = 0;
+	for (Default32squareroot obj : list) {
+		if (obj == value) {
+			return iteration;
+		}
+		iteration++;
+	}
+}

@@ -78,6 +78,12 @@
     <ClCompile Include="Logisticmap_float32.cpp">
       <Filter>Quelldateien\Logmap</Filter>
     </ClCompile>
+    <ClCompile Include="Logisticmap_Default32squareroot.cpp">
+      <Filter>Quelldateien\Logmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter32.cpp">
+      <Filter>Quelldateien\Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="Logisticmap_float32.h">
       <Filter>Headerdateien\Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Logisticmap_Default32squareroot.h">
+      <Filter>Headerdateien\Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Converter32.h">
+      <Filter>Headerdateien\Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
