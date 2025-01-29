@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "Converter32.h"
+
 // todo
 class Default32squareroot {
 public:
@@ -70,6 +70,7 @@ public:
 	
 	void test_Default32squareroot_calcX();
 
+	static Default32squareroot convert_to_Default32squareroot(int base, long double x);
 
 
 private:

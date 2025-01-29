@@ -24,7 +24,6 @@
 #include "Default32squareroot.h"
 #include "Logisticmap_float32.h"
 #include "Logisticmap_Default32squareroot.h"
-#include "Converter32.h"
 
 #include "CSV_data.h"
 

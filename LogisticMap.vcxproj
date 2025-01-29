@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Converter32.cpp" />
     <ClCompile Include="CSV_data.cpp" />
     <ClCompile Include="ExperimentalDefault.cpp" />
     <ClCompile Include="Default32squareroot.cpp" />
@@ -147,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSV_data.h" />
-    <ClInclude Include="Converter32.h" />
     <ClInclude Include="ExperimentalDefault.h" />
     <ClInclude Include="Default32squareroot.h" />
     <ClInclude Include="Float16.h" />
