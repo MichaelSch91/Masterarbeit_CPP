@@ -581,7 +581,7 @@ void Default32squareroot::test_Default32squareroot_operator_plus() {
 
 		Default32squareroot flC = flA + flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
-		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.0005) {
+		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.00005) {
 			std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() + flB.calcX())) << '\n';
 			std::cout << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() + flB.calcX()))) < flC.deviation_due_to_exp()) {
@@ -716,5 +716,5 @@ long double Default32squareroot::simpleCalcX() {
 }
 
 long double Default32squareroot::deviation_due_to_exp() {
-	return Default32squareroot(this->getBase(), 0, this->getExponent(), 1).calcX() - Default32squareroot(this->getBase(), 0, this->getExponent(), 0).calcX();
+	return (Default32squareroot(this->getBase(), 0, this->getExponent(), 1).calcX() - Default32squareroot(this->getBase(), 0, this->getExponent(), 0).calcX());
 }

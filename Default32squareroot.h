@@ -8,7 +8,7 @@
 #include <cmath>
 #include "Converter32.h"
 // todo
-class Default32squareroot : Converter32 {
+class Default32squareroot {
 public:
 	Default32squareroot(int ba);
 

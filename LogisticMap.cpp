@@ -24,6 +24,7 @@
 #include "Default32squareroot.h"
 #include "Logisticmap_float32.h"
 #include "Logisticmap_Default32squareroot.h"
+#include "Converter32.h"
 
 #include "CSV_data.h"
 
@@ -87,7 +88,7 @@ int main()
 	// std::cout << square.calcX()<< '\n';
 
 	// square.test_Default32squareroot_calcX();
-	// square.test_Default32squareroot_operator_plus();
+	square.test_Default32squareroot_operator_plus();
 	// square.test_Default32squareroot_operator_minus();
 	// square.test_Default32squareroot_operator_multiply();
 
