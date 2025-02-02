@@ -794,8 +794,12 @@ void Default32squareroot::convert_setSign(long double x) {
 }
 // todo: genauer, aktuell ist der Exponent meist um 1 zu niedrig
 int Default32squareroot::convert_findExponent(long double x) {
+	x = abs(x);
 	for (int exp = this->getExponent_min(); exp <= this->getExponent_max(); exp++) {
-		if ((x >= Default32squareroot(this->getBase(), this->getSign(), exp, this->getMantissa_min()).calcX()) and (x <= Default32squareroot(this->getBase(), this->getSign(), exp, this->getMantissa_max()).calcX())) {
+		if ((x >= Default32squareroot(this->getBase(), 0, exp, this->getMantissa_min()).calcX()) and (x <= Default32squareroot(this->getBase(), 0, exp, this->getMantissa_max()).calcX())) {
+			if ((x >= Default32squareroot(this->getBase(), 0, exp+1, this->getMantissa_min()).calcX()) and (x <= Default32squareroot(this->getBase(), 0, exp+1, this->getMantissa_max()).calcX())) {
+				return exp + 1;
+			}
 			return exp;
 		}
 	}
@@ -807,9 +811,10 @@ int Default32squareroot::convert_findMantissa(long double x, int s) {
 }
 
 int Default32squareroot::convert_mantissa_fastApproximation(long double x, int s) {
+	x = abs(x);
 	int steps = s;
 	for (int mant = this->getMantissa_min(); mant <= this->getMantissa_max(); mant += steps) {
-		if ((x >= Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant).calcX()) and (x <= Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant + 100).calcX())) {
+		if ((x >= Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX()) and (x <= Default32squareroot(this->getBase(), 0, this->getExponent(), mant + 100).calcX())) {
 			// std::cout << mant << '\n';
 			return mant;
 		}
@@ -817,12 +822,13 @@ int Default32squareroot::convert_mantissa_fastApproximation(long double x, int s
 }
 
 int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s, int mant_inaccurate) {
+	x = abs(x);
 	int m = mant_inaccurate;
-	long double deviation = abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x);
+	long double deviation = abs(Default32squareroot(this->getBase(), 0, this->getExponent(), m).calcX() - x);
 	for (int mant = mant_inaccurate; mant <= mant_inaccurate + s; mant++) {
 		// std::cout << "Mant = " << mant << '\n';
-		if (deviation > abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant).calcX() - x)) {
-			deviation = abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant).calcX() - x);
+		if (deviation > abs(Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX() - x)) {
+			deviation = abs(Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX() - x);
 			// std::cout << "Abweichung: " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant).calcX() - x) << '\n';
 			// std::cout << "erwarteter maximaler Fehler: " << this->deviation_due_to_exp() << '\n';
 			// std::cout << "fineApprox " << mant << '\n';
@@ -831,7 +837,7 @@ int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s
 	}
 	// std::cout << "m = " << m << '\n';
 
-	if (Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).deviation_due_to_exp() < abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x)) {
+	if (Default32squareroot(this->getBase(), 0, this->getExponent(), m).deviation_due_to_exp() < abs(Default32squareroot(this->getBase(), 0, this->getExponent(), m).calcX() - x)) {
 		std::cout << "Fehler, nicht im Rahmen der Abweichung mit dem jeweiligen Exponenten, MaxFehler: " << this->deviation_due_to_exp() << " erhaltener Fehler = " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x) << '\n';
 	}
 	return m;
