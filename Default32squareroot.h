@@ -7,7 +7,6 @@
 #include <iostream>
 #include <cmath>
 
-// todo
 class Default32squareroot {
 public:
 	Default32squareroot(int ba);
@@ -69,9 +68,15 @@ public:
 	void test_Default32squareroot_operator_multiply();
 	
 	void test_Default32squareroot_calcX();
+	void test_Default32squareroot_convert_to_Default32squareroot();
+	void test_Default32squareroot_convert_to_Default32squareroot_In_and_Out(); // Default32squareroot als Random-Eingabe und Überprüfung, ob ein Default32squareroot-Objekt mit gleichen Wert raus kommt.
 
 	static Default32squareroot convert_to_Default32squareroot(int base, long double x);
-
+	void convert_setSign(long double x);
+	int convert_findExponent(long double x);
+	int convert_findMantissa(long double x, int s);
+	int convert_mantissa_fastApproximation(long double x, int s);
+	int convert_Mantissa_fineApproximation(long double x, int s, int mant_inaccurate);
 
 private:
 	int sign;  // Vorzeichen
