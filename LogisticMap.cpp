@@ -80,12 +80,15 @@ int main()
 	LogisticmapCalc::list_screen(lm_f.get_long_double_List());
 	CSV_data::writeFloatListToCSV(lm_f.getList());
 	*/
-
-	Default32squareroot square(2);
-	// square.test_Default32squareroot_convert_to_Default32squareroot();
-	square.test_Default32squareroot_convert_to_Default32squareroot_In_and_Out();
+	Float32 flx(0, 0, 0);
+	flx.test_Float32_operator_plus();
 
 	/*
+	// Default32squareroot square(2);
+	// square.test_Default32squareroot_convert_to_Default32squareroot();
+	// square.test_Default32squareroot_convert_to_Default32squareroot_In_and_Out();
+
+	
 	Zahlenverteilung zahlenverteilung(0.0, 4.0, 0.1);
 	Default32squareroot square(2,0,0, 0);
 	// std::cout << square.calcX()<< '\n';
@@ -104,10 +107,10 @@ int main()
 	std::cout << "Start = " << def_sqrt.getS().calcX() << " r = " << def_sqrt.getR().calcX() << '\n';
 	LogisticmapCalc::list_screen(def_sqrt.get_long_double_List());
 	
-	*/
+	
 	// CSV_data::writeDeltaLongDoubleListToCSV_double_float(LogisticmapCalc::abweichungsRechner(fl.get_long_double_List(), lm_f.get_long_double_List()));
 
-	/*
+	
 
 	//todo: als Funktion in LogisticmapCalc oder Unterklassen einarbeiten
 	Logisticmap_float logisticmap_float;

@@ -41,6 +41,13 @@ int Float32::getExponent_bits() {
 	return this->exponent_bits;
 }
 
+float Float32::calcX_float() {
+	if (this->getExponent() == 0) {
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+	}
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+}
+
 double Float32::calcX() {
 	if (this->getExponent() == 0) {
 		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
@@ -470,18 +477,22 @@ void Float32::test_Float32_operator_plus() {
 	int m1 = 0;
 	int m2 = 0;
 
+	long double abweichung = 0.0;
+
+	int counter = 0;
+
 	Float32 flA(s1, e1, m1);
 	Float32 flB(s2, e2, m2);
 
 	Float32 flC = flA - flB;
 
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 10000; i++) {
 		s1 = rand() % 2;
 		s2 = rand() % 2;
-		e1 = rand() % 254;
-		e2 = rand() % 254;
-		// e1 = 126 + rand() % 5; // Werte um 0
-		// e2 = 126 + rand() % 5; // Werte um 0
+		// e1 = rand() % 254;
+		// e2 = rand() % 254;
+		e1 = 126 + rand() % 5; // Werte um 0
+		e2 = 126 + rand() % 5; // Werte um 0
 		m1 = rand() % 8'388'608;
 		m2 = rand() % 8'388'608;
 
@@ -489,12 +500,15 @@ void Float32::test_Float32_operator_plus() {
 		Float32 flB(s2, e2, m2);
 
 		Float32 flC = flA + flB;
-		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
-		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.0005) {
-			std::cout << "Abweichung!" << '\n';
-			std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Float32 A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+		abweichung = flC.calcX_float() - (flA.calcX_float() + flB.calcX_float());
+		std::cout << "A = " << flA.calcX_float() << " B = " << flB.calcX_float() << " A + B = " << flC.calcX_float() << '\n';
+		if (abs(flC.calcX_float() - (flA.calcX_float() + flB.calcX_float())) > 0) {
+			counter++;
+			std::cout << "Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			std::cout << " A + B = " << (flA.calcX_float() + flB.calcX_float()) << " Float32 A + B = " << flC.calcX_float() << '\n' << '\n' << '\n';
 		}
 	}
+	std::cout << counter << " Fehler" << '\n';
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -507,6 +521,8 @@ void Float32::test_Float32_operator_minus() {
 	int m1 = 0;
 	int m2 = 0;
 
+	long double abweichung = 0.0;
+
 	int counter = 0;
 
 	Float32 flA(s1, e1, m1);
@@ -514,7 +530,7 @@ void Float32::test_Float32_operator_minus() {
 
 	Float32 flC = flA - flB;
 
-	for (int i = 0; i < 100'000; i++) {
+	for (int i = 0; i < 10'000; i++) {
 		s1 = rand() % 2;
 		s2 = rand() % 2;
 		// e1 = rand() % 254;
@@ -528,15 +544,16 @@ void Float32::test_Float32_operator_minus() {
 		Float32 flB(s2, e2, m2);
 
 		Float32 flC = flA - flB;
-		// std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
-		if ((flC.calcX() < 0) and ((flA.calcX() - flB.calcX()) > 0) or (flC.calcX() > 0) and ((flA.calcX() - flB.calcX()) < 0)) {
+		abweichung = flC.calcX_float() - (flA.calcX_float() - flB.calcX_float());
+		std::cout << "A = " << flA.calcX_float() << " B = " << flB.calcX_float() << " A - B = " << flC.calcX_float() << '\n';
+		if ((flC.calcX_float() < 0) and ((flA.calcX_float() - flB.calcX_float()) > 0) or (flC.calcX_float() > 0) and ((flA.calcX_float() - flB.calcX_float()) < 0)) {
 			std::cout << "Falsches Vorzeichen!" << '\n';
-			std::cout << " A - B = " << (flA.calcX() - flB.calcX()) << " Float32 A - B = " << flC.calcX() << '\n';
+			std::cout << " A - B = " << (flA.calcX_float() - flB.calcX_float()) << " Float32 A - B = " << flC.calcX_float() << '\n';
 		}
-		if (abs(flC.calcX() - (flA.calcX() - flB.calcX())) > 0.0005) {
+		if (abs(flC.calcX_float() - (flA.calcX_float() - flB.calcX_float())) > 0) {
 			counter++;
-			std::cout << "Abweichung!" << '\n';
-			std::cout << " A - B = " << (flA.calcX() - flB.calcX()) << " Float32 A - B = " << flC.calcX() << '\n' << '\n' << '\n';
+			std::cout << "Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			std::cout << " A - B = " << (flA.calcX_float() - flB.calcX_float()) << " Float32 A - B = " << flC.calcX_float() << '\n' << '\n' << '\n';
 		}
 	}
 	std::cout << counter << " Fehler" << '\n';
@@ -552,6 +569,10 @@ void Float32::test_Float32_operator_multiply() {
 	int m1 = 0;
 	int m2 = 0;
 
+	long double abweichung = 0.0;
+
+	int counter = 0;
+
 	Float32 flA(s1, e1, m1);
 	Float32 flB(s2, e2, m2);
 
@@ -560,10 +581,10 @@ void Float32::test_Float32_operator_multiply() {
 	for (int i = 0; i < 1000; i++) {
 		s1 = rand() % 2;
 		s2 = rand() % 2;
-		e1 = rand() % 254;
-		e2 = rand() % 254;
-		// e1 = 126 + rand() % 5; // Werte um 0
-		// e2 = 126 + rand() % 5; // Werte um 0
+		// e1 = rand() % 254;
+		// e2 = rand() % 254;
+		e1 = 126 + rand() % 5; // Werte um 0
+		e2 = 126 + rand() % 5; // Werte um 0
 		m1 = rand() % 8'388'608;
 		m2 = rand() % 8'388'608;
 
@@ -571,10 +592,17 @@ void Float32::test_Float32_operator_multiply() {
 		Float32 flB(s2, e2, m2);
 
 		Float32 flC = flA * flB;
-		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
-		if (abs(flC.calcX() - (flA.calcX() * flB.calcX())) > 0.00005) {
-			std::cout << "Abweichung!" << '\n';
-			std::cout << " A * B = " << (flA.calcX() * flB.calcX()) << " Float32 A * B = " << flC.calcX() << '\n' << '\n' << '\n';
+		abweichung = flC.calcX_float() - (flA.calcX_float() * flB.calcX_float());
+		std::cout << "A = " << flA.calcX_float() << " B = " << flB.calcX_float() << " A * B = " << flC.calcX_float() << '\n';
+		if (abs(flC.calcX_float() - (flA.calcX_float() * flB.calcX_float())) > 0) {
+			counter++;
+			std::cout << "Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			std::cout << " A * B = " << (flA.calcX_float() * flB.calcX_float()) << " Float32 A * B = " << flC.calcX_float() << '\n' << '\n' << '\n';
 		}
 	}
+	std::cout << counter << " Fehler" << '\n';
+}
+
+long double Float32::deviation_due_to_exp() {
+	return (Float32(0, this->getExponent(), 1).calcX_long_double() - Float32(0, this->getExponent(), 0).calcX_long_double());
 }
