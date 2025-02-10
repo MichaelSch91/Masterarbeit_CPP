@@ -1,5 +1,5 @@
-// default bezieht sich auf das Vorhandensein Exponent Bits und Mantissen Bits und ggf. Vorzeichen Bits
-// squareroot => optimiert für Quadratwurzeln: zB base = sqrt(2), exponent = 8 => 2^4 , bei exponent = 9 => (2^4) * sqrt(2), 
+// default32 bezieht sich auf das Vorhandensein von Vorzeichen Bits, Exponenten Bits und Mantissen Bits mit der IEEE754 Verteilung (1,8,23)
+// squareroot => optimiert für Quadratwurzeln: zB base = sqrt(2), exponent-bias = 8 => 2^4 , bei exponent-bias = 9 => (2^4) * sqrt(2), 
 // damit nur einmal mit der irrationalen Zahl multipliziert werden muss.
 #ifndef DEFAULT32SQUAREROOT_H
 #define DEFAULT32SQUAREROOT_H

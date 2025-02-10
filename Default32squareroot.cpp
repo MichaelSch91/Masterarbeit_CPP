@@ -156,13 +156,10 @@ Default32squareroot Default32squareroot::plus_different_operator(Default32square
 	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
 }
 
-// todo: funktioniert, aber einmal beim Testen trat auf, dass Mantisse um 1 zu niedrig war (Rundungsfehler?)
-// Tests schreiben?
-// Vorzeichen muss bei beiden Summanden gleich sein (Implementierung von Addition einer negativen Zahl über operator-)
-// ::floor führt zu Abweichungen der Mantisse, weil es nicht das Runden der realen Hardware wiederspiegelt.
-// sollte aber genau genug sein. Bei Float16 macht sich das bermerkbar, bei Float32 aber wahrscheinlich nur noch minimal
-// ggf ist dazu eine weitere Logik mit ::ceil einzuführen, aber nach aktueller Überlegutn geht das Runden nur 
-// sinnvoll, wenn man die letzten Bit kennt
+// todo: funktioniert, aber beim Testen tritt auf, dass Mantisse um +-1 zu niedrig/ hoch ist (Rundungsfehler?)
+// ::round (sollte das Runden des Rechenwerks eigentlich ganz gut darstellen?) führt zu Abweichungen der Mantisse,
+// ::floor (äquivalent zum simplen Abschneiden der nicht mehr speicherbaren Bit durch das Rechenwerk) führt ebenfalls zu Abweichungen der Mantisse,
+// ggf ist eine Logik mit ::ceil und ::floor einzuführen
 Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	unsigned long long one_dot = (unsigned long long)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
 	unsigned long long mantissa = 0;
@@ -171,19 +168,28 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
+	// Vorzeichen
+	// 
+	// prüfen und ggf. an anderen Operator übergeben
 	if (this->getSign() != a.getSign()) {
 		return this->plus_different_operator(a);
 	}
 
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
-	// Exponentenverschiebung (für Mantissen)
+	// Exponentenverschiebung
+	// 
+	// zur Bestimmung der Menge an Rechtsverschiebungen und zur Bestimmung welche Zahl größer ist (this > a => shift > 0)
 	int shift = this->getExponent() - a.getExponent();
+	// Verschiebung der Mantisse ( -> Mantisse/bit_shift = Mantissenwert für die Rechtsverschiebung um ein Bit)
+	long double bit_shift = pow(sqrt(this->base), abs(shift)); // todo: das muss noch nachgebessert werden
 
 	// std::cout << "Shift = " << shift << '\n';
 
-	long double bit_shift = pow(sqrt(this->base), abs(shift)); // todo: das muss noch nachgebessert werden
 
+	// Berechnung
+	//
+	// this < a
 	if (shift < 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
@@ -211,6 +217,7 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
+	// this > a
 	if (shift > 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
@@ -238,6 +245,7 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
+	// this.expoent == a.exponent
 	if (shift == 0) {
 		// std::cout << "kein Shift, Shift = " << shift << '\n';
 		// denormalisierte Mantisse (Exponent = 0)
