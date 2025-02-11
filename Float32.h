@@ -19,6 +19,8 @@ public:
 	// Delta = Zahl(0,e,1) - Zahl(0,e,0)
 	long double deviation_due_to_exp();
 
+	void printAttributes();
+
 	// Operatoren
 	// 
 	// überladene Operatoren

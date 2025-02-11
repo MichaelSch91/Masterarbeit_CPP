@@ -88,11 +88,13 @@ Float32 Float32::plus_different_operator(Float32 a) {
 // ggf ist dazu eine weitere Logik mit ::ceil einzuführen, aber nach aktueller Überlegutn geht das Runden nur 
 // sinnvoll, wenn man die letzten Bit kennt
 Float32 Float32::operator+(Float32 a) {
-	unsigned long long one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
+	unsigned long long one_dot = (unsigned long long)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
 	unsigned long long mantissa = 0;
 	int exponent = 0;
 	int sign = this->getSign();
 
+	// this->printAttributes();
+	// a.printAttributes();
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
 	if (this->getSign() != a.getSign()) {
@@ -110,11 +112,11 @@ Float32 Float32::operator+(Float32 a) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
 			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::round((this->getMantissa()) / bit_shift) + a.getMantissa() + one_dot;
+			mantissa = std::round((this->getMantissa())*1.0 / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
@@ -122,11 +124,11 @@ Float32 Float32::operator+(Float32 a) {
 		}
 		else {
 			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::round((this->getMantissa() + one_dot) / bit_shift) + a.getMantissa() + one_dot;
+			mantissa = std::round((this->getMantissa() * 1.0 + one_dot) / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
@@ -137,11 +139,11 @@ Float32 Float32::operator+(Float32 a) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
+			mantissa = std::round((a.getMantissa()*1.0) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
@@ -149,11 +151,11 @@ Float32 Float32::operator+(Float32 a) {
 		}
 		else {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
+			mantissa = std::round((a.getMantissa() * 1.0 + one_dot) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
@@ -168,7 +170,7 @@ Float32 Float32::operator+(Float32 a) {
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 				// std::cout << '\n' << " == 0" << '\n';
 			}
@@ -179,14 +181,13 @@ Float32 Float32::operator+(Float32 a) {
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa/2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
-	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float32(sign, exponent, mantissa);
 }
 
@@ -480,6 +481,7 @@ void Float32::test_Float32_operator_plus() {
 	long double abweichung = 0.0;
 
 	int counter = 0;
+	int counter_hoheAbweichung = 0;
 
 	Float32 flA(s1, e1, m1);
 	Float32 flB(s2, e2, m2);
@@ -487,12 +489,12 @@ void Float32::test_Float32_operator_plus() {
 	Float32 flC = flA - flB;
 
 	for (int i = 0; i < 10000; i++) {
-		s1 = rand() % 2;
-		s2 = rand() % 2;
+		// s1 = rand() % 2;
+		// s2 = rand() % 2;
 		// e1 = rand() % 254;
 		// e2 = rand() % 254;
-		e1 = 126 + rand() % 5; // Werte um 0
-		e2 = 126 + rand() % 5; // Werte um 0
+		e1 = 118 + rand() % 12; // Werte um 0
+		e2 = 118 + rand() % 12; // Werte um 0
 		m1 = rand() % 8'388'608;
 		m2 = rand() % 8'388'608;
 
@@ -504,11 +506,17 @@ void Float32::test_Float32_operator_plus() {
 		std::cout << "A = " << flA.calcX_float() << " B = " << flB.calcX_float() << " A + B = " << flC.calcX_float() << '\n';
 		if (abs(flC.calcX_float() - (flA.calcX_float() + flB.calcX_float())) > 0) {
 			counter++;
-			std::cout << "Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			if (abs(abweichung) > (flC.deviation_due_to_exp())) {
+				counter_hoheAbweichung++;
+				std::cout << "hohe Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			}
+			else {
+				std::cout << "Abweichung = " << abweichung << " Abweichung durch Exponent = " << flC.deviation_due_to_exp() << '\n';
+			}
 			std::cout << " A + B = " << (flA.calcX_float() + flB.calcX_float()) << " Float32 A + B = " << flC.calcX_float() << '\n' << '\n' << '\n';
 		}
 	}
-	std::cout << counter << " Fehler" << '\n';
+	std::cout << counter << " Fehler" << ", davon " << counter_hoheAbweichung << " mit hoher Abweichung" << '\n';
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -605,4 +613,8 @@ void Float32::test_Float32_operator_multiply() {
 
 long double Float32::deviation_due_to_exp() {
 	return (Float32(0, this->getExponent(), 1).calcX_long_double() - Float32(0, this->getExponent(), 0).calcX_long_double());
+}
+
+void Float32::printAttributes() {
+	std::cout << "Sign = " << this->getSign() << " Exponent = " << this->getExponent() << " Mantisse = " << this->getMantissa() << '\n';
 }

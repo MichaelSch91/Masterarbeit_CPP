@@ -74,14 +74,21 @@ int main()
 	std::cout << "C = " << flC.calcX() << '\n';
 	*/
 
+	Float32 fl(0, 0, 0);
+	// fl.test_Float32_operator_multiply();
+	fl.test_Float32_operator_plus();
+	// fl.test_Float32_operator_minus();
+
 	/*
 	Logisticmap_float lm_f;
 	std::cout << "Start = " << lm_f.getS() << " r = " << lm_f.getR() << '\n';
 	LogisticmapCalc::list_screen(lm_f.get_long_double_List());
 	CSV_data::writeFloatListToCSV(lm_f.getList());
+
+	Default32squareroot square = square.convert_to_Default32squareroot(2,3.5);
+	std::cout << square.getSign() << ", " << square.getExponent() << ", " << square.getMantissa() << '\n';
+	std::cout << square.calcX() << '\n';
 	*/
-	Float32 flx(0, 0, 0);
-	flx.test_Float32_operator_plus();
 
 	/*
 	// Default32squareroot square(2);
