@@ -850,3 +850,7 @@ int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s
 	}
 	return m;
 }
+
+void Default32squareroot::printAttributes() {
+	std::cout << "Sign = " << this->getSign() << " Exponent = " << this->getExponent() << " Mantisse = " << this->getMantissa() << '\n';
+}
