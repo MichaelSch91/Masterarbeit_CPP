@@ -72,14 +72,13 @@ int main()
 	std::cout << "A = " << flA.calcX() << '\n';
 	std::cout << "B = " << flB.calcX() << '\n';
 	std::cout << "C = " << flC.calcX() << '\n';
-	*/
+	
 
 	Float32 fl(0, 0, 0);
 	// fl.test_Float32_operator_multiply();
-	fl.test_Float32_operator_plus();
+	// fl.test_Float32_operator_plus();
 	// fl.test_Float32_operator_minus();
 
-	/*
 	Logisticmap_float lm_f;
 	std::cout << "Start = " << lm_f.getS() << " r = " << lm_f.getR() << '\n';
 	LogisticmapCalc::list_screen(lm_f.get_long_double_List());
@@ -89,6 +88,10 @@ int main()
 	std::cout << square.getSign() << ", " << square.getExponent() << ", " << square.getMantissa() << '\n';
 	std::cout << square.calcX() << '\n';
 	*/
+
+	Default32squareroot square = square.convert_to_Default32squareroot(2, 3.5);
+	square.test_Default32squareroot_convert_to_Default32squareroot();
+
 
 	/*
 	// Default32squareroot square(2);

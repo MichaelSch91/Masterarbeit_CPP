@@ -96,29 +96,29 @@ long double Default32squareroot::calcX() {
 
 long double Default32squareroot::calcX_highExponent() {
 	if (((this->getExponent() - this->getBias()) % 2) == 1) {
-		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias) / 2) * (1 + this->mantissa / pow(this->base, this->mantissa_bits))*sqrt(this->getBase());
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias) / 2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1)) *sqrt(this->getBase());
 	}
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)/2) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)/2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 }
 
 long double Default32squareroot::calcX_oddExponent() {
 	long double power = this->calc_pow_oddExponent();
 	// std::cout << "odd, power: " << power << '\n';
-	return pow(-1, this->sign) * power * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits))*(sqrt(this->base)-1));
 }
 long double Default32squareroot::calcX_evenExponent() {
 	unsigned long long power = this->calc_pow_evenExponent();
 	// std::cout << "even, power: " << power << '\n';
 	if (this->getExponent() == 0) { // denormalisierte Mantisse
-		return pow(-1, this->sign) * power * (this->mantissa / pow(this->base, this->mantissa_bits));
+		return pow(-1, this->sign) * power * ((this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 	}
-	return pow(-1, this->sign) * power * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 }
 
 long double Default32squareroot::calcX_negativeExponent() {
 	long double power = this->calc_pow_negativeExponent();
 	// std::cout << "negative, power: " << power << '\n';
-	return pow(-1, this->sign) * power * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 }
 
 // Potenz (Base ^ Exponent) berechnen für ungerade Exponenten
@@ -771,9 +771,9 @@ void Default32squareroot::test_Default32squareroot_convert_to_Default32squareroo
 
 long double Default32squareroot::simpleCalcX() {
 	if (this->getExponent() == 0) {
-		return pow(-1, this->sign) * pow(sqrt(this->base), (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+		return pow(-1, this->sign) * pow(sqrt(this->base), (this->exponent - this->bias)) * ((this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 	}
-	return pow(-1, this->sign) * pow(sqrt(this->base), (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * pow(sqrt(this->base), (this->exponent - this->bias)) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 }
 
 long double Default32squareroot::deviation_due_to_exp() {
@@ -805,9 +805,6 @@ int Default32squareroot::convert_findExponent(long double x) {
 	x = abs(x);
 	for (int exp = this->getExponent_min(); exp <= this->getExponent_max(); exp++) {
 		if ((x >= Default32squareroot(this->getBase(), 0, exp, this->getMantissa_min()).calcX()) and (x <= Default32squareroot(this->getBase(), 0, exp, this->getMantissa_max()).calcX())) {
-			if ((x >= Default32squareroot(this->getBase(), 0, exp+1, this->getMantissa_min()).calcX()) and (x <= Default32squareroot(this->getBase(), 0, exp+1, this->getMantissa_max()).calcX())) {
-				return exp + 1;
-			}
 			return exp;
 		}
 	}
