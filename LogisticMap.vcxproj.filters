@@ -81,6 +81,9 @@
     <ClCompile Include="Logisticmap_Default32squareroot.cpp">
       <Filter>Quelldateien\Logmap</Filter>
     </ClCompile>
+    <ClCompile Include="Default32squarerootOverlapping.cpp">
+      <Filter>Quelldateien\Zahlendarstellungen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="Logisticmap_Default32squareroot.h">
       <Filter>Headerdateien\Logmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Default32squarerootOverlapping.h">
+      <Filter>Headerdateien\Zahlendarstellungen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

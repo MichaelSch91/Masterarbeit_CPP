@@ -9,16 +9,19 @@
 #include "Float32.h"
 #include "ExperimentalDefault.h"
 #include "Default32squareroot.h"
+#include "Default32squarerootOverlapping.h"
 
 class Zahlenverteilung {
 public:
-	Zahlenverteilung(double min, double max, double st);
+	Zahlenverteilung(double min, double max, double st, std::string name);
+	Zahlenverteilung(double min, double max, int klassen, std::string name);
 
 	void berechne_zahlenverteilung(Zahlendarstellung fl);
 	void berechne_zahlenverteilung(Float32 fl);
 	void berechne_zahlenverteilung(Float16 fl);
 	void berechne_zahlenverteilung(ExperimentalDefault fl);
 	void berechne_zahlenverteilung(Default32squareroot fl);
+	void berechne_zahlenverteilung(Default32squarerootOverlapping fl);
 
 	void print_zahlenverteilung();
 
@@ -27,6 +30,7 @@ public:
 	std::vector<double> getList_klassen();
 
 private:
+	std::string name;
 	double minimum;  // Untere Grenze, die dargestellt werden soll
 	double maximum;  // Obere Grenze der Zahlen, die dargestellt werden sollen
 	double steps; // Schritte für die Realisierung der einzelnen (Histogramm-)Klassen

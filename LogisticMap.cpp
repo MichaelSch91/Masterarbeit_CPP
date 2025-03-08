@@ -87,11 +87,28 @@ int main()
 	Default32squareroot square = square.convert_to_Default32squareroot(2,3.5);
 	std::cout << square.getSign() << ", " << square.getExponent() << ", " << square.getMantissa() << '\n';
 	std::cout << square.calcX() << '\n';
-	*/
+	
 
 	Default32squareroot square = square.convert_to_Default32squareroot(2, 3.5);
 	square.test_Default32squareroot_convert_to_Default32squareroot();
+	*/
 
+	Zahlenverteilung float16(0.0, 1.0, 1024, "float16");
+	Zahlenverteilung float32(0.0, 1.0, 1024, "float32");
+	Zahlenverteilung sqrtTwo(0.0, 1.0, 1024, "sqrtTwo");
+	Zahlenverteilung sqrtTwoOverlapping(0.0, 1.0, 1024, "sqrtTwoOverlapping");
+
+	float16.berechne_zahlenverteilung(Float16(0,0,0));
+	float16.print_zahlenverteilung_csv_format();
+
+	float32.berechne_zahlenverteilung(Float32(0, 0, 0));
+	float32.print_zahlenverteilung_csv_format();
+
+	sqrtTwo.berechne_zahlenverteilung(Default32squareroot(0, 0, 0));
+	sqrtTwo.print_zahlenverteilung_csv_format();
+
+	sqrtTwoOverlapping.berechne_zahlenverteilung(Default32squarerootOverlapping(0, 0, 0));
+	sqrtTwoOverlapping.print_zahlenverteilung_csv_format();
 
 	/*
 	// Default32squareroot square(2);
