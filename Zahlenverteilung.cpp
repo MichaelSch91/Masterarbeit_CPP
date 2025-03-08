@@ -247,7 +247,7 @@ void Zahlenverteilung::print_zahlenverteilung_csv_format() {
 	for (int i = 0; i < this->list_klassen.size(); i++) {
 		std::cout << this->list_klassen[i] << ',';
 	}
-	std::cout << '\n';
+	std::cout << '\n' << '\n';
 	for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
 		std::cout << this->list_zahlenverteilung[i] << ',';
 	}
