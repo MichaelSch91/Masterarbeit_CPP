@@ -177,7 +177,7 @@ void Zahlenverteilung::berechne_zahlenverteilung(Default32squareroot fl) {
 	while (fl.getExponent() < max_exponent) {
 		while (fl.getMantissa() < max_mantissa) {
 			x = fl.calcX();
-			std::cout << std::setprecision(100000) << x << '\n';
+			// std::cout << std::setprecision(100000) << x << '\n';
 			if (x > this->maximum) {
 				break;
 			}
@@ -210,7 +210,7 @@ void Zahlenverteilung::berechne_zahlenverteilung(Default32squarerootOverlapping 
 	while (fl.getExponent() < max_exponent) {
 		while (fl.getMantissa() < max_mantissa) {
 			x = fl.calcX();
-			std::cout << std::setprecision(100000) << x << '\n';
+			// std::cout << std::setprecision(100000) << x << '\n';
 			if (x > this->maximum) {
 				break;
 			}
