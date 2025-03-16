@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <random>
+#include <tuple>
 #include "Default32squareroot.h"
 
 // todo
@@ -144,6 +145,14 @@ long double Default32squareroot::calc_pow_negativeExponent() {
 	return pow(sqrt(this->getBase()), ((this->getExponent() - this->getBias())));
 }
 
+// Berechnet den Wert der in der Mantisse gespeichert ist (für sqrt(2) ein Wert im Bereich [1;sqrt(2)])
+long double Default32squareroot::calc_mantissa_value() {
+	if (this->getExponent() == 0) {
+		return (this->getMantissa() * (sqrt(this->getBase() - 1)));
+	}
+	return ((this->getMantissa_max() + 1) + this->getMantissa() * (sqrt(this->getBase() - 1)));
+}
+
 Default32squareroot Default32squareroot::plus_different_operator(Default32squareroot a) {
 	if (this->getSign() == 1) { // -this + a = a - (+this)
 		// std::cout << "plus case 1";
@@ -165,6 +174,7 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	unsigned long long mantissa = 0;
 	int exponent = 0;
 	int sign = this->getSign();
+	std::tuple<int, int> exp_mant;
 
 	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
@@ -182,7 +192,7 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	// zur Bestimmung der Menge an Rechtsverschiebungen und zur Bestimmung welche Zahl größer ist (this > a => shift > 0)
 	int shift = this->getExponent() - a.getExponent();
 	// Verschiebung der Mantisse ( -> Mantisse/bit_shift = Mantissenwert für die Rechtsverschiebung um ein Bit)
-	long double bit_shift = pow(sqrt(this->base), abs(shift)); // todo: das muss noch nachgebessert werden
+	long double bit_shift = pow(sqrt(2), abs(shift)); // todo: das muss noch nachgebessert werden
 
 	// std::cout << "Shift = " << shift << '\n';
 
@@ -191,91 +201,52 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	//
 	// this < a
 	if (shift < 0) {
-		// denormalisierte Mantisse (Exponent = 0)
-		if (this->getExponent() == 0) {
+		exponent = a.getExponent();
 			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::round((this->getMantissa()) / bit_shift) + a.getMantissa() + one_dot;
-			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-			}
-			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
-		else {
-			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::round((this->getMantissa() + one_dot) / bit_shift) + a.getMantissa() + one_dot;
-			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-			}
-			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
+			mantissa = std::round((this->calc_mantissa_value() / bit_shift) + a.calc_mantissa_value());
+			exp_mant = plus_operator_mantissa_overflowcalc_normalized(exponent, mantissa, one_dot);
 	}
 	// this > a
 	if (shift > 0) {
-		// denormalisierte Mantisse (Exponent = 0)
-		if (a.getExponent() == 0) {
+		exponent = this->getExponent();
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
-			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-			}
-			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
-		else {
-			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
-			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-			}
-			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
+			mantissa = std::round((a.calc_mantissa_value()) / bit_shift) + this->calc_mantissa_value();
+			exp_mant = plus_operator_mantissa_overflowcalc_normalized(exponent, mantissa, one_dot);
+
 	}
 	// this.expoent == a.exponent
 	if (shift == 0) {
 		// std::cout << "kein Shift, Shift = " << shift << '\n';
-		// denormalisierte Mantisse (Exponent = 0)
-		if (this->getExponent() == 0 and a.getExponent() == 0) {
-			mantissa = this->getMantissa() + a.getMantissa();
-			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-				// std::cout << '\n' << " == 0" << '\n';
-			}
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
-		else {
-			mantissa = this->getMantissa() + one_dot + a.getMantissa() + one_dot;
-			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
-			}
-			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-		}
+		exponent = this->getExponent();
+			mantissa = this->calc_mantissa_value() + a.calc_mantissa_value();
+			exp_mant = plus_operator_mantissa_overflowcalc_normalized(exponent, mantissa, one_dot);
 	}
 	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
-	return Default32squareroot(sign, exponent, mantissa);
+	return Default32squareroot(sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
 
+std::tuple<int, int> Default32squareroot::plus_operator_mantissa_overflowcalc_normalized(int exponent, int mantissa, unsigned long long one_dot) {
+	std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	while (mantissa >= (2 * one_dot)) {
+		mantissa /= sqrt(2);
+		exponent++;
+		std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	}
+	mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+	// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	return std::tuple<int, int>(exponent, mantissa);
+}
+
+std::tuple<int, int> Default32squareroot::plus_operator_mantissa_overflowcalc_denormalized(int exponent, int mantissa, unsigned long long one_dot) {
+	std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	while (mantissa >= (2 * one_dot)) {
+		mantissa /= sqrt(2);
+		exponent++;
+		std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	}
+	// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+	return std::tuple<int, int>(exponent, mantissa);
+}
 
 Default32squareroot Default32squareroot::minus_different_operator(Default32squareroot a) {
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
@@ -570,6 +541,8 @@ void Default32squareroot::test_Default32squareroot_operator_plus() {
 	int m1 = 0;
 	int m2 = 0;
 
+	int counter = 0;
+
 	Default32squareroot flA(s1, e1, m1);
 	Default32squareroot flB(s2, e2, m2);
 
@@ -578,12 +551,13 @@ void Default32squareroot::test_Default32squareroot_operator_plus() {
 	for (int i = 0; i < 10000; i++) {
 		s1 = 0; //rand() % 2;
 		s2 = 0; //rand() % 2;
-		e1 = rand() % 254;
-		e2 = rand() % 254;
-		// e1 = 126 + rand() % 5; // Werte um 0
-		// e2 = 126 + rand() % 5; // Werte um 0
+		//e1 = rand() % 254;
+		//e2 = rand() % 254;
+		e1 = 126 + rand() % 5; // Werte um 0
+		e2 = 126 + rand() % 5; // Werte um 0
 		m1 = rand() % 8'388'608;
 		m2 = rand() % 8'388'608;
+
 
 		Default32squareroot flA(s1, e1, m1);
 		Default32squareroot flB(s2, e2, m2);
@@ -591,6 +565,7 @@ void Default32squareroot::test_Default32squareroot_operator_plus() {
 		Default32squareroot flC = flA + flB;
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
 		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.00005) {
+			counter++;
 			std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() + flB.calcX())) << '\n';
 			std::cout << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() + flB.calcX()))) < flC.deviation_due_to_exp()) {
@@ -599,6 +574,7 @@ void Default32squareroot::test_Default32squareroot_operator_plus() {
 			std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
 		}
 	}
+	std::cout << "Operator Plus: " << counter << " Fehler" << '\n';
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -850,4 +826,64 @@ int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s
 
 void Default32squareroot::printAttributes() {
 	std::cout << "Sign = " << this->getSign() << " Exponent = " << this->getExponent() << " Mantisse = " << this->getMantissa() << '\n';
+}
+
+// Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
+// da bei größerer Zahl nur noch wenige Nachkommastellen dargestellt werden können.
+void Default32squareroot::test_Default32squareroot_operator_plus_with_conversion() {
+	std::random_device rd;
+	std::mt19937 gen(rd()); // Mersenne Twister Engine mit Seed von random_device
+	std::uniform_int_distribution<int> binary_dist(0, 1); // Für s1 und s2
+	std::uniform_int_distribution<int> exponent_dist(0, 253); // Für e1 und e2 (0 bis 253)
+	std::uniform_int_distribution<int> mantissa_dist(0, 8388607); // Für m1 und m2
+	int s1 = 0;
+	int s2 = 0;
+	int e1 = 0;
+	int e2 = 0;
+	int m1 = 0;
+	int m2 = 0;
+
+	int counter = 0;
+
+	Default32squareroot flA(s1, e1, m1);
+	Default32squareroot flB(s2, e2, m2);
+
+	Default32squareroot flC = flA - flB;
+
+	Default32squareroot flCompare(0,0,0);
+
+	for (int i = 0; i < 10000; i++) {
+		// s1 = binary_dist(gen);
+		// s2 = binary_dist(gen);
+		//e1 = exponent_dist(gen);
+		//e2 = exponent_dist(gen);
+		e1 = 126 + (gen() % 5); // Werte um 0 (alte rand() Variante)
+		e2 = 126 + (gen() % 5); // Werte um 0 (alte rand() Variante)
+		m1 = mantissa_dist(gen);
+		m2 = mantissa_dist(gen);
+
+		std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
+
+
+		Default32squareroot flA(s1, e1, m1);
+		Default32squareroot flB(s2, e2, m2);
+
+		Default32squareroot flC = flA + flB;
+		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
+		if (abs(flC.calcX() - (flA.calcX() + flB.calcX())) > 0.00005) {
+			counter++;
+			std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() + flB.calcX())) << '\n' << '\n' ;
+			flCompare = flCompare.convert_to_Default32squareroot(2,(flA.calcX() + flB.calcX()));
+			std::cout << "Should be: " << '\n';
+			flCompare.printAttributes();
+			std::cout << "But is: " << '\n';
+			flC.printAttributes();
+			std::cout << '\n' << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
+			if ((abs(flC.calcX() - (flA.calcX() + flB.calcX()))) < flC.deviation_due_to_exp()) {
+				std::cout << "Aber Abweichung ist in der Toleranz" << '\n';
+			}
+			std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+		}
+	}
+	std::cout << "Operator Plus: " << counter << " Fehler" << '\n';
 }

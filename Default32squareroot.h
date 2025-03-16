@@ -41,12 +41,16 @@ public:
 	// Delta = Zahl(0,this->e,1) - Zahl(0,this->e,0)
 	long double deviation_due_to_exp();
 
+	long double calc_mantissa_value();
+
 	void printAttributes();
 
 	// Operatoren
 	// 
 	// überladene Operatoren
 	Default32squareroot operator+(Default32squareroot a);
+	static std::tuple<int, int> plus_operator_mantissa_overflowcalc_normalized(int exponent, int mantissa, unsigned long long one_dot);
+	static std::tuple<int, int> plus_operator_mantissa_overflowcalc_denormalized(int exponent, int mantissa, unsigned long long one_dot);
 	Default32squareroot operator-(Default32squareroot a);
 	Default32squareroot operator*(Default32squareroot a);
 	bool operator==(Default32squareroot a);
@@ -89,6 +93,7 @@ public:
 	// Tests für den Converter von double (oder long double) Darstellung zur Zahlendarstellung der Klasse
 	void test_Default32squareroot_convert_to_Default32squareroot();
 	void test_Default32squareroot_convert_to_Default32squareroot_In_and_Out(); // Default32squareroot als Random-Eingabe und Überprüfung, ob ein Default32squareroot-Objekt mit gleichen Wert raus kommt.
+	void test_Default32squareroot_operator_plus_with_conversion();
 
 	// Converter
 	//
