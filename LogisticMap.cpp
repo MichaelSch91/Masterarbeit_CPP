@@ -92,8 +92,8 @@ int main()
 
 	Default32squareroot square = square.convert_to_Default32squareroot(2, 3.5);
 	
-	Default32squareroot flA(0, 128, 8'000'000);
-	Default32squareroot flB(0, 120, 8'000'000);
+	Default32squareroot flA(0, 128, 8'380'000);
+	Default32squareroot flB(0, 128, 8'000'000);
 	Default32squareroot flC = flA + flB;
 	std::cout << "Ist: " << '\n';
 	flC.printAttributes();
