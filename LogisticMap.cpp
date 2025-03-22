@@ -103,7 +103,7 @@ int main()
 	result.printAttributes();
 
 
-	//square.test_Default32squareroot_operator_plus_with_conversion();
+	square.test_Default32squareroot_operator_plus_with_conversion();
 
 	/*
 	Zahlenverteilung float16(0.0, 1.0, 1024, "float16");

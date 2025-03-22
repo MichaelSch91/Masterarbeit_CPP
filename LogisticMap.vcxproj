@@ -142,6 +142,7 @@
     <ClCompile Include="Logisticmap_float32.cpp" />
     <ClCompile Include="Logisticmap_long_double.cpp" />
     <ClCompile Include="Logisticmap_long_double.h" />
+    <ClCompile Include="Sqrt_helper.cpp" />
     <ClCompile Include="Zahlendarstellung.cpp" />
     <ClCompile Include="Zahlenverteilung.cpp" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="Logisticmap_double.h" />
     <ClInclude Include="Logisticmap_float.h" />
     <ClInclude Include="Logisticmap_float32.h" />
+    <ClInclude Include="Sqrt_helper.h" />
     <ClInclude Include="Zahlendarstellung.h" />
     <ClInclude Include="Zahlenverteilung.h" />
   </ItemGroup>

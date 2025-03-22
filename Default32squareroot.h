@@ -41,7 +41,11 @@ public:
 	// Delta = Zahl(0,this->e,1) - Zahl(0,this->e,0)
 	long double deviation_due_to_exp();
 
-	long double calc_mantissa_value();
+	// mantissaValue ist der dargestellte Wert [1;sqrt(2)[
+	long double calc_mantissaValue();
+	// memoryDecimal ist der Wert, der im Arbeitsspeicher als Mantissenanteil gespeichert würde
+	static int convert_mantissaValue_to_memoryDecimal(long double mantissaValue, unsigned long long one_dot);
+	static int convert_mantissaValue_to_memoryDecimal_denormalized(long double mantissaValue, unsigned long long one_dot);
 
 	void printAttributes();
 
@@ -49,8 +53,12 @@ public:
 	// 
 	// überladene Operatoren
 	Default32squareroot operator+(Default32squareroot a);
-	static std::tuple<int, int> plus_operator_mantissa_overflowcalc_normalized(int exponent, int mantissa, unsigned long long one_dot);
-	static std::tuple<int, int> plus_operator_mantissa_overflowcalc_denormalized(int exponent, int mantissa, unsigned long long one_dot);
+	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	std::tuple<int, int> plus_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	// m1 ist die Mantisse mit dem größerem Exponenten (shift wird auf m2 angewendet), exp ist der aktuelle Exponent (in operator+ gespeichert / der größere)
+	// returns tuple mit <int exponent, int mantisse>
+	std::tuple<int, int> plus_operator_mantissa_addition(int m1, int m2, int exp, unsigned long long one_dot, int shift);
+	std::tuple<int, int> plus_operator_mantissa_addition_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
 	Default32squareroot operator-(Default32squareroot a);
 	Default32squareroot operator*(Default32squareroot a);
 	bool operator==(Default32squareroot a);

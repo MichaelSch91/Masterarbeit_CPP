@@ -84,6 +84,9 @@
     <ClCompile Include="Default32squarerootOverlapping.cpp">
       <Filter>Quelldateien\Zahlendarstellungen</Filter>
     </ClCompile>
+    <ClCompile Include="Sqrt_helper.cpp">
+      <Filter>Quelldateien\Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="Default32squarerootOverlapping.h">
       <Filter>Headerdateien\Zahlendarstellungen</Filter>
+    </ClInclude>
+    <ClInclude Include="Sqrt_helper.h">
+      <Filter>Headerdateien\Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
