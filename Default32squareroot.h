@@ -59,9 +59,22 @@ public:
 	// returns tuple mit <int exponent, int mantisse>
 	std::tuple<int, int> plus_operator_mantissa_addition(int m1, int m2, int exp, unsigned long long one_dot, int shift);
 	std::tuple<int, int> plus_operator_mantissa_addition_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
+	
 	Default32squareroot operator-(Default32squareroot a);
+	std::tuple<int, int> minus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	std::tuple<int, int> minus_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	// m1 ist die Mantisse mit dem größerem Exponenten (shift wird auf m2 angewendet), exp ist der aktuelle Exponent (in operator+ gespeichert / der größere)
+	// returns tuple mit <int exponent, int mantisse>
+	std::tuple<int, int> minus_operator_mantissa_subtraction(int m1, int m2, int exp, unsigned long long one_dot, int shift);
+	std::tuple<int, int> minus_operator_mantissa_subtraction_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
+
 	Default32squareroot operator*(Default32squareroot a);
+	
 	bool operator==(Default32squareroot a);
+	bool equals(Default32squareroot a);
+
+	void operatorBaseCheck(Default32squareroot a);
+
 	// Fälle, in denen es sinnvoller ist eine andere Methode aufzurufen (zB a.operator+(-b) soll a.operator-(+b) aufrufen)
 	Default32squareroot plus_different_operator(Default32squareroot a);
 	Default32squareroot minus_different_operator(Default32squareroot a);
@@ -102,6 +115,7 @@ public:
 	void test_Default32squareroot_convert_to_Default32squareroot();
 	void test_Default32squareroot_convert_to_Default32squareroot_In_and_Out(); // Default32squareroot als Random-Eingabe und Überprüfung, ob ein Default32squareroot-Objekt mit gleichen Wert raus kommt.
 	void test_Default32squareroot_operator_plus_with_conversion();
+	void test_Default32squareroot_operator_minus_with_conversion();
 
 	// Converter
 	//

@@ -92,18 +92,18 @@ int main()
 
 	Default32squareroot square = square.convert_to_Default32squareroot(2, 3.5);
 	
-	Default32squareroot flA(0, 128, 8'380'000);
-	Default32squareroot flB(0, 128, 8'000'000);
-	Default32squareroot flC = flA + flB;
+	Default32squareroot flA(0, 128, 1000);
+	Default32squareroot flB(0, 128, 1000);
+	Default32squareroot flC = flA - flB;
 	std::cout << "Ist: " << '\n';
 	flC.printAttributes();
 
-	Default32squareroot result = result.convert_to_Default32squareroot(2,(flA.calcX() + flB.calcX()));
+	Default32squareroot result = result.convert_to_Default32squareroot(2,(flA.calcX() - flB.calcX()));
 	std::cout << "Soll: " << '\n';
 	result.printAttributes();
 
 
-	square.test_Default32squareroot_operator_plus_with_conversion();
+	square.test_Default32squareroot_operator_minus_with_conversion();
 
 	/*
 	Zahlenverteilung float16(0.0, 1.0, 1024, "float16");
