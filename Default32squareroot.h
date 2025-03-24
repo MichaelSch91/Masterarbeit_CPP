@@ -69,9 +69,10 @@ public:
 	std::tuple<int, int> minus_operator_mantissa_subtraction_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
 
 	Default32squareroot operator*(Default32squareroot a);
-	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
-	std::tuple<int, int> multiplication_operator_mantissa_multiplication(int m1, int m2, int exp, unsigned long long one_dot);
-
+	std::tuple<int, int> multiplication_operator_calc(Default32squareroot a);
+	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
+	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
+	int multiplication_operator_exponent_calc(Default32squareroot a);
 	
 	bool operator==(Default32squareroot a);
 	bool equals(Default32squareroot a);

@@ -71,9 +71,9 @@ unsigned long long Default32squareroot::getMantissa_min() {
 
 double Default32squareroot::berechneMantisseDezimalwert() {
 	if (this->getExponent() == 0) {
-		return (this->getMantissa() * (sqrt(2) - 1)) / Sqrt_helper::sqrt_power(this->base, this->mantissa_bits);
+		return (this->getMantissa() * (sqrt(2) - 1)) / pow(this->base, this->mantissa_bits);
 	}
-	return (this->getMantissa() * (sqrt(2) - 1)) / Sqrt_helper::sqrt_power(this->base, this->mantissa_bits) + 1;
+	return (this->getMantissa() * (sqrt(2) - 1)) / pow(this->base, this->mantissa_bits) + 1;
 }
 
 void Default32squareroot::operatorBaseCheck(Default32squareroot a) {
@@ -166,7 +166,6 @@ long double Default32squareroot::calc_mantissaValue() {
 }
 
 int Default32squareroot::convert_mantissaValue_to_memoryDecimal(long double mantissaValue, unsigned long long one_dot) {
-	std::cout << "Mantisse_dezimal = " << mantissaValue << '\n';
 	return ((mantissaValue - 1) * one_dot) / (sqrt(2) - 1);
 }
 
@@ -399,91 +398,42 @@ Default32squareroot Default32squareroot::operator*(Default32squareroot a) {
 		sign = 1;
 	}
 
-	// Exponent berechnen
-	exponent = this->getExponent() + a.getExponent() - this->getBias();
-	
-	// kann nicht dargestellt werden und soll eine Darstellung mit Wert +-0 ausgeben
-	if (exponent < 0) { 
-		return Default32squareroot(this->getBase(),this->getSign(), 0, 0);
-	}
+	exp_mant = this->multiplication_operator_calc(a);
 
-	/*
-	// Mantisse berechnen
-	if (this->getExponent() == 0) {
-		// std:cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
-		mantissa = this->getMantissa() * (a.getMantissa() + one_dot);
-		mantissa = std::round(mantissa / one_dot);
-		// std:cout << "Mantisse = " << mantissa << '\n';
-		// Komma verschieben, bis Mantisse größer 0,5 (512)
-		mantissa *= 2;
-		exponent--;
-		while (mantissa >= one_dot) {
-			mantissa -= one_dot;
-			exponent++;
-		}
-	}
-	else if (a.getExponent() == 0) {
-		mantissa = (this->getMantissa() + one_dot) * a.getMantissa();
-		mantissa = std::round(mantissa / one_dot);
-		// std:cout << "Mantisse = " << mantissa << '\n';
-		// Komma verschieben, bis Mantisse größer 0,5 (512)
-		mantissa *= 2;
-		exponent--;
-		while (mantissa >= one_dot) {
-			mantissa -= one_dot;
-			exponent++;
-		}
-	}
-	else {
-		// std:cout << "Mantissenberechnung Standard " << '\n';
-		mantissa = (this->getMantissa() + one_dot) * (a.getMantissa() + one_dot);
-		// std:cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
-		mantissa = std::round(mantissa / one_dot);
-		// std:cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
-		while (mantissa >= (2 * one_dot)) { // Schleife eigentlich irrelevant, weil Wert nie größer 2 * one_dot wird
-			mantissa /= 2;
-			exponent++;
-			// std:cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
-		}
-		// std:cout << "Mantisse = " << mantissa << " nach Nachberechnung " << '\n';
-		if (exponent < 0) {
-			mantissa /= 2; // Mantisse wieder normalisieren (1. vorne wegnehmen)
-		}
-		else {
-			mantissa -= one_dot;
-		}
-		// std:cout << "Mantisse = " << mantissa << " Endergebnis " << '\n';
-	}
-	// bei negativem Exponenten normalisieren
-	if (exponent < 0) {
-		while (exponent < 0) {
-			mantissa = std::round(mantissa / 2);
-			exponent++;
-			// std::cout << "Mantisse = " << mantissa << " in Exponent normalisieren " << '\n';
-			// std::cout << "Exponent = " << exponent << " in Exponent normalisieren " << '\n';
-		}
-	}
-	*/
-
-	exp_mant = this->multiplication_operator_mantissa_multiplication(this->getMantissa(), a.getMantissa(), exponent, one_dot);
-
-
-
-	// std:cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
 
-std::tuple<int, int> Default32squareroot::multiplication_operator_mantissa_multiplication(int m1, int m2, int exp, unsigned long long one_dot) {
-	double mantissa_decimal = ((m1 * (sqrt(2) - 1)) / one_dot + 1) * (((m2 * (sqrt(2) - 1)) / one_dot + 1));
-	return this->multiplication_operator_mantissa_overflowcalc(exp, mantissa_decimal, one_dot);
+std::tuple<int, int> Default32squareroot::multiplication_operator_calc(Default32squareroot a) {
+	int exp = multiplication_operator_exponent_calc(a);
+	double mantissa_decimal = this->berechneMantisseDezimalwert() * a.berechneMantisseDezimalwert();
+	if (exp < 0) {
+		return this->multiplication_operator_normalize_exponent(exp, mantissa_decimal);
+	}
+	return this->multiplication_operator_mantissa_overflowcalc(exp, mantissa_decimal);
 }
 
-std::tuple<int, int> Default32squareroot::multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot) {
+std::tuple<int, int> Default32squareroot::multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal) {
 	while (mantissa_decimal >= sqrt(this->getBase())) {
 		mantissa_decimal /= sqrt(this->getBase());
 		exponent++;
 	}
-	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal(mantissa_decimal, one_dot));
+	if (exponent == 0) {
+		return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal_denormalized(mantissa_decimal, pow(2, this->getMantissa_bits())));
+	}
+
+	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal(mantissa_decimal, pow(2,this->getMantissa_bits())));
+}
+
+std::tuple<int, int> Default32squareroot::multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal) {
+	while (exponent < 0) {
+		mantissa_decimal /= sqrt(this->getBase());
+		exponent++;
+	}
+	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal_denormalized(mantissa_decimal, pow(2, this->getMantissa_bits())));
+}
+
+int Default32squareroot::multiplication_operator_exponent_calc(Default32squareroot a) {
+	return this->getExponent() + a.getExponent() - this->getBias();
 }
 
 bool Default32squareroot::operator==(Default32squareroot a) {
@@ -532,7 +482,7 @@ void Default32squareroot::convert_setSign(long double x) {
 		this->setSign(0);
 	}
 }
-// todo: genauer, aktuell ist der Exponent meist um 1 zu niedrig
+
 int Default32squareroot::convert_findExponent(long double x) {
 	x = abs(x);
 	for (int exp = this->getExponent_min(); exp <= this->getExponent_max(); exp++) {
@@ -540,6 +490,7 @@ int Default32squareroot::convert_findExponent(long double x) {
 			return exp;
 		}
 	}
+	return 0;
 }
 
 int Default32squareroot::convert_findMantissa(long double x, int s) {
@@ -556,6 +507,7 @@ int Default32squareroot::convert_mantissa_fastApproximation(long double x, int s
 			return mant;
 		}
 	}
+	return 0;
 }
 
 int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s, int mant_inaccurate) {
@@ -575,7 +527,8 @@ int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s
 	// std::cout << "m = " << m << '\n';
 
 	if (Default32squareroot(this->getBase(), 0, this->getExponent(), m).deviation_due_to_exp() < abs(Default32squareroot(this->getBase(), 0, this->getExponent(), m).calcX() - x)) {
-		std::cout << "Fehler, nicht im Rahmen der Abweichung mit dem jeweiligen Exponenten, MaxFehler: " << this->deviation_due_to_exp() << " erhaltener Fehler = " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x) << '\n';
+		std::cout << "Fehler! Nicht im Rahmen der Abweichung mit dem jeweiligen Exponenten, MaxFehler: " << this->deviation_due_to_exp() << " erhaltener Fehler = " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x) << '\n';
+		std::cout << "x = " << x << '\n';
 	}
 	return m;
 }

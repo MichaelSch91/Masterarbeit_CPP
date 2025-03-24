@@ -374,33 +374,35 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 	for (int i = 0; i < 10000; i++) {
 		// s1 = binary_dist(gen);
 		// s2 = binary_dist(gen);
-		//e1 = exponent_dist(gen);
-		//e2 = exponent_dist(gen);
-		e1 = 126 + (gen() % 5); // Werte um 0 (alte rand() Variante)
-		e2 = 126 + (gen() % 5); // Werte um 0 (alte rand() Variante)
+		// e1 = exponent_dist(gen);
+		// e2 = exponent_dist(gen);
+		e1 = 60 + (gen() % 130); // Werte um 0 (alte rand() Variante)
+		e2 = 60 + (gen() % 130); // Werte um 0 (alte rand() Variante)
 		m1 = mantissa_dist(gen);
 		m2 = mantissa_dist(gen);
 
-		std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
+		// std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
 
 
 		Default32squareroot flA(s1, e1, m1);
 		Default32squareroot flB(s2, e2, m2);
 
-		Default32squareroot flC = flA * flB;
+		flC = flA * flB;
+		flCompare = flCompare.convert_to_Default32squareroot(2, (flA.calcX() * flB.calcX()));
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
-		if (abs(flC.calcX() - (flA.calcX() * flB.calcX())) > 0.00005) {
+		if (!flC.equals(flCompare)) {
 			counter++;
-			std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() * flB.calcX())) << '\n' << '\n';
-			flCompare = flCompare.convert_to_Default32squareroot(2, (flA.calcX() * flB.calcX()));
+			// std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() * flB.calcX())) << '\n' << '\n';
 			std::cout << "Should be: " << '\n';
 			flCompare.printAttributes();
 			std::cout << "But is: " << '\n';
 			flC.printAttributes();
+			/*
 			std::cout << '\n' << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() * flB.calcX()))) < flC.deviation_due_to_exp()) {
 				std::cout << "Aber Abweichung ist in der Toleranz" << '\n';
 			}
+			*/
 			std::cout << " A * B = " << (flA.calcX() * flB.calcX()) << " Default32squareroot A - B = " << flC.calcX() << '\n' << '\n' << '\n';
 		}
 	}
