@@ -36,7 +36,7 @@ public:
 	// Redundant zu calcX(), aber wird in manchen Funktionen noch aufgerufen, da es in anderen Klassen nötig war
 	long double calcX_long_double();
 	// nur für Tests notwendig
-	double berechneMantisseDezimalwert() const;
+	double berechneMantisseDezimalwert();
 	// gibt den Wert der Abweichung zurück, um den ein Mantissenbit (m+1) den Wert abhängig vom Exponenten steigert
 	// Delta = Zahl(0,this->e,1) - Zahl(0,this->e,0)
 	long double deviation_due_to_exp();
@@ -69,6 +69,9 @@ public:
 	std::tuple<int, int> minus_operator_mantissa_subtraction_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
 
 	Default32squareroot operator*(Default32squareroot a);
+	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	std::tuple<int, int> multiplication_operator_mantissa_multiplication(int m1, int m2, int exp, unsigned long long one_dot);
+
 	
 	bool operator==(Default32squareroot a);
 	bool equals(Default32squareroot a);
@@ -100,22 +103,6 @@ public:
 	int getExponent_min();
 	unsigned long long getMantissa_max();
 	unsigned long long getMantissa_min();
-
-	// Tests
-	// 
-	// ggf in eigene Testklasse packen (todo)
-	//
-	// Operatoren
-	void test_Default32squareroot_operator_plus();
-	void test_Default32squareroot_operator_minus();
-	void test_Default32squareroot_operator_multiply();
-	// Tests für die Berechnung des dargestellten Werts
-	void test_Default32squareroot_calcX();
-	// Tests für den Converter von double (oder long double) Darstellung zur Zahlendarstellung der Klasse
-	void test_Default32squareroot_convert_to_Default32squareroot();
-	void test_Default32squareroot_convert_to_Default32squareroot_In_and_Out(); // Default32squareroot als Random-Eingabe und Überprüfung, ob ein Default32squareroot-Objekt mit gleichen Wert raus kommt.
-	void test_Default32squareroot_operator_plus_with_conversion();
-	void test_Default32squareroot_operator_minus_with_conversion();
 
 	// Converter
 	//

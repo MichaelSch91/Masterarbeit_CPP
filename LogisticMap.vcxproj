@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="CSV_data.cpp" />
     <ClCompile Include="Default32squarerootOverlapping.cpp" />
+    <ClCompile Include="Default32squareroot_test.cpp" />
     <ClCompile Include="ExperimentalDefault.cpp" />
     <ClCompile Include="Default32squareroot.cpp" />
     <ClCompile Include="Float16.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="CSV_data.h" />
     <ClInclude Include="Default32squarerootOverlapping.h" />
+    <ClInclude Include="Default32squareroot_test.h" />
     <ClInclude Include="ExperimentalDefault.h" />
     <ClInclude Include="Default32squareroot.h" />
     <ClInclude Include="Float16.h" />

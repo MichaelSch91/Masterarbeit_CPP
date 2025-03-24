@@ -34,6 +34,12 @@
     <Filter Include="Headerdateien\Logmap">
       <UniqueIdentifier>{3b269204-0a22-4e99-a628-ad126896c1a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Test">
+      <UniqueIdentifier>{81c0abab-965e-42de-9559-a6b27eda6180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Test">
+      <UniqueIdentifier>{1f0be80c-1842-4bbe-a364-9a81ab5d0dcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogisticMap.cpp">
@@ -87,6 +93,9 @@
     <ClCompile Include="Sqrt_helper.cpp">
       <Filter>Quelldateien\Helper</Filter>
     </ClCompile>
+    <ClCompile Include="Default32squareroot_test.cpp">
+      <Filter>Quelldateien\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -130,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="Sqrt_helper.h">
       <Filter>Headerdateien\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Default32squareroot_test.h">
+      <Filter>Headerdateien\Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
