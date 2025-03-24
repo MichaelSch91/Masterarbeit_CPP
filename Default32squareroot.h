@@ -53,20 +53,14 @@ public:
 	// 
 	// überladene Operatoren
 	Default32squareroot operator+(Default32squareroot a);
-	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
-	std::tuple<int, int> plus_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal, unsigned long long one_dot);
+	std::tuple<int, int> plus_operator_calc(Default32squareroot a);
+	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
 	// m1 ist die Mantisse mit dem größerem Exponenten (shift wird auf m2 angewendet), exp ist der aktuelle Exponent (in operator+ gespeichert / der größere)
 	// returns tuple mit <int exponent, int mantisse>
-	std::tuple<int, int> plus_operator_mantissa_addition(int m1, int m2, int exp, unsigned long long one_dot, int shift);
-	std::tuple<int, int> plus_operator_mantissa_addition_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
 	
 	Default32squareroot operator-(Default32squareroot a);
-	std::tuple<int, int> minus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal, unsigned long long one_dot);
-	std::tuple<int, int> minus_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal, unsigned long long one_dot);
-	// m1 ist die Mantisse mit dem größerem Exponenten (shift wird auf m2 angewendet), exp ist der aktuelle Exponent (in operator+ gespeichert / der größere)
-	// returns tuple mit <int exponent, int mantisse>
-	std::tuple<int, int> minus_operator_mantissa_subtraction(int m1, int m2, int exp, unsigned long long one_dot, int shift);
-	std::tuple<int, int> minus_operator_mantissa_subtraction_denormalized(int m1, int m2, int exp, unsigned long long one_dot, int shift);
+	std::tuple<int, int> minus_operator_calc(Default32squareroot a);
+	std::tuple<int, int> minus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
 
 	Default32squareroot operator*(Default32squareroot a);
 	std::tuple<int, int> multiplication_operator_calc(Default32squareroot a);
@@ -90,7 +84,7 @@ public:
 	// Überläufe erzeugt
 	int getSign();
 	void setSign(int s);
-	unsigned long long getMantissa();
+	long long getMantissa();
 	void setMantissa(int m);
 	int getExponent();
 	void setExponent(int e);
