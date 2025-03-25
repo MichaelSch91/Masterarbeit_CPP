@@ -13,6 +13,8 @@ class Logisticmap_float : public LogisticmapCalc {
 public:
     Logisticmap_float();
 
+    Logisticmap_float(double start, double r);
+
     std::list<float> getList();
 
     void setList(std::list<float> newList);

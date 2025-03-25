@@ -35,12 +35,14 @@ int main()
 {
 	std::cout << "Start" << '\n';
 
-	Logisticmap_float fl;
+	double start = 0.25;
+	double r = 3.98;
+
+	Logisticmap_float fl(start,r);
 	LogisticmapCalc::list_screen(fl.get_long_double_List());
 
 
-	Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, 0.25), Default32squareroot::convert_to_Default32squareroot(2, 3.98));
-	LogisticmapCalc::list_screen(logMap.get_long_double_List());
+	Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, start), Default32squareroot::convert_to_Default32squareroot(2, r));
 	logMap.list_screen();
 
 	std::cout << '\n' << "End" << '\n';

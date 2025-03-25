@@ -10,6 +10,13 @@ Logisticmap_float::Logisticmap_float() {
 	this->long_double_list = cast_list(this->list);
 }
 
+Logisticmap_float::Logisticmap_float(double start, double r) {
+	this->setS(s);
+	this->setR(r);
+	this->list = logistischeAbbildungFloat();
+	this->long_double_list = cast_list(this->list);
+}
+
 std::list<float> Logisticmap_float::getList() {
 	return this->list;
 }

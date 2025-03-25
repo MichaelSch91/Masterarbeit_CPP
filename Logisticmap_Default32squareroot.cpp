@@ -8,7 +8,7 @@
 #include <unordered_set>
 #include "Default32squareroot.h"
 
-Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(): s(Default32squareroot(2, 0, 123, 5033165)), r(Default32squareroot(2, 0, 128, 7969178)) {
+Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(): s(Default32squareroot::convert_to_Default32squareroot(2,0.1)), r(Default32squareroot::convert_to_Default32squareroot(2, 3.9)) {
 	this->list = logistischeAbbildungDefault32squareroot();
 	this->long_double_list = cast_list(this->list);
 }
@@ -106,8 +106,6 @@ std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot:
 
 	std::vector<Default32squareroot> vectorlist = listToVector(list);
 
-	std::cout << "Listengröße: " << list.size() << '\n';
-
 	for (int i = 0; i < vectorlist.size()-1; i++) {
 		for (int j = i+1; j < vectorlist.size(); j++) {
 			if (vectorlist[i] == vectorlist[j]) {
@@ -115,8 +113,6 @@ std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot:
 				has_duplicate = 1;
 				first_iteration = i;
 				last_iteration = j;
-				vectorlist[i].printAttributes();
-				vectorlist[j].printAttributes();
 				break;
 			}
 		}
