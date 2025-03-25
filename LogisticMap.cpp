@@ -49,7 +49,7 @@ int main()
 	result.printAttributes();
 
 	Default32squareroot_test test(2);
-	test.test_Default32squareroot_operator_minus_with_conversion();
+	test.test_Default32squareroot_operator_multiply_with_conversion();
 
 
 

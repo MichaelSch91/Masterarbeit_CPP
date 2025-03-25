@@ -273,10 +273,6 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 	// Exponentenverschiebung (für Mantissen)
 	int shift = this->getExponent() - a.getExponent();
 
-	if (!(this->getExponent() == 0) != !(a.getExponent() == 0)) {
-		std::cout << "Nur ein Exponent = 0, Berechnung funktioniert noch nicht" << '\n'; // todo: beide Exponenten übergeben und dann in minus_operator_mantissa_subtraction übergeben
-	}
-
 	// Vorzeichen:
 	int sign = 0;
 	if (shift < 0) {
@@ -290,11 +286,11 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 
 	exp_mant = this->minus_operator_calc(a);
 
-	if (std::get<0>(exp_mant) > this->getExponent_max()) {
+	if ((std::get<0>(exp_mant) > this->getExponent_max()) || (std::get<0>(exp_mant) < 0)) {
 		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
 		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
 	}
-	if (std::get<1>(exp_mant) > one_dot) {
+	if (std::get<1>(exp_mant) > one_dot || (std::get<1>(exp_mant) < 0)) {
 		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
 		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
 	}
@@ -320,12 +316,19 @@ std::tuple<int, int> Default32squareroot::minus_operator_calc(Default32squareroo
 
 std::tuple<int, int> Default32squareroot::minus_operator_mantissa_overflowcalc(int exponent, double mantissa) {
 	if (mantissa == 0) {
+		if (exponent <= 0) {
+			return std::tuple<int, int>(0, 0);
+		}
 		return std::tuple<int, int>(exponent, 0);
 	}
 
 	while (mantissa < 1) {
 		mantissa *= sqrt(this->getBase());
 		exponent--;
+	}
+
+	if (exponent < 0) {
+		return std::tuple<int, int>(0, 0);
 	}
 
 	if (exponent == 0) {

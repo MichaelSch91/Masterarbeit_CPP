@@ -262,8 +262,8 @@ void Default32squareroot_test::test_Default32squareroot_operator_plus_with_conve
 		m1 = mantissa_dist(gen);
 		m2 = mantissa_dist(gen);
 
-		std::cout << "e1 = " << e1 << " e2 = " << e2 << '\n';
-		std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
+		// std::cout << "e1 = " << e1 << " e2 = " << e2 << '\n';
+		// std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
 
 
 		Default32squareroot flA(s1, e1, m1);
@@ -275,10 +275,7 @@ void Default32squareroot_test::test_Default32squareroot_operator_plus_with_conve
 		if (!flC.equals(flCompare)) {
 			counter++;
 			// std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() + flB.calcX())) << '\n' << '\n';
-			std::cout << "Should be: " << '\n';
-			flCompare.printAttributes();
-			std::cout << "But is: " << '\n';
-			flC.printAttributes();
+
 			/*
 			std::cout << '\n' << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() + flB.calcX()))) < flC.deviation_due_to_exp()) {
@@ -286,12 +283,17 @@ void Default32squareroot_test::test_Default32squareroot_operator_plus_with_conve
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
+				std::cout << "Big Error!" << '\n';
 				counter_bigError++;
-				std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+				std::cout << "Should be: " << '\n';
+				flCompare.printAttributes();
+				std::cout << "But is: " << '\n';
+				flC.printAttributes();
+				std::cout << "A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
 			}
 		}
 	}
-	std::cout << "Operator Plus: " << counter << " Fehler" << '\n';
+	std::cout << "Operator Plus: " << counter << " Fehler, davon " << counter_bigError << " große Fehler" << '\n';
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -329,7 +331,8 @@ void Default32squareroot_test::test_Default32squareroot_operator_minus_with_conv
 		m1 = mantissa_dist(gen);
 		m2 = mantissa_dist(gen);
 
-		std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
+		// std::cout << "e1 = " << e1 << " e2 = " << e2 << '\n';
+		// std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
 
 
 		Default32squareroot flA(s1, e1, m1);
@@ -340,11 +343,6 @@ void Default32squareroot_test::test_Default32squareroot_operator_minus_with_conv
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
 		if (!flC.equals(flCompare)) {
 			counter++;
-			// std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() - flB.calcX())) << '\n' << '\n';
-			std::cout << "Should be: " << '\n';
-			flCompare.printAttributes();
-			std::cout << "But is: " << '\n';
-			flC.printAttributes();
 			/*
 			std::cout << '\n' << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() - flB.calcX()))) < flC.deviation_due_to_exp()) {
@@ -352,12 +350,17 @@ void Default32squareroot_test::test_Default32squareroot_operator_minus_with_conv
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
+				std::cout << "Big Error!" << '\n';
 				counter_bigError++;
-				std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+				std::cout << "Should be: " << '\n';
+				flCompare.printAttributes();
+				std::cout << "But is: " << '\n';
+				flC.printAttributes();
+				std::cout << "A - B = " << (flA.calcX() - flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
 			}
 		}
 	}
-	std::cout << "Operator Minus: " << counter << " Fehler" << '\n';
+	std::cout << "Operator Minus: " << counter << " Fehler, davon " << counter_bigError << " große Fehler" << '\n';
 }
 
 // Ein Test, der die Größenordnung des Ergebnisses miteinbezieht wäre sinnvoller, 
@@ -395,6 +398,7 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 		m1 = mantissa_dist(gen);
 		m2 = mantissa_dist(gen);
 
+		// std::cout << "e1 = " << e1 << " e2 = " << e2 << '\n';
 		// std::cout << "m1 = " << m1 << " m2 = " << m2 << '\n';
 
 
@@ -407,10 +411,7 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 		if (!flC.equals(flCompare)) {
 			counter++;
 			// std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() * flB.calcX())) << '\n' << '\n';
-			std::cout << "Should be: " << '\n';
-			flCompare.printAttributes();
-			std::cout << "But is: " << '\n';
-			flC.printAttributes();
+
 			/*
 			std::cout << '\n' << "Abweichung aufgrund Exponent = " << flC.deviation_due_to_exp() << " Exponent = " << flC.getExponent() << '\n';
 			if ((abs(flC.calcX() - (flA.calcX() * flB.calcX()))) < flC.deviation_due_to_exp()) {
@@ -418,10 +419,15 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
+				std::cout << "Big Error!" << '\n';
 				counter_bigError++;
-				std::cout << " A + B = " << (flA.calcX() + flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
+				std::cout << "Should be: " << '\n';
+				flCompare.printAttributes();
+				std::cout << "But is: " << '\n';
+				flC.printAttributes();
+				std::cout << "A * B = " << (flA.calcX() * flB.calcX()) << " Default32squareroot A + B = " << flC.calcX() << '\n' << '\n' << '\n';
 			}
 		}
 	}
-	std::cout << "Operator Minus: " << counter << " Fehler" << '\n';
+	std::cout << "Operator Minus: " << counter << " Fehler, davon " << counter_bigError << " große Fehler" << '\n';
 }
