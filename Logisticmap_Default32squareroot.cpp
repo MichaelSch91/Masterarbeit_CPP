@@ -18,6 +18,12 @@ Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(Default32square
 	this->long_double_list = cast_list(this->list);
 };
 
+template <typename T>
+std::vector<T> listToVector(const std::list<T>& inputList) {
+	std::vector<T> resultVector(inputList.begin(), inputList.end());
+	return resultVector;
+}
+
 std::list<Default32squareroot> Logisticmap_Default32squareroot::getList() {
 	return this->list;
 }
@@ -79,9 +85,8 @@ std::list<long double> Logisticmap_Default32squareroot::cast_list(std::list<Defa
 	return list;
 }
 
-void Logisticmap_Default32squareroot::list_screen(std::list<Default32squareroot> checked_list) {
-	std::list<Default32squareroot> list(checked_list);
-	std::tuple<bool, Default32squareroot, int, int> tuple = list_screen_duplicates(list);
+void Logisticmap_Default32squareroot::list_screen() {
+	std::tuple<bool, Default32squareroot, int, int> tuple = list_screen_duplicates(this->getList());
 	if (std::get<0>(tuple)) {
 		std::cout << "Liste hat Wert doppelt: " << std::get<1>(tuple).calcX() << " bei " << std::get<2>(tuple) << " und " << std::get<3>(tuple) << " iterations." << '\n';;
 	}
@@ -99,21 +104,27 @@ std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot:
 	int first_iteration = 0;
 	int last_iteration = 0;
 
-	for (Default32squareroot obj_i : list) {
-		for (Default32squareroot obj_j : list) {
-			if (obj_i == obj_j) {
-				value = obj_i;
+	std::vector<Default32squareroot> vectorlist = listToVector(list);
+
+	std::cout << "Listengröße: " << list.size() << '\n';
+
+	for (int i = 0; i < vectorlist.size()-1; i++) {
+		for (int j = i+1; j < vectorlist.size(); j++) {
+			if (vectorlist[i] == vectorlist[j]) {
+				value = vectorlist[i];
 				has_duplicate = 1;
-				first_iteration = iteration_i;
-				last_iteration = iteration_j;
+				first_iteration = i;
+				last_iteration = j;
+				vectorlist[i].printAttributes();
+				vectorlist[j].printAttributes();
 				break;
 			}
-			iteration_j++;
 		}
 		if (has_duplicate) {
 			break;
 		}
 	}
+
 	/*
 	if (has_duplicate) {
 		first_iteration = search_first_occurrence(list, value);
@@ -130,4 +141,16 @@ int Logisticmap_Default32squareroot::search_first_occurrence(std::list<Default32
 		}
 		iteration++;
 	}
+}
+
+void Logisticmap_Default32squareroot::print_list() {
+	std::cout << "Print list:" << '\n';
+	int counter = 0;
+	for (Default32squareroot i : this->getList()) {
+		std::cout << counter << ": ";
+		i.printAttributes();
+		counter++;
+	}
+
+	std::cout << "End" << '\n';
 }

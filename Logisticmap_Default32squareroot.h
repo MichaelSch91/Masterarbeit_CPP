@@ -30,8 +30,10 @@ public:
 
     void calcLongDoubleList();
 
-    void list_screen(std::list<Default32squareroot> checked_list);
-    std::tuple<bool, Default32squareroot, int, int> list_screen_duplicates(std::list<Default32squareroot> list);
+    void print_list();
+
+    void list_screen();
+    static std::tuple<bool, Default32squareroot, int, int> list_screen_duplicates(std::list<Default32squareroot> list);
     int search_first_occurrence(std::list<Default32squareroot> list, Default32squareroot value);
 
 

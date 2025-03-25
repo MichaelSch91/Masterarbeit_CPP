@@ -35,23 +35,13 @@ int main()
 {
 	std::cout << "Start" << '\n';
 
-
-	Default32squareroot square = square.convert_to_Default32squareroot(2, 3.5);
-	
-	Default32squareroot flA(0, 51, 567663);
-	Default32squareroot flB(0, 99, 2770307);
-	Default32squareroot flC = flA + flB;
-	std::cout << "Ist: " << '\n';
-	flC.printAttributes();
-
-	Default32squareroot result = result.convert_to_Default32squareroot(2,(flA.calcX() * flB.calcX()));
-	std::cout << "Soll: " << '\n';
-	result.printAttributes();
-
-	Default32squareroot_test test(2);
-	test.test_Default32squareroot_operator_multiply_with_conversion();
+	Logisticmap_float fl;
+	LogisticmapCalc::list_screen(fl.get_long_double_List());
 
 
+	Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, 0.25), Default32squareroot::convert_to_Default32squareroot(2, 3.98));
+	LogisticmapCalc::list_screen(logMap.get_long_double_List());
+	logMap.list_screen();
 
 	std::cout << '\n' << "End" << '\n';
 }
