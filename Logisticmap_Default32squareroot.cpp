@@ -95,6 +95,17 @@ void Logisticmap_Default32squareroot::list_screen() {
 	}
 }
 
+void Logisticmap_Default32squareroot::list_screen_csv() {
+	std::tuple<bool, Default32squareroot, int, int> tuple = list_screen_duplicates(this->getList());
+	if (std::get<0>(tuple)) {
+		// start, r, X, erstes Vorkommen, zweites Vorkommen
+		std::cout << this->getS().calcX() << ", " << this->getR().calcX() << ", " << std::get<1>(tuple).calcX() << ", " << std::get<2>(tuple) << ", " << std::get<3>(tuple)  << '\n';
+	}
+	else {
+		std::cout << this->getS().calcX() << ", " << this->getR().calcX() << ", " << "Liste hat keinen Wert doppelt" << '\n';
+	}
+}
+
 // Tupel: <hat Dopplung, Wert der ersten Dopplung, Iteration erstes Vorkommen, Iteration zweites Vorkommen>
 std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot::list_screen_duplicates(std::list<Default32squareroot> list) {
 	int iteration_i = 0;

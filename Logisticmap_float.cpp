@@ -11,7 +11,7 @@ Logisticmap_float::Logisticmap_float() {
 }
 
 Logisticmap_float::Logisticmap_float(double start, double r) {
-	this->setS(s);
+	this->setS(start);
 	this->setR(r);
 	this->list = logistischeAbbildungFloat();
 	this->long_double_list = cast_list(this->list);

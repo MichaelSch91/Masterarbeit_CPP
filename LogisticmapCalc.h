@@ -64,6 +64,8 @@ public:
     // gibt die Daten aus, wann sich eine Liste, mit welchem Wert wiederholt
     static void list_screen(std::list<long double> checked_list);
 
+    void list_screen_csv(std::list<long double> checked_list);
+
     // Listenwerte +1, falls Zählung nicht ab 0: std::cout << std::get<1>(tuple) << ',' << (std::get<2>(tuple)+1) << ',' << (std::get<3>(tuple)+1) << '\n';
     static void list_screen_csv_format(std::list<long double> checked_list);
 };

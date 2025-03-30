@@ -147,6 +147,18 @@
         }
     }
 
+    void LogisticmapCalc::list_screen_csv(std::list<long double> checked_list) {
+        std::list<long double> list(checked_list);
+        std::tuple<bool, long double, int, int> tuple = list_screen_duplicates(list);
+        if (std::get<0>(tuple)) {
+            // start, r, X, erstes Vorkommen, zweites Vorkommen
+            std::cout << this->getS() << ", " << this->getR() << ", " << std::get<1>(tuple) << ", " << std::get<2>(tuple) << ", " << std::get<3>(tuple) << '\n';
+        }
+        else {
+            std::cout << this->getS() << ", " << this->getR() << ", " << "Liste hat keinen Wert doppelt" << '\n';
+        }
+    }
+
     // Listenwerte +1, falls Zählung nicht ab 0: std::cout << std::get<1>(tuple) << ',' << (std::get<2>(tuple)+1) << ',' << (std::get<3>(tuple)+1) << '\n';
     void LogisticmapCalc::list_screen_csv_format(std::list<long double> checked_list) {
         std::list<long double> list(checked_list);
