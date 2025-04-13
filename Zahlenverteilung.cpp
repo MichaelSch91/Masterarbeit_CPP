@@ -138,15 +138,29 @@ void Zahlenverteilung::berechne_zahlenverteilung(ExperimentalDefault fl) {
 	init_list_zahlenverteilung();
 	long double x = 0.0;
 
-	long long max_exponent = pow(fl.getBase(), fl.getExponent_bits());
-	long long max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
+	long long max_exponent = fl.getExponent_max();
+	long long max_mantissa = fl.getMantissa_max();
 
-	while (fl.getExponent() < max_exponent) {
-		while (fl.getMantissa() < max_mantissa) {
+	while (fl.getExponent() <= max_exponent) {
+		while (fl.getMantissa() <= max_mantissa) {
 			x = fl.calcX();
+			// 
 			if (x > this->maximum) {
+				std::cout << "break" << '\n';
 				break;
 			}
+			/*
+			if (fl.getMantissa() == 0) {
+				std::cout << "Hier, Mant = 0" << '\n';
+				if (ExperimentalDefault(fl.getBase(), fl.getMantissa_bits(), fl.getExponent_bits(), fl.getSign(), fl.getExponent(), fl.getMantissa_max()).calcX() < this->list_klassen[1]) {
+					std::cout << "Max Wert mit Exponent = " << ExperimentalDefault(fl.getBase(), fl.getMantissa_bits(), fl.getExponent_bits(), fl.getSign(), fl.getExponent(), fl.getMantissa_max()).calcX() << '\n';
+					ExperimentalDefault(fl.getBase(), fl.getMantissa_bits(), fl.getExponent_bits(), fl.getSign(), fl.getExponent(), fl.getMantissa_max()).printAttributes();
+					std::cout << "adds mantissa max (+=" << fl.getMantissa_max() << ")" << '\n';
+					this->list_klassen[0] += fl.getMantissa_max();
+					break;
+				}
+			}
+			*/
 			// std::cout << "x: " << x << '\n';
 			for (int i = 0; i < this->list_zahlenverteilung.size(); i++) {
 				// std::cout << "checking ob zwischen: " << this->list_klassen[i] << " und " << this->list_klassen[i + 1] << '\n';
@@ -158,7 +172,7 @@ void Zahlenverteilung::berechne_zahlenverteilung(ExperimentalDefault fl) {
 			fl.setMantissa(fl.getMantissa() + 1);
 		}
 		std::cout << "Exponent: " << fl.getExponent() << '\n';
-		this->print_zahlenverteilung();
+		// this->print_zahlenverteilung();
 		fl.setExponent(fl.getExponent() + 1);
 		fl.setMantissa(0);
 	}
@@ -174,8 +188,8 @@ void Zahlenverteilung::berechne_zahlenverteilung(Default32squareroot fl) {
 	int max_exponent = pow(fl.getBase(), fl.getExponent_bits());
 	int max_mantissa = pow(fl.getBase(), fl.getMantissa_bits());
 
-	while (fl.getExponent() < max_exponent) {
-		while (fl.getMantissa() < max_mantissa) {
+	while (fl.getExponent() <= max_exponent) {
+		while (fl.getMantissa() <= max_mantissa) {
 			x = fl.calcX();
 			// std::cout << std::setprecision(100000) << x << '\n';
 			if (x > this->maximum) {

@@ -34,7 +34,13 @@ bool create_csv = 1;
 int main()
 {
 	std::cout << "Start" << '\n';
+	ExperimentalDefault fl(2, 27, 4);
 
+	Zahlenverteilung z(0.0, 1.0, 1024, "ExperimentalDefault 1,5,26 Bit");
+	z.berechne_zahlenverteilung(ExperimentalDefault(2, 26, 5));
+	z.print_zahlenverteilung_csv_format();
+
+	/*
 	double start = 0.25;
 	double r = 3.80;
 
@@ -54,7 +60,7 @@ int main()
 		r += 0.01;
 		std::cout << '\n' << '\n';
 	}
-
+	*/
 
 	std::cout << '\n' << "End" << '\n';
 }

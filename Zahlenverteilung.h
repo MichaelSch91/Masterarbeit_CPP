@@ -34,7 +34,7 @@ private:
 	double minimum;  // Untere Grenze, die dargestellt werden soll
 	double maximum;  // Obere Grenze der Zahlen, die dargestellt werden sollen
 	double steps; // Schritte für die Realisierung der einzelnen (Histogramm-)Klassen
-	std::vector<int> list_zahlenverteilung; // Liste mit der Anzahl der Vorkommen in der jeweiligen Klasse
+	std::vector<unsigned long long> list_zahlenverteilung; // Liste mit der Anzahl der Vorkommen in der jeweiligen Klasse
 	std::vector<double> list_klassen; // Liste mit der Anzahl der Vorkommen in der jeweiligen Klasse
 
 	std::vector<double> berechne_klassen();
