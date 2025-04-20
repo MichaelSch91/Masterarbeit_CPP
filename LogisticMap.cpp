@@ -34,19 +34,20 @@ bool create_csv = 1;
 int main()
 {
 	std::cout << "Start" << '\n';
-	ExperimentalDefault fl(2, 27, 4);
-
-	Zahlenverteilung z(0.0, 1.0, 1024, "ExperimentalDefault 1,5,26 Bit");
-	z.berechne_zahlenverteilung(ExperimentalDefault(2, 26, 5));
-	z.print_zahlenverteilung_csv_format();
 
 	/*
-	double start = 0.25;
-	double r = 3.80;
+	Zahlenverteilung z(0.0, 1.0, 1024, "ExperimentalDefault 1,7,24 Bit");
+	z.berechne_zahlenverteilung(ExperimentalDefault(2, 24, 7));
+	z.print_zahlenverteilung_csv_format();
 
-	while (r < 4.00) {
+	
+	double start = 0.25;
+	double r = 4.00;
+
+	while (r <= 4.00) {
 		while (start < 1.0) {
 			// std::cout << "Startwert: " << start << "r-Parameter: " << r << '\n';
+
 			Logisticmap_float fl(start, r);
 			std::cout << "Float, ";
 			fl.list_screen_csv(fl.get_long_double_List());
@@ -62,5 +63,18 @@ int main()
 	}
 	*/
 
+	Default32squareroot fl(2);
+	Default32squareroot testwert(2, 0, 0, 1);
+	std::cout << "Testwert = " << testwert.calcX() << '\n';
+	fl = Default32squareroot::convert_to_Default32squareroot(2, testwert.calcX());
+	std::cout << "Ergebnis = " << fl.calcX() << '\n';
+
+	fl.printAttributes();
+
+	
+	Default32squareroot_test test(2);
+	test.test_Default32squareroot_operator_minus_with_conversion();
+	
+	
 	std::cout << '\n' << "End" << '\n';
 }

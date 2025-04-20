@@ -62,7 +62,7 @@ std::list<Default32squareroot> Logisticmap_Default32squareroot::logistischeAbbil
 		list.push_back(logistischeAbbildungRechnerDefault32squareroot(x, this->r));
 		// std::cout << list.back() << '\n';
 		x = list.back();
-		// std::cout << x.calcX() << '\n';
+		std::cout << x.calcX() << '\n';
 	}
 	return list;
 }

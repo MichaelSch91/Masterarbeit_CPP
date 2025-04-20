@@ -193,34 +193,45 @@ void Default32squareroot_test::test_Default32squareroot_convert_to_Default32squa
 }
 
 void Default32squareroot_test::test_Default32squareroot_convert_to_Default32squareroot_In_and_Out() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> binary_dist(0, 1);
+	std::uniform_int_distribution<int> exponent_dist(0, 253);
+	std::uniform_int_distribution<int> mantissa_dist(0, 8388607);
+
 	int s1 = 0;
-	int s2 = 0;
 	int e1 = 0;
-	int e2 = 0;
 	int m1 = 0;
-	int m2 = 0;
 
 	int counter = 0;
 
-	Default32squareroot flA(s1, e1, m1);
-	Default32squareroot conversion(this->getBase());
+	Default32squareroot conversion(this->getBase()); // Use the class's base
 
-	for (int i = 0; i < 10000; i++) {
-		s1 = rand() % 2;
-		e1 = rand() % 254;
-		// e1 = 126 + rand() % 5; // Werte um 0
-		// e2 = 126 + rand() % 5; // Werte um 0
-		m1 = rand() % 8'388'608;
+	for (int i = 0; i < 1000; i++) {
+		s1 = binary_dist(gen);
+		e1 = exponent_dist(gen);
+		m1 = mantissa_dist(gen);
 
 		Default32squareroot flA(s1, e1, m1);
-		conversion = Default32squareroot::convert_to_Default32squareroot(this->getBase(), flA.calcX());
-		std::cout << "In = " << flA.calcX() << " Out = " << conversion.calcX() << '\n';
 
-		if (!(flA == conversion)) { // todo != überladen
+		// Convert flA.calcX() to a Default32squareroot
+		conversion = Default32squareroot::convert_to_Default32squareroot(this->getBase(), flA.calcX());
+
+		long double original_value = flA.calcX();
+		long double converted_value = conversion.calcX();
+
+		// std::cout << "Iteration: " << i << ", In = " << original_value << ", Out = " << converted_value << '\n';
+
+		if (!(flA == conversion)) {
 			counter++;
 			std::cout << "Abweichung!" << '\n';
-			std::cout << "In Sign = " << flA.getSign() << " In Exp = " << flA.getExponent() << " In Mant = " << flA.getMantissa() << '\n'
-				<< "Out Sign = " << conversion.getSign() << " Out Exp = " << conversion.getExponent() << " Out Mant = " << conversion.getMantissa() << '\n' << '\n' << '\n';
+			std::cout << "In  Sign = " << flA.getSign() << ", Exp = " << flA.getExponent() << ", Mant = " << flA.getMantissa() << '\n';
+			std::cout << "Out Sign = " << conversion.getSign() << ", Exp = " << conversion.getExponent() << ", Mant = " << conversion.getMantissa() << '\n';
+
+			// Calculate and print the relative error
+			long double relative_error = std::abs((converted_value - original_value) / original_value);
+			std::cout << "Relative Error: " << relative_error << '\n';
+			std::cout << std::endl;
 		}
 	}
 	std::cout << "Convert In Out: " << counter << " Fehler" << '\n';
@@ -270,7 +281,7 @@ void Default32squareroot_test::test_Default32squareroot_operator_plus_with_conve
 		Default32squareroot flB(s2, e2, m2);
 
 		Default32squareroot flC = flA + flB;
-		flCompare = flCompare.convert_to_Default32squareroot(2, (flA.calcX() + flB.calcX()));
+		flCompare = Default32squareroot::convert_to_Default32squareroot(2, (flA.calcX() + flB.calcX()));
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
 		if (!flC.equals(flCompare)) {
 			counter++;
@@ -283,7 +294,9 @@ void Default32squareroot_test::test_Default32squareroot_operator_plus_with_conve
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
-				std::cout << "Big Error!" << '\n';
+				std::cout << '\n' << "Big Error!" << '\n';
+				std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A + B = " << flC.calcX() << '\n';
+
 				counter_bigError++;
 				std::cout << "Should be: " << '\n';
 				flCompare.printAttributes();
@@ -339,7 +352,7 @@ void Default32squareroot_test::test_Default32squareroot_operator_minus_with_conv
 		Default32squareroot flB(s2, e2, m2);
 
 		Default32squareroot flC = flA - flB;
-		flCompare = flCompare.convert_to_Default32squareroot(2, (flA.calcX() - flB.calcX()));
+		flCompare = Default32squareroot::convert_to_Default32squareroot(2, (flA.calcX() - flB.calcX()));
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
 		if (!flC.equals(flCompare)) {
 			counter++;
@@ -350,7 +363,9 @@ void Default32squareroot_test::test_Default32squareroot_operator_minus_with_conv
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
-				std::cout << "Big Error!" << '\n';
+				std::cout << '\n' << "Big Error!" << '\n';
+				std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A - B = " << flC.calcX() << '\n';
+
 				counter_bigError++;
 				std::cout << "Should be: " << '\n';
 				flCompare.printAttributes();
@@ -385,7 +400,6 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 	Default32squareroot flB(s2, e2, m2);
 
 	Default32squareroot flC(0, 0, 0);
-
 	Default32squareroot flCompare(0, 0, 0);
 
 	for (int i = 0; i < 10000; i++) {
@@ -393,8 +407,8 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 		// s2 = binary_dist(gen);
 		// e1 = exponent_dist(gen);
 		// e2 = exponent_dist(gen);
-		e1 = 60 + (gen() % 130); // Werte um 0 (alte rand() Variante)
-		e2 = 60 + (gen() % 130); // Werte um 0 (alte rand() Variante)
+		e1 = 0 + (gen() % 130); // Werte um 0 (alte rand() Variante)
+		e2 = 0 + (gen() % 130); // Werte um 0 (alte rand() Variante)
 		m1 = mantissa_dist(gen);
 		m2 = mantissa_dist(gen);
 
@@ -406,8 +420,16 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 		Default32squareroot flB(s2, e2, m2);
 
 		flC = flA * flB;
-		flCompare = flCompare.convert_to_Default32squareroot(2, (flA.calcX() * flB.calcX()));
+		flCompare= Default32squareroot::convert_to_Default32squareroot(2, (flA.calcX() * flB.calcX()));
+		// std::cout << "flCompare = " << flCompare.calcX() << '\n';
+		// std::cout << "flCompare Mantissa = " << flCompare.getMantissa() << '\n';
+
+		/*
 		std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
+		std::cout << "flC Attributes:";
+		flC.printAttributes();
+		*/
+
 		if (!flC.equals(flCompare)) {
 			counter++;
 			// std::cout << "Abweichung!" << " Delta = " << abs(flC.calcX() - (flA.calcX() * flB.calcX())) << '\n' << '\n';
@@ -419,7 +441,9 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 			}
 			*/
 			if ((flC.getExponent() != flCompare.getExponent()) || (abs((int)(flC.getMantissa() - flCompare.getMantissa())) > 1)) {
-				std::cout << "Big Error!" << '\n';
+				std::cout << '\n' << "Big Error!" << '\n';
+				std::cout << "A = " << flA.calcX() << " B = " << flB.calcX() << " A * B = " << flC.calcX() << '\n';
+
 				counter_bigError++;
 				std::cout << "Should be: " << '\n';
 				flCompare.printAttributes();

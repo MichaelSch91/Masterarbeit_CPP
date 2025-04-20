@@ -22,6 +22,7 @@ public:
 
 	// Berechnung des dargestellten Wertes
 	long double calcX();
+	long double calcX_denormalized();
 	long double calcX_highExponent();
 	long double calcX_oddExponent();
 	long double calcX_evenExponent();
@@ -65,6 +66,7 @@ public:
 	Default32squareroot operator*(Default32squareroot a);
 	std::tuple<int, int> multiplication_operator_calc(Default32squareroot a);
 	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
+	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal);
 	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
 	int multiplication_operator_exponent_calc(Default32squareroot a);
 	
@@ -103,6 +105,7 @@ public:
 	//
 	// double / long double wird in Default32Squareroot Zahlentyp konvertiert
 	static Default32squareroot convert_to_Default32squareroot(int base, long double x);
+	void convert_to_Default32squareroot_overwrite(int base, long double x);
 	void convert_setSign(long double x);
 	int convert_findExponent(long double x);
 	int convert_findMantissa(long double x, int s);
