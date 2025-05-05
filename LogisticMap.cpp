@@ -73,7 +73,7 @@ int main()
 
 	
 	Default32squareroot_test test(2);
-	test.test_Default32squareroot_operator_minus_with_conversion();
+	test.test_Default32squareroot_operator_greater();
 	
 	
 	std::cout << '\n' << "End" << '\n';

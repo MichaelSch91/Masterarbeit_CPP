@@ -71,6 +71,12 @@ public:
 	int multiplication_operator_exponent_calc(Default32squareroot a);
 	
 	bool operator==(Default32squareroot a);
+	bool operator!=(Default32squareroot a);
+	bool operator>(Default32squareroot a);
+	bool operator>=(Default32squareroot a);
+	bool operator<(Default32squareroot a);
+	bool operator<=(Default32squareroot a);
+
 	bool equals(Default32squareroot a);
 
 	void operatorBaseCheck(Default32squareroot a);

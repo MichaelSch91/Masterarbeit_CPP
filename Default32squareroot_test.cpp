@@ -455,3 +455,135 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 	}
 	std::cout << "Operator Minus: " << counter << " Fehler, davon " << counter_bigError << " große Fehler" << '\n';
 }
+
+void Default32squareroot_test::test_Default32squareroot_operator_smaller() {
+	int counter = 0;
+	for (int i = 0; i < 10000; ++i) {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> sign_dist(0, 1);
+		std::uniform_int_distribution<int> exponent_dist(0, 253);
+		std::uniform_int_distribution<int> mantissa_dist(0, 8388607);
+
+		int s1 = sign_dist(gen);
+		int e1 = exponent_dist(gen);
+		int m1 = mantissa_dist(gen);
+		Default32squareroot a(s1, e1, m1);
+
+		int s2 = sign_dist(gen);
+		int e2 = exponent_dist(gen);
+		int m2 = mantissa_dist(gen);
+		Default32squareroot b(s2, e2, m2);
+
+		bool expected = (a.calcX() < b.calcX());
+		bool actual = (a < b);
+
+		if (actual != expected) {
+			counter++;
+			std::cout << "Fehler in Operator < !" << std::endl;
+			std::cout << "a (calcX) = " << a.calcX() << " (s=" << a.getSign() << ", e=" << a.getExponent() << ", m=" << a.getMantissa() << ")" << std::endl;
+			std::cout << "b (calcX) = " << b.calcX() << " (s=" << b.getSign() << ", e=" << b.getExponent() << ", m=" << b.getMantissa() << ")" << std::endl;
+			std::cout << "Erwartet: " << expected << ", Ergebnis: " << actual << std::endl << std::endl;
+		}
+	}
+	std::cout << "Operator <: " << counter << " Fehler" << std::endl;
+}
+
+void Default32squareroot_test::test_Default32squareroot_operator_smaller_equal() {
+	int counter = 0;
+	for (int i = 0; i < 10000; ++i) {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> sign_dist(0, 1);
+		std::uniform_int_distribution<int> exponent_dist(0, 253);
+		std::uniform_int_distribution<int> mantissa_dist(0, 8388607);
+
+		int s1 = sign_dist(gen);
+		int e1 = exponent_dist(gen);
+		int m1 = mantissa_dist(gen);
+		Default32squareroot a(s1, e1, m1);
+
+		int s2 = sign_dist(gen);
+		int e2 = exponent_dist(gen);
+		int m2 = mantissa_dist(gen);
+		Default32squareroot b(s2, e2, m2);
+
+		bool expected = (a.calcX() <= b.calcX());
+		bool actual = (a <= b);
+
+		if (actual != expected) {
+			counter++;
+			std::cout << "Fehler in Operator <= !" << std::endl;
+			std::cout << "a (calcX) = " << a.calcX() << " (s=" << a.getSign() << ", e=" << a.getExponent() << ", m=" << a.getMantissa() << ")" << std::endl;
+			std::cout << "b (calcX) = " << b.calcX() << " (s=" << b.getSign() << ", e=" << b.getExponent() << ", m=" << b.getMantissa() << ")" << std::endl;
+			std::cout << "Erwartet: " << expected << ", Ergebnis: " << actual << std::endl << std::endl;
+		}
+	}
+	std::cout << "Operator <=: " << counter << " Fehler" << std::endl;
+}
+
+void Default32squareroot_test::test_Default32squareroot_operator_greater() {
+	int counter = 0;
+	for (int i = 0; i < 10000; ++i) {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> sign_dist(0, 1);
+		std::uniform_int_distribution<int> exponent_dist(0, 253);
+		std::uniform_int_distribution<int> mantissa_dist(0, 8388607);
+
+		int s1 = sign_dist(gen);
+		int e1 = exponent_dist(gen);
+		int m1 = mantissa_dist(gen);
+		Default32squareroot a(s1, e1, m1);
+
+		int s2 = sign_dist(gen);
+		int e2 = exponent_dist(gen);
+		int m2 = mantissa_dist(gen);
+		Default32squareroot b(s2, e2, m2);
+
+		bool expected = (a.calcX() > b.calcX());
+		bool actual = (a > b);
+
+		if (actual != expected) {
+			counter++;
+			std::cout << "Fehler in Operator > !" << std::endl;
+			std::cout << "a (calcX) = " << a.calcX() << " (s=" << a.getSign() << ", e=" << a.getExponent() << ", m=" << a.getMantissa() << ")" << std::endl;
+			std::cout << "b (calcX) = " << b.calcX() << " (s=" << b.getSign() << ", e=" << b.getExponent() << ", m=" << b.getMantissa() << ")" << std::endl;
+			std::cout << "Erwartet: " << expected << ", Ergebnis: " << actual << std::endl << std::endl;
+		}
+	}
+	std::cout << "Operator >: " << counter << " Fehler" << std::endl;
+}
+
+void Default32squareroot_test::test_Default32squareroot_operator_greater_equal() {
+	int counter = 0;
+	for (int i = 0; i < 10000; ++i) {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> sign_dist(0, 1);
+		std::uniform_int_distribution<int> exponent_dist(0, 253);
+		std::uniform_int_distribution<int> mantissa_dist(0, 8388607);
+
+		int s1 = sign_dist(gen);
+		int e1 = exponent_dist(gen);
+		int m1 = mantissa_dist(gen);
+		Default32squareroot a(s1, e1, m1);
+
+		int s2 = sign_dist(gen);
+		int e2 = exponent_dist(gen);
+		int m2 = mantissa_dist(gen);
+		Default32squareroot b(s2, e2, m2);
+
+		bool expected = (a.calcX() >= b.calcX());
+		bool actual = (a >= b);
+
+		if (actual != expected) {
+			counter++;
+			std::cout << "Fehler in Operator >= !" << std::endl;
+			std::cout << "a (calcX) = " << a.calcX() << " (s=" << a.getSign() << ", e=" << a.getExponent() << ", m=" << a.getMantissa() << ")" << std::endl;
+			std::cout << "b (calcX) = " << b.calcX() << " (s=" << b.getSign() << ", e=" << b.getExponent() << ", m=" << b.getMantissa() << ")" << std::endl;
+			std::cout << "Erwartet: " << expected << ", Ergebnis: " << actual << std::endl << std::endl;
+		}
+	}
+	std::cout << "Operator >=: " << counter << " Fehler" << std::endl;
+}

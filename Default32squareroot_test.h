@@ -24,6 +24,11 @@ public:
 	void test_Default32squareroot_operator_plus_with_conversion();
 	void test_Default32squareroot_operator_minus_with_conversion();
 	void test_Default32squareroot_operator_multiply_with_conversion();
+	
+	void test_Default32squareroot_operator_smaller();
+	void test_Default32squareroot_operator_smaller_equal();
+	void test_Default32squareroot_operator_greater();
+	void test_Default32squareroot_operator_greater_equal();
 
 private:
 	int base;

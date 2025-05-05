@@ -113,15 +113,15 @@ long double Default32squareroot::calcX() {
 
 long double Default32squareroot::calcX_highExponent() {
 	if (((this->getExponent() - this->getBias()) % 2) == 1) {
-		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias) / 2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1)) *sqrt(this->getBase());
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias) / 2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1)) * sqrt(this->getBase());
 	}
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)/2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias) / 2) * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1));
 }
 
 long double Default32squareroot::calcX_oddExponent() {
 	long double power = this->calc_pow_oddExponent();
 	// std::cout << "odd, power: " << power << '\n';
-	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits))*(sqrt(this->base)-1.0));
+	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1.0));
 }
 long double Default32squareroot::calcX_evenExponent() {
 	unsigned long long power = this->calc_pow_evenExponent();
@@ -268,7 +268,7 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 	}
 
 	if (this->equals(a)) {
-		return Default32squareroot(this->getBase(),0,0,0);
+		return Default32squareroot(this->getBase(), 0, 0, 0);
 	}
 
 	unsigned long long one_dot = (unsigned long long)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
@@ -332,7 +332,7 @@ std::tuple<int, int> Default32squareroot::minus_operator_mantissa_overflowcalc(i
 		exponent--;
 	}
 
-	if (exponent < 0) {
+	if (exponent < 0) { // todo: multiplication_operator_normalize_exponent
 		return std::tuple<int, int>(0, 0);
 	}
 
@@ -389,13 +389,13 @@ std::tuple<int, int> Default32squareroot::multiplication_operator_mantissa_overf
 		return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal_denormalized(mantissa_decimal, pow(2, this->getMantissa_bits())));
 	}
 
-	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal(mantissa_decimal, pow(2,this->getMantissa_bits())));
+	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal(mantissa_decimal, pow(2, this->getMantissa_bits())));
 }
 
 std::tuple<int, int> Default32squareroot::multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal) {
-		mantissa_decimal /= Sqrt_helper::sqrt_power(this->getBase(), abs(exponent));
-		exponent = 0;
-	
+	mantissa_decimal /= Sqrt_helper::sqrt_power(this->getBase(), abs(exponent));
+	exponent = 0;
+
 	return std::tuple<int, int>(exponent, convert_mantissaValue_to_memoryDecimal_denormalized(mantissa_decimal, pow(2, this->getMantissa_bits())));
 }
 
@@ -415,15 +415,104 @@ int Default32squareroot::multiplication_operator_exponent_calc(Default32squarero
 	return this->getExponent() + a.getExponent() - this->getBias();
 }
 
+bool Default32squareroot::equals(Default32squareroot a) {
+	return ((this->getSign() == a.getSign()) && (this->getExponent() == a.getExponent()) && (this->getMantissa() == a.getMantissa()) && (this->getBase() == a.getBase()));
+}
+
 bool Default32squareroot::operator==(Default32squareroot a) {
 	return this->equals(a);
 }
 
-bool Default32squareroot::equals(Default32squareroot a) {
-	if ((this->getSign() == a.getSign()) and (this->getExponent() == a.getExponent()) and (this->getMantissa() == a.getMantissa()) and (this->getBase() == a.getBase())) {
-		return 1;
+bool Default32squareroot::operator!=(Default32squareroot a) {
+	return !this->equals(a);
+}
+
+bool Default32squareroot::operator>(Default32squareroot a) {
+	if (this->getSign() == 0) { 
+		if (a.getSign() == 0) { // Both positive
+			if (this->getExponent() > a.getExponent()) {
+				return true;
+			}
+			else if (this->getExponent() < a.getExponent()) {
+				return false;
+			}
+			else { // Exponents are equal
+				return this->getMantissa() > a.getMantissa();
+			}
+		}
+		else { // 'this' is positive, 'a' is negative
+			if (((this->getExponent() == 0) && (a.getExponent() == 0)) && ((this->getMantissa() == 0) && (a.getMantissa() == 0))) {
+				return false; // Not -0 > 0
+			}
+			else {
+				return true;
+			}
+		}
 	}
-	return 0;
+	else { // this->getSign() == 1, 'this' is negative
+		if (a.getSign() == 0) { // 'this' is negative, 'a' is positive
+			return false;
+		}
+		else { // Both negative
+			if (this->getExponent() < a.getExponent()) {
+				return true;
+			}
+			else if (this->getExponent() > a.getExponent()) {
+				return false;
+			}
+			else { // Exponents are equal
+				return this->getMantissa() < a.getMantissa();
+			}
+		}
+	}
+}
+
+bool Default32squareroot::operator>=(Default32squareroot a) {
+	return (*this > a) || (*this == a);
+}
+
+bool Default32squareroot::operator<(Default32squareroot a) {
+	if (this->getSign() == 0) { // 'this' is positive
+		if (a.getSign() == 0) { // 'a' is also positive
+			if (this->getExponent() < a.getExponent()) {
+				return true;
+			}
+			else if (this->getExponent() > a.getExponent()) {
+				return false;
+			}
+			else { // Exponents are equal
+				return this->getMantissa() < a.getMantissa();
+			}
+		}
+		else { // 'a' is negative
+			if (((this->getExponent() == 0) && (a.getExponent() == 0)) && ((this->getMantissa() == 0) && (a.getMantissa() == 0))) {
+				return false; // Not 0 < -0
+			}
+			else {
+				return false; // Positive is never less than negative (except potentially signed zero)
+			}
+		}
+	}
+	else { // this->getSign() == 1, 'this' is negative
+		if (a.getSign() == 0) { // 'a' is positive
+			return true; // Negative is always less than positive
+		}
+		else { // 'a' is also negative
+			if (this->getExponent() > a.getExponent()) {
+				return true;
+			}
+			else if (this->getExponent() < a.getExponent()) {
+				return false;
+			}
+			else { // Exponents are equal
+				return this->getMantissa() > a.getMantissa();
+			}
+		}
+	}
+}
+
+bool Default32squareroot::operator<=(Default32squareroot a) {
+	return (*this < a) || (*this == a);
 }
 
 long double Default32squareroot::simpleCalcX() {
@@ -455,7 +544,7 @@ Default32squareroot Default32squareroot::convert_to_Default32squareroot(int base
 
 void Default32squareroot::convert_to_Default32squareroot_overwrite(int base, long double x) {
 	if (x == 0.0) {
-		this->setValues(0,0,0);
+		this->setValues(0, 0, 0);
 		return;
 	}
 
@@ -486,7 +575,7 @@ int Default32squareroot::convert_findExponent(long double x) {
 }
 
 int Default32squareroot::convert_findMantissa(long double x, int s) {
-	int mantissa_bigSteps = this->convert_mantissa_fastApproximation(x,s);
+	int mantissa_bigSteps = this->convert_mantissa_fastApproximation(x, s);
 	return this->convert_Mantissa_fineApproximation(x, s, mantissa_bigSteps);
 }
 
