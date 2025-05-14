@@ -18,8 +18,6 @@ public:
 	// Konstruktor mit Basis 2 -> sqrt(2), s, e, m gem. Aufruf initialisiert
 	Default32squareroot(int s, int e, int m);
 
-	void setValues(int s, int e, int m);
-
 	// Berechnung des dargestellten Wertes
 	long double calcX();
 	long double calcX_denormalized();
@@ -96,6 +94,9 @@ public:
 	void setMantissa(int m);
 	int getExponent();
 	void setExponent(int e);
+
+	void setValues(int s, int e, int m);
+
 	// nur Getter, da nicht mehr veränderbar
 	long long getBase();
 	int getBias();
