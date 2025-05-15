@@ -575,6 +575,7 @@ int Default32squareroot::convert_findExponent(long double x) {
 }
 
 int Default32squareroot::convert_findMantissa(long double x, int s) {
+	x = abs(x);
 	int mantissa_bigSteps = this->convert_mantissa_fastApproximation(x, s);
 	return this->convert_Mantissa_fineApproximation(x, s, mantissa_bigSteps);
 }
