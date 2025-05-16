@@ -27,9 +27,26 @@
 
 #include "CSV_data.h"
 #include "Default32squareroot_test.h"
+#include <chrono>
 
 //config
 bool create_csv = 1;
+
+void zeitmessung_converter_steps(double konvertierenderWert, int schritte) {
+	auto start = std::chrono::high_resolution_clock::now();
+
+	Default32squareroot::convert_to_Default32squareroot(2, konvertierenderWert, schritte);
+
+	auto ende = std::chrono::high_resolution_clock::now();
+
+	std::cout << "Testwert = " << konvertierenderWert << " Ergebnis = " << Default32squareroot::convert_to_Default32squareroot(2, konvertierenderWert, schritte).calcX() << '\n';
+	Default32squareroot::convert_to_Default32squareroot(2, konvertierenderWert, schritte).printAttributes();
+
+	auto dauer = std::chrono::duration_cast<std::chrono::milliseconds>(ende - start);
+
+
+	std::cout << "Schritte: " << schritte << " Die Ausfuehrung der Methode dauerte: " << dauer.count() << " Millisekunden." << std::endl;
+}
 
 int main()
 {
@@ -61,20 +78,30 @@ int main()
 		r += 0.01;
 		std::cout << '\n' << '\n';
 	}
-	*/
+	
 
 	Default32squareroot fl(2);
-	Default32squareroot testwert(2, 0, 0, 1);
+	Default32squareroot testwert(2, 1, 0, 1);
 	std::cout << "Testwert = " << testwert.calcX() << '\n';
 	fl = Default32squareroot::convert_to_Default32squareroot(2, testwert.calcX());
 	std::cout << "Ergebnis = " << fl.calcX() << '\n';
 
 	fl.printAttributes();
+	*/
 
-	
-	Default32squareroot_test test(2);
-	test.test_Default32squareroot_operator_greater();
+	zeitmessung_converter_steps(1.2, 100);
+	zeitmessung_converter_steps(1.2, 1);
+
+
+	Default32squareroot::convert_to_Default32squareroot(2, 50.0).printAttributes();
+
+	// Alternativ: std::chrono::milliseconds, std::chrono::nanoseconds, etc.
+	// Alternativ für Millisekunden:
+	// auto dauer_ms = std::chrono::duration_cast<std::chrono::milliseconds>(ende - start);
+	// std::cout << "Die Ausführung von meineMethode dauerte: "
+	//           << dauer_ms.count() << " Millisekunden." << std::endl;
 	
 	
 	std::cout << '\n' << "End" << '\n';
 }
+

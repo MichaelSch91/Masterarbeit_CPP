@@ -112,6 +112,7 @@ public:
 	//
 	// double / long double wird in Default32Squareroot Zahlentyp konvertiert
 	static Default32squareroot convert_to_Default32squareroot(int base, long double x);
+	static Default32squareroot convert_to_Default32squareroot(int base, long double x, int s);
 	void convert_to_Default32squareroot_overwrite(int base, long double x);
 	void convert_setSign(long double x);
 	int convert_findExponent(long double x);
