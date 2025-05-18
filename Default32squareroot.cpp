@@ -88,26 +88,19 @@ long double Default32squareroot::calcX_long_double() {
 	return this->calcX();
 }
 
-// für Werte > 254 muss anders gerechnet werden, außer man würde wie bei IEEE 754 definieren, dass 255 (Exponent_Hex: FF) = inf
-// sollte aber zunächst irrelevant sein
 long double Default32squareroot::calcX() {
-	// std::cout << "Mantisse = " << this->getMantissa() << '\n';
 	if (this->getExponent() > 254) { // Basis ^ Exponent kann hier nicht in unsigned long long gespeichert werden, daher muss hier alles in einer Funktion berechnet werden
 		return calcX_highExponent();
 	}
 	if (this->getExponent() == 0) {
 		return calcX_denormalized();
 	}
-	// std::cout << "Sign,Exponent,Mantisse: " << this->getSign() << " , " << this->getExponent() << " , " << this->getMantissa() << '\n';
 	if (((this->getExponent() - this->getBias()) % 2) == 1) {
-		// std::cout << "odd" << '\n';
 		return this->calcX_oddExponent();
 	}
 	if ((this->getExponent() - this->getBias()) < 0) {
-		// std::cout << "negative" << '\n';
 		return this->calcX_negativeExponent();
 	}
-	// std::cout << "evenExponent" << '\n';
 	return calcX_evenExponent();
 }
 
@@ -120,7 +113,6 @@ long double Default32squareroot::calcX_highExponent() {
 
 long double Default32squareroot::calcX_oddExponent() {
 	long double power = this->calc_pow_oddExponent();
-	// std::cout << "odd, power: " << power << '\n';
 	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1.0));
 }
 long double Default32squareroot::calcX_evenExponent() {
@@ -135,14 +127,12 @@ long double Default32squareroot::calcX_denormalized() {
 
 long double Default32squareroot::calcX_negativeExponent() {
 	long double power = this->calc_pow_negativeExponent();
-	// std::cout << "negative, power: " << power << '\n';
 	return pow(-1, this->sign) * power * (1.0 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1.0));
 }
 
 // Potenz (Base ^ Exponent) berechnen für ungerade Exponenten
 long double Default32squareroot::calc_pow_oddExponent() {
 	unsigned long long exp_helper = this->getExponent() - this->getBias() - 1;
-	// std::cout << "Exp_Helper = " << exp_helper << '\n';
 	if (exp_helper == 0) {
 		return sqrt(this->getBase());
 	}
