@@ -199,6 +199,8 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 
 	exp_mant = this->plus_operator_calc(a);
 
+	this->operatorResultCheck(sign, exp_mant);
+
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
 
@@ -281,14 +283,7 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 
 	exp_mant = this->minus_operator_calc(a);
 
-	if ((std::get<0>(exp_mant) > this->getExponent_max()) || (std::get<0>(exp_mant) < 0)) {
-		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
-	if (std::get<1>(exp_mant) > one_dot || (std::get<1>(exp_mant) < 0)) {
-		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
+	this->operatorResultCheck(sign, exp_mant);
 
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
@@ -349,14 +344,7 @@ Default32squareroot Default32squareroot::operator*(Default32squareroot a) {
 
 	exp_mant = this->multiplication_operator_calc(a);
 
-	if ((std::get<0>(exp_mant) > this->getExponent_max()) || (std::get<0>(exp_mant) < 0)) {
-		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
-	if (std::get<1>(exp_mant) > one_dot || (std::get<1>(exp_mant) < 0)) {
-		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
+	this->operatorResultCheck(sign, exp_mant);
 
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
@@ -405,6 +393,38 @@ int Default32squareroot::multiplication_operator_exponent_calc(Default32squarero
 	return this->getExponent() + a.getExponent() - this->getBias();
 }
 
+void Default32squareroot::operatorResultCheck(int sign, std::tuple<int, int> exp_mant) {
+	int exp = std::get<0>(exp_mant);
+	int mant = std::get<1>(exp_mant);
+	checkSign(sign);
+	this->checkExponent(exp);
+	this->checkMantissa(mant);
+}
+
+void Default32squareroot::checkSign(int sign) {
+	if (sign == 0 or sign == 1) {
+		return;
+	}
+	std::cout << "invalid sign" << " - value saved as sign is invalid" << '\n';
+	throw std::invalid_argument("invalid sign");
+}
+
+void Default32squareroot::checkExponent(int exponent) {
+	if (exponent < this->getExponent_min() or exponent > this->getExponent_max()){
+		return;
+	}
+	std::cout << "invalid exponent" << " - value saved as exponent is invalid" << '\n';
+	throw std::invalid_argument("invalid exponent");
+}
+
+void Default32squareroot::checkMantissa(int mantissa) {
+	if (mantissa < this->getMantissa_min() or exponent > this->getMantissa_max()) {
+		return;
+	}
+	std::cout << "invalid mantissa" << " - value saved as mantissa is invalid" << '\n';
+	throw std::invalid_argument("invalid mantissa");
+}
+
 bool Default32squareroot::equals(Default32squareroot a) {
 	return ((this->getSign() == a.getSign()) && (this->getExponent() == a.getExponent()) && (this->getMantissa() == a.getMantissa()) && (this->getBase() == a.getBase()));
 }
@@ -418,6 +438,7 @@ bool Default32squareroot::operator!=(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator>(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	if (this->getSign() == 0) { 
 		if (a.getSign() == 0) { // Both positive
 			if (this->getExponent() > a.getExponent()) {
@@ -458,10 +479,12 @@ bool Default32squareroot::operator>(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator>=(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	return (*this > a) || (*this == a);
 }
 
 bool Default32squareroot::operator<(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	if (this->getSign() == 0) { // 'this' is positive
 		if (a.getSign() == 0) { // 'a' is also positive
 			if (this->getExponent() < a.getExponent()) {
@@ -502,6 +525,7 @@ bool Default32squareroot::operator<(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator<=(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	return (*this < a) || (*this == a);
 }
 

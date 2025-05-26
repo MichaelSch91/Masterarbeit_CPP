@@ -51,6 +51,7 @@ public:
 	// Operatoren
 	// 
 	// überladene Operatoren
+	// Rechenoperatoren
 	Default32squareroot operator+(Default32squareroot a);
 	std::tuple<int, int> plus_operator_calc(Default32squareroot a);
 	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
@@ -67,7 +68,14 @@ public:
 	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal);
 	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
 	int multiplication_operator_exponent_calc(Default32squareroot a);
+
+	// Überprüfung des Ergebnisses der Rechenoperatoren
+	void operatorResultCheck(int sign, std::tuple<int, int> exp_mant);
+	static void checkSign(int sign);
+	void checkExponent(int exponent);
+	void checkMantissa(int mantissa);
 	
+	// Vergleichsoperatoren
 	bool operator==(Default32squareroot a);
 	bool operator!=(Default32squareroot a);
 	bool operator>(Default32squareroot a);
