@@ -69,7 +69,8 @@ public:
 	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
 	int multiplication_operator_exponent_calc(Default32squareroot a);
 
-	// Überprüfung des Ergebnisses der Rechenoperatoren
+	// Überprüfung des Ergebnisses der Rechenoperatoren 
+	// => wirft exception
 	void operatorResultCheck(int sign, std::tuple<int, int> exp_mant);
 	static void checkSign(int sign);
 	void checkExponent(int exponent);
@@ -85,6 +86,8 @@ public:
 
 	bool equals(Default32squareroot a);
 
+	// Überprüfung ob gleiche Basis der Eingaben bei Rechen- und Vergleichsoperatoren vorliegen
+	// => wirft exception
 	void operatorBaseCheck(Default32squareroot a);
 
 	// Fälle, in denen es sinnvoller ist eine andere Methode aufzurufen (zB a.operator+(-b) soll a.operator-(+b) aufrufen)
