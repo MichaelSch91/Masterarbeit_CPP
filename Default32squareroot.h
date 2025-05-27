@@ -11,12 +11,15 @@ class Default32squareroot {
 public:
 	// Konstruktoren
 	// 
-	// Standardkonstruktor, mit ba als Basis -> sqrt(ba), s, e, m mit 0 initialisiert
+	// Standardkonstruktor
+	Default32squareroot();
+	// Konstruktor mit Basis 2 -> sqrt(2), s, e, m gem. Aufruf initialisiert
+	Default32squareroot(int s, int e, int m);
+	
+	// Konstruktor mit ba als Basis -> sqrt(ba), s, e, m mit 0 initialisiert
 	Default32squareroot(int ba);
 	// Konstruktor, mit ba als Basis -> sqrt(ba), s, e, m gem. Aufruf initialisiert
 	Default32squareroot(int ba, int s, int e, int m);
-	// Konstruktor mit Basis 2 -> sqrt(2), s, e, m gem. Aufruf initialisiert
-	Default32squareroot(int s, int e, int m);
 
 	// Berechnung des dargestellten Wertes
 	long double calcX();

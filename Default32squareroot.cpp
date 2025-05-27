@@ -5,7 +5,7 @@
 #include "Sqrt_helper.h"
 #include "Default32squareroot.h"
 
-// todo
+Default32squareroot::Default32squareroot() : base(2), sign(0), exponent(0), mantissa(0) {};
 
 Default32squareroot::Default32squareroot(int ba) : base(ba), sign(0), exponent(0), mantissa(0) {};
 
