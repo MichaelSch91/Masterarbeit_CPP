@@ -7,11 +7,11 @@
 
 Default32squareroot::Default32squareroot() : base(2), sign(0), exponent(0), mantissa(0) {};
 
+Default32squareroot::Default32squareroot(int s, int e, int m) : base(2), sign(s), exponent(e), mantissa(m) {};
+
 Default32squareroot::Default32squareroot(int ba) : base(ba), sign(0), exponent(0), mantissa(0) {};
 
 Default32squareroot::Default32squareroot(int ba, int s, int e, int m) : base(ba), sign(s), exponent(e), mantissa(m) {};
-
-Default32squareroot::Default32squareroot(int s, int e, int m) : base(2), sign(s), exponent(e), mantissa(m) {};
 
 void Default32squareroot::setValues(int s, int e, int m) {
 	this->sign = s;
