@@ -426,6 +426,9 @@ void Default32squareroot::checkMantissa(int mantissa) {
 }
 
 bool Default32squareroot::equals(Default32squareroot a) {
+	if ((this->getExponent() == 0 && this->getMantissa() == 0) && (a.getExponent() == 0 && a.getMantissa() == 0) && (this->getBase() == a.getBase())) {
+		return true; // +0 == -0 return true
+	}
 	return ((this->getSign() == a.getSign()) && (this->getExponent() == a.getExponent()) && (this->getMantissa() == a.getMantissa()) && (this->getBase() == a.getBase()));
 }
 
