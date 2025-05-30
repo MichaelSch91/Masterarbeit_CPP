@@ -418,7 +418,7 @@ void Default32squareroot::checkExponent(int exponent) {
 }
 
 void Default32squareroot::checkMantissa(int mantissa) {
-	if (mantissa < this->getMantissa_min() or exponent > this->getMantissa_max()) {
+	if (mantissa < this->getMantissa_min() or mantissa > this->getMantissa_max()) {
 		return;
 	}
 	std::cout << "invalid mantissa" << " - value saved as mantissa is invalid" << '\n';
