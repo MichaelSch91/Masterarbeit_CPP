@@ -417,7 +417,7 @@ void Default32squareroot::checkSign(int sign) {
 }
 
 void Default32squareroot::checkExponent(int exponent) {
-	if (exponent < this->getExponent_min() or exponent > this->getExponent_max()){
+	if (exponent > this->getExponent_min() or exponent < this->getExponent_max()) {
 		return;
 	}
 	std::cout << "invalid exponent" << " - value saved as exponent is invalid" << '\n';
@@ -425,7 +425,7 @@ void Default32squareroot::checkExponent(int exponent) {
 }
 
 void Default32squareroot::checkMantissa(int mantissa) {
-	if (mantissa < this->getMantissa_min() or mantissa > this->getMantissa_max()) {
+	if (mantissa > this->getMantissa_min() or mantissa < this->getMantissa_max()) {
 		return;
 	}
 	std::cout << "invalid mantissa" << " - value saved as mantissa is invalid" << '\n';
