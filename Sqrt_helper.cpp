@@ -10,6 +10,5 @@ double Sqrt_helper::sqrt_power(int base, int exponent) {
 }
 
 long long Sqrt_helper::sqrt_power_even(int base, int exponent) {
-	// ggf mit For/While-Schleife bei sehr hohen Werten besser?
 	return pow(base, exponent/2);
 }
