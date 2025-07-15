@@ -11,15 +11,14 @@ class Default32squareroot {
 public:
 	// Konstruktoren
 	// 
-	// Standardkonstruktor
-	Default32squareroot();
-	// Konstruktor mit Basis 2 -> sqrt(2), s, e, m gem. Aufruf initialisiert
-	Default32squareroot(int s, int e, int m);
-	
-	// Konstruktor mit ba als Basis -> sqrt(ba), s, e, m mit 0 initialisiert
+	// Standardkonstruktor, mit ba als Basis -> sqrt(ba), s, e, m mit 0 initialisiert
 	Default32squareroot(int ba);
 	// Konstruktor, mit ba als Basis -> sqrt(ba), s, e, m gem. Aufruf initialisiert
 	Default32squareroot(int ba, int s, int e, int m);
+	// Konstruktor mit Basis 2 -> sqrt(2), s, e, m gem. Aufruf initialisiert
+	Default32squareroot(int s, int e, int m);
+
+	void setValues(int s, int e, int m);
 
 	// Berechnung des dargestellten Wertes
 	long double calcX();
@@ -54,7 +53,6 @@ public:
 	// Operatoren
 	// 
 	// überladene Operatoren
-	// Rechenoperatoren
 	Default32squareroot operator+(Default32squareroot a);
 	std::tuple<int, int> plus_operator_calc(Default32squareroot a);
 	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
@@ -71,15 +69,7 @@ public:
 	std::tuple<int, int> multiplication_operator_mantissa_overflowcalc_denormalized(int exponent, double mantissa_decimal);
 	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
 	int multiplication_operator_exponent_calc(Default32squareroot a);
-
-	// Überprüfung des Ergebnisses der Rechenoperatoren 
-	// => wirft exception
-	void operatorResultCheck(int sign, std::tuple<int, int> exp_mant);
-	static void checkSign(int sign);
-	void checkExponent(int exponent);
-	void checkMantissa(int mantissa);
 	
-	// Vergleichsoperatoren
 	bool operator==(Default32squareroot a);
 	bool operator!=(Default32squareroot a);
 	bool operator>(Default32squareroot a);
@@ -89,8 +79,6 @@ public:
 
 	bool equals(Default32squareroot a);
 
-	// Überprüfung ob gleiche Basis der Eingaben bei Rechen- und Vergleichsoperatoren vorliegen
-	// => wirft exception
 	void operatorBaseCheck(Default32squareroot a);
 
 	// Fälle, in denen es sinnvoller ist eine andere Methode aufzurufen (zB a.operator+(-b) soll a.operator-(+b) aufrufen)
@@ -108,9 +96,6 @@ public:
 	void setMantissa(int m);
 	int getExponent();
 	void setExponent(int e);
-
-	void setValues(int s, int e, int m);
-
 	// nur Getter, da nicht mehr veränderbar
 	long long getBase();
 	int getBias();
