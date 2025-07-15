@@ -105,26 +105,30 @@ int main()
 {
 	std::cout << "Start" << '\n';
 
-	/*
-	Zahlenverteilung z(0.0, 1.0, 1024, "ExperimentalDefault 1,7,24 Bit");
-	z.berechne_zahlenverteilung(ExperimentalDefault(2, 24, 7));
-	z.print_zahlenverteilung_csv_format();
+	double START = 0.01;
+	double START_INCREMENT = 0.01;
+	double R_INCREMENT = 0.01;
 
-	Default32squareroot fl(2);
-	Default32squareroot testwert(2, 0, 0, 1);
-	std::cout << "Testwert = " << testwert.calcX() << '\n';
-	fl = Default32squareroot::convert_to_Default32squareroot(2, testwert.calcX());
-	std::cout << "Ergebnis = " << fl.calcX() << '\n';
+	double start = START;
+	double r = 3.80;
 
-	fl.printAttributes();
+	while (r <= 4.00) {
+		while (start < 1.0) {
 
+			Logisticmap_float fl(start, r);
+			std::cout << "Float, ";
+			fl.list_screen_csv(fl.get_long_double_List());
 
-	Default32squareroot_test test(2);
-	test.test_Default32squareroot_operator_greater();
-	*/
-	
-	zeitmessung_logmap_default32squareroot();
-	zeitmessung_logmap_float();
+			Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, start), Default32squareroot::convert_to_Default32squareroot(2, r));
+			std::cout << "squareroot, ";
+			logMap.list_screen_csv();
+			start += START_INCREMENT;
+
+		}
+		start = START;
+		r += R_INCREMENT;
+		std::cout << '\n' << '\n';
+	}
 
 
 	std::cout << '\n' << "End" << '\n';
