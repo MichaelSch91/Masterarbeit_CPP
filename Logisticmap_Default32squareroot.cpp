@@ -1,12 +1,14 @@
 #include "Logisticmap_Default32squareroot.h"
 
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <string>
 #include <vector>
 #include <tuple>
 #include <unordered_set>
 #include "Default32squareroot.h"
+#include <iomanip>
 
 Logisticmap_Default32squareroot::Logisticmap_Default32squareroot(): s(Default32squareroot::convert_to_Default32squareroot(2,0.1)), r(Default32squareroot::convert_to_Default32squareroot(2, 3.9)) {
 	this->list = logistischeAbbildungDefault32squareroot();
@@ -62,7 +64,9 @@ std::list<Default32squareroot> Logisticmap_Default32squareroot::logistischeAbbil
 		list.push_back(logistischeAbbildungRechnerDefault32squareroot(x, this->r));
 		// std::cout << list.back() << '\n';
 		x = list.back();
-		std::cout << x.calcX() << '\n';
+		// std::cout << x.calcX() << '\n';
+		// x.printAttributes();
+
 	}
 	return list;
 }
@@ -161,3 +165,4 @@ void Logisticmap_Default32squareroot::print_list() {
 
 	std::cout << "End" << '\n';
 }
+

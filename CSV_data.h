@@ -10,9 +10,12 @@
 #include <unordered_set>
 #include <tuple>
 #include <cmath>
+#include "Logisticmap_Default32squareroot.h"
 
 class CSV_data {
 public:
+    static void writeDefault32SquareRootListAsCalcXToCSV(Logisticmap_Default32squareroot d32s);
+
     static void writeFloatListToCSV(std::list<float> list);
 
     static void writeDoubleListToCSV(std::list<double> list);

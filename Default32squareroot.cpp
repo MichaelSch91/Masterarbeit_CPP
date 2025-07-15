@@ -171,6 +171,9 @@ long double Default32squareroot::calc_mantissaValue() {
 }
 
 int Default32squareroot::convert_mantissaValue_to_memoryDecimal(long double mantissaValue, unsigned long long one_dot) {
+	if (mantissaValue == 0.0) {
+		return 0;
+	}
 	return ((mantissaValue - 1) * one_dot) / (sqrt(2) - 1);
 }
 
@@ -355,6 +358,10 @@ Default32squareroot Default32squareroot::operator*(Default32squareroot a) {
 	// Vorzeichen bestimmen
 	if (this->getSign() != a.getSign()) {
 		sign = 1;
+	}
+
+	if (*this == Default32squareroot(this->getBase(), 0, 0, 0) or a == Default32squareroot(this->getBase(), 0, 0, 0)) {
+		return Default32squareroot(this->getBase(), 0, 0, 0);
 	}
 
 	exp_mant = this->multiplication_operator_calc(a);
