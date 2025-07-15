@@ -5,13 +5,13 @@
 #include "Sqrt_helper.h"
 #include "Default32squareroot.h"
 
-// todo
+Default32squareroot::Default32squareroot() : base(2), sign(0), exponent(0), mantissa(0) {};
+
+Default32squareroot::Default32squareroot(int s, int e, int m) : base(2), sign(s), exponent(e), mantissa(m) {};
 
 Default32squareroot::Default32squareroot(int ba) : base(ba), sign(0), exponent(0), mantissa(0) {};
 
 Default32squareroot::Default32squareroot(int ba, int s, int e, int m) : base(ba), sign(s), exponent(e), mantissa(m) {};
-
-Default32squareroot::Default32squareroot(int s, int e, int m) : base(2), sign(s), exponent(e), mantissa(m) {};
 
 void Default32squareroot::setValues(int s, int e, int m) {
 	this->sign = s;
@@ -88,26 +88,19 @@ long double Default32squareroot::calcX_long_double() {
 	return this->calcX();
 }
 
-// für Werte > 254 muss anders gerechnet werden, außer man würde wie bei IEEE 754 definieren, dass 255 (Exponent_Hex: FF) = inf
-// sollte aber zunächst irrelevant sein
 long double Default32squareroot::calcX() {
-	// std::cout << "Mantisse = " << this->getMantissa() << '\n';
 	if (this->getExponent() > 254) { // Basis ^ Exponent kann hier nicht in unsigned long long gespeichert werden, daher muss hier alles in einer Funktion berechnet werden
 		return calcX_highExponent();
 	}
 	if (this->getExponent() == 0) {
 		return calcX_denormalized();
 	}
-	// std::cout << "Sign,Exponent,Mantisse: " << this->getSign() << " , " << this->getExponent() << " , " << this->getMantissa() << '\n';
 	if (((this->getExponent() - this->getBias()) % 2) == 1) {
-		// std::cout << "odd" << '\n';
 		return this->calcX_oddExponent();
 	}
 	if ((this->getExponent() - this->getBias()) < 0) {
-		// std::cout << "negative" << '\n';
 		return this->calcX_negativeExponent();
 	}
-	// std::cout << "evenExponent" << '\n';
 	return calcX_evenExponent();
 }
 
@@ -120,7 +113,6 @@ long double Default32squareroot::calcX_highExponent() {
 
 long double Default32squareroot::calcX_oddExponent() {
 	long double power = this->calc_pow_oddExponent();
-	// std::cout << "odd, power: " << power << '\n';
 	return pow(-1, this->sign) * power * (1 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1.0));
 }
 long double Default32squareroot::calcX_evenExponent() {
@@ -135,14 +127,12 @@ long double Default32squareroot::calcX_denormalized() {
 
 long double Default32squareroot::calcX_negativeExponent() {
 	long double power = this->calc_pow_negativeExponent();
-	// std::cout << "negative, power: " << power << '\n';
 	return pow(-1, this->sign) * power * (1.0 + (this->mantissa / pow(this->base, this->mantissa_bits)) * (sqrt(this->base) - 1.0));
 }
 
 // Potenz (Base ^ Exponent) berechnen für ungerade Exponenten
 long double Default32squareroot::calc_pow_oddExponent() {
 	unsigned long long exp_helper = this->getExponent() - this->getBias() - 1;
-	// std::cout << "Exp_Helper = " << exp_helper << '\n';
 	if (exp_helper == 0) {
 		return sqrt(this->getBase());
 	}
@@ -211,6 +201,8 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	}
 
 	exp_mant = this->plus_operator_calc(a);
+
+	this->operatorResultCheck(sign, exp_mant);
 
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
@@ -294,14 +286,7 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 
 	exp_mant = this->minus_operator_calc(a);
 
-	if ((std::get<0>(exp_mant) > this->getExponent_max()) || (std::get<0>(exp_mant) < 0)) {
-		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
-	if (std::get<1>(exp_mant) > one_dot || (std::get<1>(exp_mant) < 0)) {
-		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
+	this->operatorResultCheck(sign, exp_mant);
 
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
@@ -366,14 +351,7 @@ Default32squareroot Default32squareroot::operator*(Default32squareroot a) {
 
 	exp_mant = this->multiplication_operator_calc(a);
 
-	if ((std::get<0>(exp_mant) > this->getExponent_max()) || (std::get<0>(exp_mant) < 0)) {
-		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
-	if (std::get<1>(exp_mant) > one_dot || (std::get<1>(exp_mant) < 0)) {
-		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
-		std::cout << "Exponent = " << std::get<0>(exp_mant) << " Mantisse = " << std::get<1>(exp_mant) << '\n';
-	}
+	this->operatorResultCheck(sign, exp_mant);
 
 	return Default32squareroot(this->getBase(), sign, std::get<0>(exp_mant), std::get<1>(exp_mant));
 }
@@ -422,7 +400,42 @@ int Default32squareroot::multiplication_operator_exponent_calc(Default32squarero
 	return this->getExponent() + a.getExponent() - this->getBias();
 }
 
+void Default32squareroot::operatorResultCheck(int sign, std::tuple<int, int> exp_mant) {
+	int exp = std::get<0>(exp_mant);
+	int mant = std::get<1>(exp_mant);
+	checkSign(sign);
+	this->checkExponent(exp);
+	this->checkMantissa(mant);
+}
+
+void Default32squareroot::checkSign(int sign) {
+	if (sign == 0 or sign == 1) {
+		return;
+	}
+	std::cout << "invalid sign" << " - value saved as sign is invalid" << '\n';
+	throw std::invalid_argument("invalid sign");
+}
+
+void Default32squareroot::checkExponent(int exponent) {
+	if (exponent < this->getExponent_min() or exponent > this->getExponent_max()){
+		return;
+	}
+	std::cout << "invalid exponent" << " - value saved as exponent is invalid" << '\n';
+	throw std::invalid_argument("invalid exponent");
+}
+
+void Default32squareroot::checkMantissa(int mantissa) {
+	if (mantissa < this->getMantissa_min() or mantissa > this->getMantissa_max()) {
+		return;
+	}
+	std::cout << "invalid mantissa" << " - value saved as mantissa is invalid" << '\n';
+	throw std::invalid_argument("invalid mantissa");
+}
+
 bool Default32squareroot::equals(Default32squareroot a) {
+	if ((this->getExponent() == 0 && this->getMantissa() == 0) && (a.getExponent() == 0 && a.getMantissa() == 0) && (this->getBase() == a.getBase())) {
+		return true; // +0 == -0 return true
+	}
 	return ((this->getSign() == a.getSign()) && (this->getExponent() == a.getExponent()) && (this->getMantissa() == a.getMantissa()) && (this->getBase() == a.getBase()));
 }
 
@@ -435,6 +448,7 @@ bool Default32squareroot::operator!=(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator>(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	if (this->getSign() == 0) { 
 		if (a.getSign() == 0) { // Both positive
 			if (this->getExponent() > a.getExponent()) {
@@ -475,10 +489,12 @@ bool Default32squareroot::operator>(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator>=(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	return (*this > a) || (*this == a);
 }
 
 bool Default32squareroot::operator<(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	if (this->getSign() == 0) { // 'this' is positive
 		if (a.getSign() == 0) { // 'a' is also positive
 			if (this->getExponent() < a.getExponent()) {
@@ -519,6 +535,7 @@ bool Default32squareroot::operator<(Default32squareroot a) {
 }
 
 bool Default32squareroot::operator<=(Default32squareroot a) {
+	this->operatorBaseCheck(a);
 	return (*this < a) || (*this == a);
 }
 
@@ -533,7 +550,6 @@ long double Default32squareroot::deviation_due_to_exp() {
 	return (Default32squareroot(this->getBase(), 0, this->getExponent(), 1).calcX() - Default32squareroot(this->getBase(), 0, this->getExponent(), 0).calcX());
 }
 
-// todo: für negative x
 Default32squareroot Default32squareroot::convert_to_Default32squareroot(int base, long double x) {
 	Default32squareroot result(base, 0, 0, 0);
 
@@ -582,6 +598,7 @@ int Default32squareroot::convert_findExponent(long double x) {
 }
 
 int Default32squareroot::convert_findMantissa(long double x, int s) {
+	x = abs(x);
 	int mantissa_bigSteps = this->convert_mantissa_fastApproximation(x, s);
 	return this->convert_Mantissa_fineApproximation(x, s, mantissa_bigSteps);
 }
@@ -590,9 +607,7 @@ int Default32squareroot::convert_mantissa_fastApproximation(long double x, int s
 	x = abs(x);
 	int steps = s;
 	for (int mant = this->getMantissa_min(); mant <= this->getMantissa_max(); mant += steps) {
-		// std::cout << "x = " << x << " min = " << Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX() << " max = " << Default32squareroot(this->getBase(), 0, this->getExponent(), mant + 100).calcX() << '\n';
 		if ((x >= Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX()) and (x <= Default32squareroot(this->getBase(), 0, this->getExponent(), mant + 100).calcX())) {
-			// std::cout << mant << '\n';
 			return mant;
 		}
 	}
@@ -603,24 +618,17 @@ int Default32squareroot::convert_Mantissa_fineApproximation(long double x, int s
 	x = abs(x);
 	int m = mant_inaccurate;
 	long double deviation = abs(Default32squareroot(this->getBase(), 0, this->getExponent(), m).calcX() - x);
-	// std::cout << "deviation = " << deviation << '\n';
 	for (int mant = mant_inaccurate; mant <= mant_inaccurate + s; mant++) {
-		// std::cout << "Mant = " << mant << '\n';
 		if (deviation > abs(Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX() - x)) {
 			deviation = abs(Default32squareroot(this->getBase(), 0, this->getExponent(), mant).calcX() - x);
-			// std::cout << "Abweichung: " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), mant).calcX() - x) << '\n';
-			// std::cout << "erwarteter maximaler Fehler: " << this->deviation_due_to_exp() << '\n';
-			// std::cout << "fineApprox " << mant << '\n';
 			m = mant;
 		}
 	}
-	// std::cout << "m = " << m << '\n';
 
 	if (Default32squareroot(this->getBase(), 0, this->getExponent(), m).deviation_due_to_exp() < abs(Default32squareroot(this->getBase(), 0, this->getExponent(), m).calcX() - x)) {
 		std::cout << "Fehler! Nicht im Rahmen der Abweichung mit dem jeweiligen Exponenten, MaxFehler: " << this->deviation_due_to_exp() << " erhaltener Fehler = " << abs(Default32squareroot(this->getBase(), this->getSign(), this->getExponent(), m).calcX() - x) << '\n';
 		std::cout << "x = " << x << '\n';
 	}
-	// std::cout << "m = " << m << '\n';
 	return m;
 }
 
