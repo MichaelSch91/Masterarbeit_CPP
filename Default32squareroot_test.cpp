@@ -403,8 +403,8 @@ void Default32squareroot_test::test_Default32squareroot_operator_multiply_with_c
 	Default32squareroot flCompare(0, 0, 0);
 
 	for (int i = 0; i < 10000; i++) {
-		// s1 = binary_dist(gen);
-		// s2 = binary_dist(gen);
+		s1 = binary_dist(gen);
+		s2 = binary_dist(gen);
 		// e1 = exponent_dist(gen);
 		// e2 = exponent_dist(gen);
 		e1 = 0 + (gen() % 130); // Werte um 0 (alte rand() Variante)

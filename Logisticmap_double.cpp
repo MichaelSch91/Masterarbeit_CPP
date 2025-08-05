@@ -10,6 +10,13 @@ Logisticmap_double::Logisticmap_double() {
 	this->long_double_list = cast_list(this->list);
 }
 
+Logisticmap_double::Logisticmap_double(double start, double r) {
+	this->setS(start);
+	this->setR(r);
+	this->list = logistischeAbbildungDouble();
+	this->long_double_list = cast_list(this->list);
+}
+
 std::list<double> Logisticmap_double::getList() {
 	return this->list;
 }

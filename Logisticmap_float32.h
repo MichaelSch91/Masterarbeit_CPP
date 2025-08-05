@@ -13,6 +13,8 @@ class Logisticmap_float32 : public LogisticmapCalc {
 public:
     Logisticmap_float32();
 
+    Logisticmap_float32(double s, double r);
+
     Float32 getS();
 
     Float32 getR();

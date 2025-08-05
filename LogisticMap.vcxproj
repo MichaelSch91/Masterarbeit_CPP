@@ -140,6 +140,7 @@
     <ClCompile Include="Logisticmap_Default32squareroot.cpp" />
     <ClCompile Include="Logisticmap_double.cpp" />
     <ClCompile Include="Logisticmap_float.cpp" />
+    <ClCompile Include="Logisticmap_float16.cpp" />
     <ClCompile Include="Logisticmap_float32.cpp" />
     <ClCompile Include="Logisticmap_long_double.cpp" />
     <ClCompile Include="Logisticmap_long_double.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Logisticmap_Default32squareroot.h" />
     <ClInclude Include="Logisticmap_double.h" />
     <ClInclude Include="Logisticmap_float.h" />
+    <ClInclude Include="Logisticmap_float16.h" />
     <ClInclude Include="Logisticmap_float32.h" />
     <ClInclude Include="Sqrt_helper.h" />
     <ClInclude Include="Zahlendarstellung.h" />

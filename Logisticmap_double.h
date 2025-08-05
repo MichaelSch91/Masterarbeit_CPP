@@ -12,6 +12,8 @@ class Logisticmap_double : public LogisticmapCalc {
 public:
     Logisticmap_double();
 
+    Logisticmap_double(double start, double r);
+
     std::list<double> getList();
 
     std::list<long double> get_long_double_List();

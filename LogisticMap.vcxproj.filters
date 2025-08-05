@@ -96,6 +96,9 @@
     <ClCompile Include="Default32squareroot_test.cpp">
       <Filter>Quelldateien\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Logisticmap_float16.cpp">
+      <Filter>Quelldateien\Logmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogisticmapCalc.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Default32squareroot_test.h">
       <Filter>Headerdateien\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Logisticmap_float16.h">
+      <Filter>Headerdateien\Logmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

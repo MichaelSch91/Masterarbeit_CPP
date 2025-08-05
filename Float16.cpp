@@ -43,9 +43,9 @@ int Float16::getExponent_bits() {
 
 double Float16::calcX() {
 	if (this->getExponent() == 0) {
-		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * 1.0 * (this->mantissa / pow(this->base, this->mantissa_bits));
 	}
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * 1.0 * (1.0 + this->mantissa / pow(this->base, this->mantissa_bits));
 }
 
 // denormalisiert, sonst +1 für exp > 0
@@ -500,4 +500,79 @@ void Float16::test_Float16_operator_multiply() {
 			std::cout << " A + B = " << (flA.calcX() * flB.calcX()) << " Float16 A * B = " << flC.calcX() << '\n' << '\n' << '\n';
 		}
 	}
+}
+
+Float16 Float16::convert_to_Float16(long double x) {
+	Float16 result(0, 0, 0);
+
+	if (x == 0.0) {
+		return result;
+	}
+
+	int steps = 20; //fastApproximation Mantisse Schritte
+
+	result.convert_setSign(x);
+	result.setExponent(result.convert_findExponent(x));
+	result.setMantissa(result.convert_findMantissa(x, steps));
+	return result;
+}
+
+void Float16::convert_setSign(long double x) {
+	if (x < 0) {
+		this->setSign(1);
+	}
+	else {
+		this->setSign(0);
+	}
+}
+
+int Float16::convert_findExponent(long double x) {
+	x = abs(x);
+	for (int exp = 0; exp <= 32; exp++) {
+		if ((x >= Float16(0, exp, 0).calcX()) and (x <= Float16(0, exp, 1024).calcX())) {
+			return exp;
+		}
+	}
+	return 0;
+}
+
+int Float16::convert_findMantissa(long double x, int s) {
+	x = abs(x);
+	int mantissa_bigSteps = this->convert_mantissa_fastApproximation(x, s);
+	return this->convert_Mantissa_fineApproximation(x, s, mantissa_bigSteps);
+}
+
+int Float16::convert_mantissa_fastApproximation(long double x, int s) {
+	x = abs(x);
+	int steps = s;
+	for (int mant = 0; mant <= 1024; mant += steps) {
+		if ((x >= Float16( 0, this->getExponent(), mant).calcX()) and (x <= Float16( 0, this->getExponent(), mant + 100).calcX())) {
+			return mant;
+		}
+	}
+	return 0;
+}
+
+int Float16::convert_Mantissa_fineApproximation(long double x, int s, int mant_inaccurate) {
+	x = abs(x);
+	int m = mant_inaccurate;
+	long double deviation = abs(Float16( 0, this->getExponent(), m).calcX() - x);
+	for (int mant = mant_inaccurate; mant <= mant_inaccurate + s; mant++) {
+		if (deviation > abs(Float16(0, this->getExponent(), mant).calcX() - x)) {
+			deviation = abs(Float16(0, this->getExponent(), mant).calcX() - x);
+			m = mant;
+		}
+	}
+	return m;
+}
+
+void Float16::printAttributes() {
+	std::cout << "Sign = " << this->getSign() << " Exponent = " << this->getExponent() << " Mantisse = " << this->getMantissa() << '\n';
+}
+
+bool Float16::operator==(Float16 a) {
+	if ((this->getSign() == a.getSign()) and (this->getExponent() == a.getExponent()) and (this->getMantissa() == a.getMantissa())) {
+		return 1;
+	}
+	return 0;
 }
