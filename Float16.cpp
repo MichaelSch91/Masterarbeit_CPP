@@ -546,7 +546,7 @@ int Float16::convert_mantissa_fastApproximation(long double x, int s) {
 	x = abs(x);
 	int steps = s;
 	for (int mant = 0; mant <= 1024; mant += steps) {
-		if ((x >= Float16( 0, this->getExponent(), mant).calcX()) and (x <= Float16( 0, this->getExponent(), mant + 100).calcX())) {
+		if ((x >= Float16( 0, this->getExponent(), mant).calcX()) and (x <= Float16( 0, this->getExponent(), mant + 20).calcX())) {
 			return mant;
 		}
 	}
