@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include "Float16.h"
-#include "Float32.h"
+#include "Float16.h"
 
 
 Float16::Float16(int s, int e, int m) : sign(s), exponent(e), mantissa(m) {
@@ -43,9 +43,9 @@ int Float16::getExponent_bits() {
 
 double Float16::calcX() {
 	if (this->getExponent() == 0) {
-		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * 1.0 * (this->mantissa / pow(this->base, this->mantissa_bits));
+		return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (this->mantissa / pow(this->base, this->mantissa_bits));
 	}
-	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * 1.0 * (1.0 + this->mantissa / pow(this->base, this->mantissa_bits));
+	return pow(-1, this->sign) * pow(this->base, (this->exponent - this->bias)) * (1 + this->mantissa / pow(this->base, this->mantissa_bits));
 }
 
 // denormalisiert, sonst +1 für exp > 0
@@ -57,91 +57,99 @@ int Float16::berechneMantisseBinärwert(double dezimalwert) {
 	return (int)(dezimalwert * pow(this->base, this->mantissa_bits));
 }
 
-Float32 Float16::convert_to_Float32() {
-	Float32 fl32(0, 0, 0); // Instanziiert, um Bias und Base als Rückgabe zu erhalten, übersichtliche Berechnung der Werte, 
-	// ginge auch schneller mit Übergabe der Formeln im Setter
-	int exponent = this->getExponent() - this->getBias() + fl32.getBias();
-	int mantissa = (int)(this->getMantissa() * pow(fl32.getBase(), fl32.getMantissa_bits()) / pow(this->getBase(), this->getMantissa_bits()));
 
-	fl32.setSign(this->getSign());
-	fl32.setExponent(exponent);
-	fl32.setMantissa(mantissa);
-
-	return fl32;
+Float16 Float16::plus_different_operator(Float16 a) {
+	if (this->getSign() == 1) { // -this + a = a - (+this)
+		// std::cout << "plus case 1";
+		return a.operator-(Float16(0, this->getExponent(), this->getMantissa()));
+	}
+	if (a.getSign() == 1) { // this + (-a) = this - (+a)
+		// std::cout << "plus case 2";
+		return this->operator-(Float16(0, a.getExponent(), a.getMantissa()));
+	}
+	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
 }
-
 
 // todo: funktioniert, aber einmal beim Testen trat auf, dass Mantisse um 1 zu niedrig war (Rundungsfehler?)
 // Tests schreiben?
 // Vorzeichen muss bei beiden Summanden gleich sein (Implementierung von Addition einer negativen Zahl über operator-)
 // ::floor führt zu Abweichungen der Mantisse, weil es nicht das Runden der realen Hardware wiederspiegelt.
-// sollte aber genau genug sein. Bei Float16 macht sich das bermerkbar, bei Float32 aber wahrscheinlich nur noch minimal
+// sollte aber genau genug sein. Bei Float16 macht sich das bermerkbar, bei Float16 aber wahrscheinlich nur noch minimal
 // ggf ist dazu eine weitere Logik mit ::ceil einzuführen, aber nach aktueller Überlegutn geht das Runden nur 
 // sinnvoll, wenn man die letzten Bit kennt
 Float16 Float16::operator+(Float16 a) {
-	int one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
-	int mantissa = 0;
+	unsigned long long one_dot = (unsigned long long)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
+	unsigned long long mantissa = 0;
 	int exponent = 0;
 	int sign = this->getSign();
 
+	// this->printAttributes();
+	// a.printAttributes();
+	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
+
 	if (this->getSign() != a.getSign()) {
-		if (this->getSign() == 1) { // -this + a = a - (+this)
-			return a.operator-(Float16(0, this->getExponent(), this->getMantissa()));
-		}
-		if (a.getSign() == 1) { // this + (-a) = this - (+a)
-			return this->operator-(Float16(0, a.getExponent(), a.getMantissa()));
-		}
-		throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+		return this->plus_different_operator(a);
 	}
+
+	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
 	// Exponentenverschiebung (für Mantissen)
 	int shift = this->getExponent() - a.getExponent();
+
+	unsigned long long bit_shift = (unsigned long long)pow(this->base, abs(shift));
 
 	if (shift < 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
 			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::floor((this->getMantissa()) / pow(2, abs(shift))) + a.getMantissa() + one_dot;
+			mantissa = std::round((this->getMantissa()) * 1.0 / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
 			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = std::floor((this->getMantissa() + one_dot) / pow(2, abs(shift))) + a.getMantissa() + one_dot;
+			mantissa = std::round((this->getMantissa() * 1.0 + one_dot) / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
-
 	}
 	if (shift > 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift))) + this->getMantissa() + one_dot;
+			mantissa = std::round((a.getMantissa() * 1.0) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
 			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift))) + this->getMantissa() + one_dot;
+			mantissa = std::round((a.getMantissa() * 1.0 + one_dot) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	if (shift == 0) {
@@ -150,32 +158,31 @@ Float16 Float16::operator+(Float16 a) {
 		if (this->getExponent() == 0 and a.getExponent() == 0) {
 			mantissa = this->getMantissa() + a.getMantissa();
 			exponent = this->getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 				// std::cout << '\n' << " == 0" << '\n';
 			}
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
 			mantissa = this->getMantissa() + one_dot + a.getMantissa() + one_dot;
 			exponent = this->getExponent();
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
+				mantissa = (int)std::round(mantissa / 2.0);
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
-	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float16(sign, exponent, mantissa);
 }
 
-// ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
-// damit es übersichtlicher wird, aber vermutlich dadurch Performanz schlechter
-// 
-// nur "+this - (+a)" wird hier in der Methode berechnet, alle anderen Fälle werden übergeben
-Float16 Float16::operator-(Float16 a) {
-	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
+
+Float16 Float16::minus_different_operator(Float16 a) {
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
 		// std::cout << "this - (-a) = this + a" << '\n';
 		return this->operator+(Float16(0, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
@@ -188,14 +195,29 @@ Float16 Float16::operator-(Float16 a) {
 		// std::cout << "- this - (+a) = - this + (-a)" << '\n';
 		return this->operator+(Float16(1, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
+	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+}
 
-	int one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
-	int mantissa = 0;
+// ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
+// damit es übersichtlicher wird, aber vermutlich dadurch Performanz schlechter
+// 
+// nur "+this - (+a)" wird hier in der Methode berechnet, alle anderen Fälle werden übergeben
+Float16 Float16::operator-(Float16 a) {
+	// Fälle mit Vorzeichenkombinationen, die andere Methoden, oder die Methode anders aufrufen
+	if (!(this->getSign() == 0 and a.getSign() == 0)) {
+		return this->minus_different_operator(a);
+	}
+
+	unsigned long long one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
+	unsigned long long mantissa = 0;
 	int exponent = 0;
 
+	// std::cout << "this sign: "<< this->getSign() << " a sign: "<< a.getSign() << '\n';
 
 	// Exponentenverschiebung (für Mantissen)
 	int shift = this->getExponent() - a.getExponent();
+
+	// std::cout << "a Exponent " << a.getExponent() << " this Exponent " << this->getExponent() << '\n';
 
 	// Vorzeichen:
 	int sign = 0;
@@ -207,96 +229,120 @@ Float16 Float16::operator-(Float16 a) {
 			sign = 1;
 		}
 	}
+	// std::cout << "a Mantisse " << a.getMantissa() << " this Mantisse " << this->getMantissa() << '\n';
 	// std::cout << "Sign = " << sign << '\n';
 
 	if (shift < 0) {
+		// std::cout << "a groesser, Shift = " << shift << '\n';
+
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
-			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = (a.getMantissa() + one_dot) - std::floor((this->getMantissa()) / pow(2, abs(shift)));
+			mantissa = (a.getMantissa() + one_dot) - std::round((this->getMantissa()) / pow(2, abs(shift)));
 			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
+			// std:cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			while (mantissa <= (one_dot)) {
+				mantissa *= 2;
+				exponent--;
+				// std::cout << '\n' << " == 0" << '\n';
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std:cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			// std::cout << "a groesser, Shift = " << shift << '\n';
-			mantissa = (a.getMantissa() + one_dot) - std::floor((this->getMantissa() + one_dot) / pow(2, abs(shift)));
+			mantissa = (a.getMantissa() + one_dot) - std::round((this->getMantissa() + one_dot) / pow(2, abs(shift)));
 			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
+			// std:cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			while (mantissa <= (one_dot)) {
+				mantissa *= 2;
+				exponent--;
+				// std::cout << '\n' << " == 0" << '\n';
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std:cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	if (shift > 0) {
+		// std::cout << "a kleiner, Shift = " << shift << '\n';
+
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
-			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = (this->getMantissa() + one_dot) - std::floor((a.getMantissa()) / pow(2, abs(shift)));
+			// std::cout << "if " << '\n';
+			mantissa = (this->getMantissa() + one_dot) - std::round((a.getMantissa()) / pow(2, abs(shift)));
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
+			while (mantissa <= (one_dot)) {
+				mantissa *= 2;
+				exponent--;
+				// std::cout << '\n' << " == 0" << '\n';
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			// std::cout << "a kleiner, Shift = " << shift << '\n';
-			mantissa = (this->getMantissa() + one_dot) - std::floor((a.getMantissa() + one_dot) / pow(2, abs(shift)));
+			// std::cout << "else " << '\n';
+			mantissa = (this->getMantissa() + one_dot) - std::round((a.getMantissa() + one_dot) / pow(2, abs(shift)));
 			exponent = this->getExponent();
 			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-			while (mantissa >= (2 * one_dot)) {
-				mantissa /= 2;
-				exponent++;
+			while (mantissa <= (one_dot)) {
+				mantissa *= 2;
+				exponent--;
+				// std::cout << '\n' << " == 0" << '\n';
 			}
+			/*
+			if (mantissa < one_dot) {
+				mantissa += one_dot;
+				exponent--;
+			}
+			*/			// std::cout << "Vor " << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+			// std::cout << "Nach " << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+
+
 		}
 	}
 	if (shift == 0) {
 		// std::cout << "kein Shift, Shift = " << shift << '\n';
 		// Mantisse: this > a
 		if (this->getMantissa() > a.getMantissa()) { // Zahlen sortieren, dass von größerer Mantisse die kleinere abgezogen wird
+			// std::cout << "this > a" << '\n';
 			if (this->getExponent() == 0 and a.getExponent() == 0) {
+				std::cout << "== 0" << '\n';
 				mantissa = this->getMantissa() - a.getMantissa();
 				exponent = this->getExponent();
-				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-				while (mantissa >= (2 * one_dot)) {
-					mantissa /= 2;
-					exponent++;
+				std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+				while (mantissa <= (one_dot)) {
+					mantissa *= 2;
+					exponent--;
 					// std::cout << '\n' << " == 0" << '\n';
 				}
 			}
 			else {
+				//std::cout << "this < a" << '\n';
 				mantissa = (this->getMantissa() + one_dot) - (a.getMantissa() + one_dot);
 				exponent = this->getExponent();
 				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-				while (mantissa >= (2 * one_dot)) {
-					mantissa /= 2;
-					exponent++;
+				while (mantissa <= (one_dot)) {
+					mantissa *= 2;
+					exponent--;
+					// std::cout << '\n' << " == 0" << '\n';
 				}
+
 				mantissa -= one_dot; // 1. wieder von Mantisse abziehen
+
+
 			}
 		}
-		// Mantisse: a > this
+		// Mantisse: a < this
 		if (this->getMantissa() < a.getMantissa()) { // Zahlen sortieren, dass von größerer Mantisse die kleinere abgezogen wird
+			// std::cout << "this < a" << '\n';
 			if (this->getExponent() == 0 and a.getExponent() == 0) {
+				// std::cout << "== 0" << '\n';
 				mantissa = a.getMantissa() - this->getMantissa();
 				exponent = this->getExponent();
 				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-				while (mantissa >= (2 * one_dot)) {
-					mantissa /= 2;
-					exponent++;
+				while (mantissa <= (one_dot)) {
+					mantissa *= 2;
+					exponent--;
 					// std::cout << '\n' << " == 0" << '\n';
 				}
 			}
@@ -304,21 +350,32 @@ Float16 Float16::operator-(Float16 a) {
 				mantissa = (a.getMantissa() + one_dot) - (this->getMantissa() + one_dot);
 				exponent = this->getExponent();
 				// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
-				while (mantissa >= (2 * one_dot)) {
-					mantissa /= 2;
-					exponent++;
+				while (mantissa <= (one_dot)) {
+					mantissa *= 2;
+					exponent--;
+					// std::cout << '\n' << " == 0" << '\n';
 				}
 				mantissa -= one_dot; // 1. wieder von Mantisse abziehen
 			}
 		}
 	}
 	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	if (exponent > 256) {
+		std::cout << '\n' << "Exponent mit falschem Wert!" << '\n';
+		std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	}
+	if (mantissa > one_dot) {
+		std::cout << '\n' << "Mantisse mit falschem Wert!" << '\n';
+		std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	}
+
+
 	return Float16(sign, exponent, mantissa);
 }
 
 Float16 Float16::operator*(Float16 a) {
-	int one_dot = (int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
-	int mantissa = 0;
+	unsigned long long one_dot = (long long int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
+	unsigned long long mantissa = 0;
 	int exponent = 0;
 	int sign = 0;
 
@@ -330,17 +387,17 @@ Float16 Float16::operator*(Float16 a) {
 	// Exponent berechnen
 	exponent = this->getExponent() + a.getExponent() - this->getBias();
 
-	// std::cout << "Exponent = " << exponent << " exp_1 = " << this->getExponent() << " exp_2 = " << a.getExponent() << '\n';
+	// std:cout << "Exponent = " << exponent << " exp_1 = " << this->getExponent() << " exp_2 = " << a.getExponent() << '\n';
 
 	// Mantisse berechnen
 	if (this->getExponent() == 0 and a.getExponent() == 0) {
 		mantissa = 0; // Wert ist für die Darstellung zu klein
 	}
 	else if (this->getExponent() == 0) {
-		// std::cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
+		// std:cout << "A Mantisse = " << a.getMantissa() << " this Mantisse = " << this->getMantissa() << '\n';
 		mantissa = this->getMantissa() * (a.getMantissa() + one_dot);
-		mantissa = std::floor(mantissa / one_dot);
-		// std::cout << "Mantisse = " << mantissa << '\n';
+		mantissa = std::round(mantissa / one_dot);
+		// std:cout << "Mantisse = " << mantissa << '\n';
 		// Komma verschieben, bis Mantisse größer 0,5 (512)
 		mantissa *= 2;
 		exponent--;
@@ -351,8 +408,8 @@ Float16 Float16::operator*(Float16 a) {
 	}
 	else if (a.getExponent() == 0) {
 		mantissa = (this->getMantissa() + one_dot) * a.getMantissa();
-		mantissa = std::floor(mantissa / one_dot);
-		// std::cout << "Mantisse = " << mantissa << '\n';
+		mantissa = std::round(mantissa / one_dot);
+		// std:cout << "Mantisse = " << mantissa << '\n';
 		// Komma verschieben, bis Mantisse größer 0,5 (512)
 		mantissa *= 2;
 		exponent--;
@@ -362,34 +419,35 @@ Float16 Float16::operator*(Float16 a) {
 		}
 	}
 	else {
-		// std::cout << "Mantissenberechnung Standard " << '\n';
+		// std:cout << "Mantissenberechnung Standard " << '\n';
 		mantissa = (this->getMantissa() + one_dot) * (a.getMantissa() + one_dot);
-		mantissa = std::ceil(mantissa / one_dot);
-		// std::cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
+		// std:cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
+		mantissa = std::round(mantissa / one_dot);
+		// std:cout << "Mantisse = " << mantissa << " vor Nachberechnung " << '\n';
 		while (mantissa >= (2 * one_dot)) { // Schleife eigentlich irrelevant, weil Wert nie größer 2 * one_dot wird
 			mantissa /= 2;
 			exponent++;
-			// std::cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
+			// std:cout << "Mantisse = " << mantissa << " in Nachberechnung " << '\n';
 		}
-		// std::cout << "Mantisse = " << mantissa << " nach Nachberechnung " << '\n';
+		// std:cout << "Mantisse = " << mantissa << " nach Nachberechnung " << '\n';
 		if (exponent < 0) {
 			mantissa /= 2; // Mantisse wieder normalisieren (1. vorne wegnehmen)
 		}
 		else {
 			mantissa -= one_dot;
 		}
-		// std::cout << "Mantisse = " << mantissa << " Endergebnis " << '\n';
+		// std:cout << "Mantisse = " << mantissa << " Endergebnis " << '\n';
 	}
 	// bei negativem Exponenten normalisieren
 	if (exponent < 0) {
 		while (exponent < 0) {
-			mantissa = std::ceil(mantissa / 2);
+			mantissa = std::round(mantissa / 2);
 			exponent++;
 			// std::cout << "Mantisse = " << mantissa << " in Exponent normalisieren " << '\n';
 			// std::cout << "Exponent = " << exponent << " in Exponent normalisieren " << '\n';
 		}
 	}
-	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
+	// std:cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Float16(sign, exponent, mantissa);
 }
 
@@ -514,6 +572,10 @@ Float16 Float16::convert_to_Float16(long double x) {
 	result.convert_setSign(x);
 	result.setExponent(result.convert_findExponent(x));
 	result.setMantissa(result.convert_findMantissa(x, steps));
+	if (result.getMantissa() >= 1024) {
+		result.setMantissa(result.getMantissa() - 1024);
+		result.setExponent(result.getExponent() + 1);
+	}
 	return result;
 }
 
@@ -528,7 +590,7 @@ void Float16::convert_setSign(long double x) {
 
 int Float16::convert_findExponent(long double x) {
 	x = abs(x);
-	for (int exp = 0; exp <= 32; exp++) {
+	for (int exp = 0; exp <= 16; exp++) {
 		if ((x >= Float16(0, exp, 0).calcX()) and (x <= Float16(0, exp, 1024).calcX())) {
 			return exp;
 		}

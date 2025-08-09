@@ -10,7 +10,7 @@
 
 class LogisticmapCalc {
 public:
-    int i = 20'000;
+    int i = 10'000;
     long double r = 3.9;
     long double s = 0.1;
     long double start_step = 0.1;

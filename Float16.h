@@ -11,6 +11,9 @@ public:
 
 	double calcX();
 
+	Float16 plus_different_operator(Float16 a);
+	Float16 minus_different_operator(Float16 a);
+
 	Float16 operator+(Float16 a);
 	Float16 operator-(Float16 a);
 	Float16 operator*(Float16 a);

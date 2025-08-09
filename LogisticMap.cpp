@@ -111,21 +111,18 @@ int main()
 	}
 	*/
 
-	std::vector<double> s = { 0.01, 0.08, 0.13, 0.25, 0.33, 0.41, 0.5 };
-	std::vector<double> r = { 3.8, 3.89, 3.92, 3.985, 3.99, 4.0 };
+	std::vector<double> s_ = { 0.01, 0.08, 0.13, 0.25, 0.33, 0.41, 0.5 };
+	std::vector<double> r_ = { 3.8, 3.89, 3.92, 3.985, 3.99, 4.0 };
 
-	for (const auto& r_value : r) {
-		for (const auto& start : s) {
-			Logisticmap_float fl(start, r_value);
-			std::cout << "Float, ";
-			fl.list_screen_csv(fl.get_long_double_List());
 
-			Logisticmap_float16 fl16(start, r_value);
+	for (const auto& r : r_) {
+		for (const auto& start : s_) {
+			
+
+			Logisticmap_float16 fl16(start, r);
 			std::cout << "Float16, ";
 			fl16.list_screen_csv(fl16.get_long_double_List());
-
 		}
-
 	}
 	
 	/*

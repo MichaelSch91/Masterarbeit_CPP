@@ -16,10 +16,8 @@ Logisticmap_float16::Logisticmap_float16() {
 Logisticmap_float16::Logisticmap_float16(double s, double r) {
 	this->s = Float16::convert_to_Float16(s);
 	this->r = Float16::convert_to_Float16(r);
-	this->s.printAttributes();
-	std::cout << s << " = " << this->s.calcX() << '\n';
-	std::cout << r << " = " << this->r.calcX() << '\n';
-	this->r.printAttributes();
+	//this->s.printAttributes();
+	//this->r.printAttributes();
 	this->list = logistischeAbbildungFloat16();
 	this->long_double_list = cast_list(this->list);
 }
@@ -73,7 +71,7 @@ Float16 Logisticmap_float16::logistischeAbbildungRechnerFloat16(Float16 x, Float
 	// std::cout << "Double (1-x) =  " << (Float16(0, 127, 0).calcX() - x.calcX())<< " Float16 (1-x) = " << (Float16(0, 127, 0)-x).calcX() << '\n';
 	// std::cout << "Double r*x =  " << this->getR().calcX() * x.calcX() << " Float16 r*x = " << (this->getR() * x).calcX() << '\n';
 
-	std::cout << "x = " << (r * x * (Float16(0, 15, 0) - x)).calcX() << '\n';
+	// std::cout << "x = " << (r * x * (Float16(0, 15, 0) - x)).calcX() << '\n';
 	return r * x * (Float16(0, 15, 0) - x);
 }
 
