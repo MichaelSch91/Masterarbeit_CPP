@@ -166,26 +166,20 @@ Default32squarerootOverlapping Default32squarerootOverlapping::operator+(Default
 	int exponent = 0;
 	int sign = this->getSign();
 
-	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
 	// Vorzeichen
 	// 
-	// pr�fen und ggf. an anderen Operator �bergeben
+	// prüfen und ggf. an anderen Operator übergeben
 	if (this->getSign() != a.getSign()) {
 		return this->plus_different_operator(a);
 	}
-
-	// std::cout << "Plus Operator; this sign: " << this->getSign() << " a sign: " << a.getSign() << " Sign = " << sign << '\n';
 
 	// Exponentenverschiebung
 	// 
 	// zur Bestimmung der Menge an Rechtsverschiebungen und zur Bestimmung welche Zahl gr��er ist (this > a => shift > 0)
 	int shift = this->getExponent() - a.getExponent();
-	// Verschiebung der Mantisse ( -> Mantisse/bit_shift = Mantissenwert f�r die Rechtsverschiebung um ein Bit)
-	long double bit_shift = pow(sqrt(this->base), abs(shift)); // todo: das muss noch nachgebessert werden
-
-	// std::cout << "Shift = " << shift << '\n';
-
+	// Verschiebung der Mantisse ( -> Mantisse/bit_shift = Mantissenwert für die Rechtsverschiebung um ein Bit)
+	long double bit_shift = pow(sqrt(this->base), abs(shift));
 
 	// Berechnung
 	//
@@ -193,86 +187,68 @@ Default32squarerootOverlapping Default32squarerootOverlapping::operator+(Default
 	if (shift < 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0) {
-			// std::cout << "a groesser, Shift = " << shift << '\n';
 			mantissa = std::round((this->getMantissa()) / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			// std::cout << "a groesser, Shift = " << shift << '\n';
 			mantissa = std::round((this->getMantissa() + one_dot) / bit_shift) + a.getMantissa() + one_dot;
 			exponent = a.getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
+
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	// this > a
 	if (shift > 0) {
 		// denormalisierte Mantisse (Exponent = 0)
 		if (a.getExponent() == 0) {
-			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
-			// std::cout << "a kleiner, Shift = " << shift << '\n';
 			mantissa = std::round((a.getMantissa() + one_dot) / bit_shift) + this->getMantissa() + one_dot;
 			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
 	// this.expoent == a.exponent
 	if (shift == 0) {
-		// std::cout << "kein Shift, Shift = " << shift << '\n';
 		// denormalisierte Mantisse (Exponent = 0)
 		if (this->getExponent() == 0 and a.getExponent() == 0) {
 			mantissa = this->getMantissa() + a.getMantissa();
 			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
-				// std::cout << '\n' << " == 0" << '\n';
 			}
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 		else {
 			mantissa = this->getMantissa() + one_dot + a.getMantissa() + one_dot;
 			exponent = this->getExponent();
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 			while (mantissa >= (2 * one_dot)) {
 				mantissa /= 2;
 				exponent++;
 			}
 			mantissa -= one_dot; // 1. wieder von Mantisse abziehen
-			// std::cout << "Mantisse = " << mantissa << " Exponent = " << exponent << '\n';
 		}
 	}
-	// std::cout << "Exponent = " << exponent << " Mantisse = " << mantissa << '\n';
 	return Default32squarerootOverlapping(sign, exponent, mantissa);
 }
 

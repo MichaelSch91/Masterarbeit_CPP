@@ -173,25 +173,16 @@ int Default32squareroot::convert_mantissaValue_to_memoryDecimal_denormalized(lon
 
 Default32squareroot Default32squareroot::plus_different_operator(Default32squareroot a) {
 	if (this->getSign() == 1) { // -this + a = a - (+this)
-		// std::cout << "plus case 1";
 		return a.operator-(Default32squareroot(0, this->getExponent(), this->getMantissa()));
 	}
 	if (a.getSign() == 1) { // this + (-a) = this - (+a)
-		// std::cout << "plus case 2";
 		return this->operator-(Default32squareroot(0, a.getExponent(), a.getMantissa()));
 	}
-	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
+	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnten nicht ermittelt werden.");
 }
 
-// todo: funktioniert, aber beim Testen tritt auf, dass Mantisse um +-1 zu niedrig/ hoch ist (Rundungsfehler?)
-// ::round (sollte das Runden des Rechenwerks eigentlich ganz gut darstellen?) führt zu Abweichungen der Mantisse,
-// ::floor (äquivalent zum simplen Abschneiden der nicht mehr speicherbaren Bit durch das Rechenwerk) führt ebenfalls zu Abweichungen der Mantisse,
-// ggf ist eine Logik mit ::ceil und ::floor einzuführen
 Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	this->operatorBaseCheck(a);
-	int exponent = 0;
-	int sign = this->getSign();
-	std::tuple<int, int> exp_mant;
 
 	// Vorzeichen
 	// 
@@ -199,6 +190,9 @@ Default32squareroot Default32squareroot::operator+(Default32squareroot a) {
 	if (this->getSign() != a.getSign()) {
 		return this->plus_different_operator(a);
 	}
+
+	int sign = this->getSign();
+	std::tuple<int, int> exp_mant;
 
 	exp_mant = this->plus_operator_calc(a);
 
@@ -237,23 +231,17 @@ std::tuple<int, int> Default32squareroot::plus_operator_mantissa_overflowcalc(in
 
 Default32squareroot Default32squareroot::minus_different_operator(Default32squareroot a) {
 	if (this->getSign() == 0 and a.getSign() == 1) { // this - (-a) = this + a
-		// std::cout << "this - (-a) = this + a" << '\n';
 		return this->operator+(Default32squareroot(0, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	if (this->getSign() == 1 and a.getSign() == 1) { // - this - (-a) = a + (-this)
-		// std::cout << "- this - (-a) = a - this" << '\n';
 		return Default32squareroot(0, a.getExponent(), a.getMantissa()).operator+(*this); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	if (this->getSign() == 1 and a.getSign() == 0) { // - this - (+a) = - this + (-a)
-		// std::cout << "- this - (+a) = - this + (-a)" << '\n';
 		return this->operator+(Default32squareroot(1, a.getExponent(), a.getMantissa())); // neues Objekt, um Objekt a nicht zu verändern
 	}
 	throw std::invalid_argument("Vorzeichen und zugehöriger Operator konnte nicht ermittelt werden.");
 }
 
-// ggf. hier nur Fälle mit Vorzeichenkombinationen abarbeiten und an Methode "minus()" oder "plus()" übergeben
-// damit es übersichtlicher wird, aber vermutlich dadurch Performanz schlechter
-// 
 // nur "+this - (+a)" wird hier in der Methode berechnet, alle anderen Fälle werden übergeben
 Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 	this->operatorBaseCheck(a);
@@ -266,19 +254,14 @@ Default32squareroot Default32squareroot::operator-(Default32squareroot a) {
 		return Default32squareroot(this->getBase(), 0, 0, 0);
 	}
 
-	unsigned long long one_dot = (unsigned long long)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
-	int exponent = 0;
 	std::tuple<int, int> exp_mant;
-
-	// Exponentenverschiebung (für Mantissen)
-	int shift = this->getExponent() - a.getExponent();
 
 	// Vorzeichen:
 	int sign = 0;
-	if (shift < 0) {
+	if (a.getExponent() > this->getExponent()) {
 		sign = 1;
 	}
-	if (shift == 0) {
+	if (a.getExponent() == this->getExponent()) {
 		if (a.getMantissa() > this->getMantissa()) {
 			sign = 1;
 		}
@@ -308,11 +291,8 @@ std::tuple<int, int> Default32squareroot::minus_operator_calc(Default32squareroo
 }
 
 std::tuple<int, int> Default32squareroot::minus_operator_mantissa_overflowcalc(int exponent, double mantissa) {
-	if (mantissa == 0) {
-		if (exponent <= 0) {
-			return std::tuple<int, int>(0, 0);
-		}
-		return std::tuple<int, int>(exponent, 0);
+	if ((mantissa == 0) and (exponent <= 0)) {
+		return std::tuple<int, int>(0, 0);
 	}
 
 	while (mantissa < 1) {
@@ -320,7 +300,7 @@ std::tuple<int, int> Default32squareroot::minus_operator_mantissa_overflowcalc(i
 		exponent--;
 	}
 
-	if (exponent < 0) { // todo: multiplication_operator_normalize_exponent
+	if (exponent < 0) {
 		return std::tuple<int, int>(0, 0);
 	}
 
@@ -333,10 +313,6 @@ std::tuple<int, int> Default32squareroot::minus_operator_mantissa_overflowcalc(i
 
 Default32squareroot Default32squareroot::operator*(Default32squareroot a) {
 	this->operatorBaseCheck(a);
-
-	unsigned long long one_dot = (long long int)(pow(this->base, this->mantissa_bits)); // 1. vor der Mantisse // ggf. als Klassenvariable einfügen, damit die Berechnung entfällt
-	unsigned long long mantissa = 0;
-	int exponent = 0;
 	int sign = 0;
 	std::tuple<int, int> exp_mant;
 

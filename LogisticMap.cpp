@@ -109,7 +109,7 @@ int main()
 			zeitmessung_logmap_float(start, start_increment, r);
 		}
 	}
-	*/
+
 
 	std::vector<double> s_ = { 0.01, 0.08, 0.13, 0.25, 0.33, 0.41, 0.5 };
 	std::vector<double> r_ = { 3.8, 3.89, 3.92, 3.985, 3.99, 4.0 };
@@ -124,10 +124,10 @@ int main()
 			fl16.list_screen_csv(fl16.get_long_double_List());
 		}
 	}
-	
-	/*
+	*/
+
 	double START = 0.01;
-	double START_INCREMENT = 0.01;
+	double START_INCREMENT = 0.2;
 	double R_INCREMENT = 0.01;
 
 	double start = START;
@@ -136,9 +136,6 @@ int main()
 	while (r < 4) {
 		while (start < 1.0) {
 
-			Logisticmap_float fl(start, r);
-			std::cout << "Float, ";
-			fl.list_screen_csv(fl.get_long_double_List());
 			
 			
 			Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, start), Default32squareroot::convert_to_Default32squareroot(2, r));
@@ -146,17 +143,22 @@ int main()
 			logMap.list_screen_csv();
 
 
+			/*
+			Logisticmap_float fl(start, r);
+			std::cout << "Float, ";
+			fl.list_screen_csv(fl.get_long_double_List());
+
 			Logisticmap_double d(start, r);
 			std::cout << "Double, ";
 			d.list_screen_csv(d.get_long_double_List());
-			
+			*/
 			start += START_INCREMENT;
 		}
 		start = START;
 		r += R_INCREMENT;
 		std::cout << '\n' << '\n';
 	}
-	*/
+
 
 	std::cout << '\n' << "End" << '\n';
 }

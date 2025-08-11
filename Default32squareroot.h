@@ -58,8 +58,6 @@ public:
 	Default32squareroot operator+(Default32squareroot a);
 	std::tuple<int, int> plus_operator_calc(Default32squareroot a);
 	std::tuple<int, int> plus_operator_mantissa_overflowcalc(int exponent, double mantissa_decimal);
-	// m1 ist die Mantisse mit dem größerem Exponenten (shift wird auf m2 angewendet), exp ist der aktuelle Exponent (in operator+ gespeichert / der größere)
-	// returns tuple mit <int exponent, int mantisse>
 	
 	Default32squareroot operator-(Default32squareroot a);
 	std::tuple<int, int> minus_operator_calc(Default32squareroot a);
