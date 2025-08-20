@@ -155,22 +155,20 @@ int main()
 		std::cout << '\n' << '\n';
 	}
 	*/
-	double MAX = 1'000'000.0;
+	double MAX = 100'000.0;
 
-	long double x = 100000;
+	long double x = 30000;
 	long double highest_value = 1.0;
-	long double first_value = 50'000.0;
+	long double first_value = MAX;
 	Default32squareroot result(2,0,126,0);
 
-	// Auslöschung klassisch x−sqrt(x^2+1)
+	// Auslöschung x−sqrt(x^2+1)
 
 	while (x < MAX) {
 		Default32squareroot d = Default32squareroot::convert_to_Default32squareroot(2, x);
 		Default32squareroot d_incr = Default32squareroot::convert_to_Default32squareroot(2, sqrt(x * x + 1.0));
-
-		if (d != d_incr) {
-			d.printAttributes();
-			d_incr.printAttributes();
+		result = d - d_incr;
+		if (result != Default32squareroot(2, 0, 0, 0)) {
 			std::cout << x << '\n';
 			highest_value = x;
 			std::cout << result.calcX() << '\n';
