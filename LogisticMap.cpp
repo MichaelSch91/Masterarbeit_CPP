@@ -124,7 +124,7 @@ int main()
 			fl16.list_screen_csv(fl16.get_long_double_List());
 		}
 	}
-	*/
+	
 
 	double START = 0.01;
 	double START_INCREMENT = 0.2;
@@ -135,15 +135,11 @@ int main()
 
 	while (r < 4) {
 		while (start < 1.0) {
-
-			
 			
 			Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, start), Default32squareroot::convert_to_Default32squareroot(2, r));
 			std::cout << "squareroot, ";
 			logMap.list_screen_csv();
 
-
-			/*
 			Logisticmap_float fl(start, r);
 			std::cout << "Float, ";
 			fl.list_screen_csv(fl.get_long_double_List());
@@ -151,13 +147,60 @@ int main()
 			Logisticmap_double d(start, r);
 			std::cout << "Double, ";
 			d.list_screen_csv(d.get_long_double_List());
-			*/
+
 			start += START_INCREMENT;
 		}
 		start = START;
 		r += R_INCREMENT;
 		std::cout << '\n' << '\n';
 	}
+	*/
+	double MAX = 1'000'000.0;
+
+	long double x = 100000;
+	long double highest_value = 1.0;
+	long double first_value = 50'000.0;
+	Default32squareroot result(2,0,126,0);
+
+	// Auslöschung klassisch x−sqrt(x^2+1)
+
+	while (x < MAX) {
+		Default32squareroot d = Default32squareroot::convert_to_Default32squareroot(2, x);
+		Default32squareroot d_incr = Default32squareroot::convert_to_Default32squareroot(2, sqrt(x * x + 1.0));
+
+		if (d != d_incr) {
+			d.printAttributes();
+			d_incr.printAttributes();
+			std::cout << x << '\n';
+			highest_value = x;
+			std::cout << result.calcX() << '\n';
+		}
+		else {
+			if (first_value > x) {
+				first_value = x;
+				std::cout << first_value << '\n';
+			}
+		}
+		x += 0.1;
+	}
+
+	std::cout <<highest_value << '\n';
+
+	/*
+	float f = 0;
+	float result_float = 1.0;
+	float highest_value = 1.0;
+	while (f < MAX) {
+		result_float = f - sqrt(f * f + 1);
+		if (result_float != 0) {
+			std::cout << f << '\n';
+			highest_value = f;
+		}
+		f += 0.1;
+	}
+	std::cout << highest_value << '\n';
+	*/
+	// Auslöschung Mantisse +1
 
 
 	std::cout << '\n' << "End" << '\n';
