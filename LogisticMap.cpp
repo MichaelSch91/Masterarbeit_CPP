@@ -90,10 +90,99 @@ static void logMap_default32squareroot(double s, double start_increment, double 
 	std::cout << '\n' << '\n';
 }
 
+static float newtonVerfahren_float(long double a, long double s, int iterations) {
+	float x = s; // Startwert
+	float radikand = a;
+	for (int i = 0; i <= iterations; i++) {
+		x = (x + radikand / x) / 2.0f;
+	}
+	return x;
+}
+
+static long double newtonVerfahren_long_double(long double a, long double s, int iterations) {
+	long double x = s; // Startwert
+	for (int i = 0; i <= iterations; i++) {
+		x = (x + a / x) / 2.0;
+	}
+	return x;
+}
+
+static Default32squareroot newtonVerfahren_Default32squareroot(long double a, long double s, int iterations) {
+	Default32squareroot x = Default32squareroot::convert_to_Default32squareroot(2, s); // Startwert
+	Default32squareroot radikand = Default32squareroot::convert_to_Default32squareroot(2, a);
+	Default32squareroot zwei = Default32squareroot(2, 0, 129, 0);
+	for (int i = 0; i <= iterations; i++) {
+		x = (x + radikand / x) / zwei;
+	}
+	return x;
+}
+
+static void newtonVerfahren_Vergleich(long double a, long double s, int iterations, long double max) {
+	int counter_float = 0;
+	int counter_sqrt2 = 0;
+	int counter_equal = 0;
+
+	while (a <= max) {
+		if (abs((long double)newtonVerfahren_float(a, s, iterations) - newtonVerfahren_long_double(a, s, iterations)) < abs(newtonVerfahren_Default32squareroot(a, s, iterations).calcX() - newtonVerfahren_long_double(a, s, iterations))) {
+			//std::cout << "Float ist besser" << '\n';
+			counter_float++;
+		}
+		else if (abs((long double)newtonVerfahren_float(a, s, iterations) - newtonVerfahren_long_double(a, s, iterations)) == abs(newtonVerfahren_Default32squareroot(a, s, iterations).calcX() - newtonVerfahren_long_double(a, s, iterations))) {
+			//std::cout << "beide gleich" << '\n';
+			counter_equal++;
+		}
+		else {
+			//std::cout << "Sqrt2 ist besser" << '\n';
+			counter_sqrt2++;
+		}
+		a += 1.0;
+	}
+	std::cout << iterations <<"Iterationen: ";
+	std::cout << "Float: " << counter_float << " Sqrt2: " << counter_sqrt2 << " gleich: " << counter_equal << '\n';
+}
+
+static void newtonVerfahren_Vergleich_MathSqrt(long double a, long double s, int iterations, long double max) {
+	int counter_float = 0;
+	int counter_sqrt2 = 0;
+	int counter_equal = 0;
+
+	while (a <= max) {
+		if (abs((long double)newtonVerfahren_float(a, s, iterations) - sqrt(a)) < abs(newtonVerfahren_Default32squareroot(a, s, iterations).calcX() - sqrt(a))) {
+			//std::cout << "Float ist besser" << '\n';
+			counter_float++;
+		}
+		else if (abs((long double)newtonVerfahren_float(a, s, iterations) - sqrt(a)) == abs(newtonVerfahren_Default32squareroot(a, s, iterations).calcX() - sqrt(a))) {
+			//std::cout << "beide gleich" << '\n';
+			counter_equal++;
+		}
+		else {
+			//std::cout << "Sqrt2 ist besser" << '\n';
+			counter_sqrt2++;
+		}
+		a += 1.0;
+	}
+	std::cout << iterations << "Iterationen: ";
+	std::cout << "Float: " << counter_float << " Sqrt2: " << counter_sqrt2 << " gleich: " << counter_equal << '\n';
+}
+
 
 int main()
 {
 	std::cout << "Start" << '\n';
+
+	long double max = 101.0;
+
+	long double a = 2.0;
+	long double s = a;
+	std::vector<int> iterations = {16, 32, 64};
+
+	for (int i : iterations) {
+		std::cout << "Iterations: " << i << '\n';
+		if (i == 3 or i == 5) {
+			continue;
+		}
+		newtonVerfahren_Vergleich_MathSqrt(a, s, i, max);
+	}
 
 	/*
 	double start = 0.01;
@@ -117,14 +206,14 @@ int main()
 
 	for (const auto& r : r_) {
 		for (const auto& start : s_) {
-			
+
 
 			Logisticmap_float16 fl16(start, r);
 			std::cout << "Float16, ";
 			fl16.list_screen_csv(fl16.get_long_double_List());
 		}
 	}
-	
+
 
 	double START = 0.01;
 	double START_INCREMENT = 0.2;
@@ -135,7 +224,7 @@ int main()
 
 	while (r < 4) {
 		while (start < 1.0) {
-			
+
 			Logisticmap_Default32squareroot logMap(Default32squareroot::convert_to_Default32squareroot(2, start), Default32squareroot::convert_to_Default32squareroot(2, r));
 			std::cout << "squareroot, ";
 			logMap.list_screen_csv();
@@ -154,7 +243,7 @@ int main()
 		r += R_INCREMENT;
 		std::cout << '\n' << '\n';
 	}
-	*/
+
 	double MAX = 100'000.0;
 
 	long double x = 30000;
@@ -184,7 +273,7 @@ int main()
 
 	std::cout <<highest_value << '\n';
 
-	/*
+
 	float f = 0;
 	float result_float = 1.0;
 	float highest_value = 1.0;
@@ -198,7 +287,8 @@ int main()
 	}
 	std::cout << highest_value << '\n';
 	*/
-	// Auslöschung Mantisse +1
+
+
 
 
 	std::cout << '\n' << "End" << '\n';
