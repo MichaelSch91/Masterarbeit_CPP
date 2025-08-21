@@ -135,12 +135,6 @@ std::tuple<bool, Default32squareroot, int, int> Logisticmap_Default32squareroot:
 			break;
 		}
 	}
-
-	/*
-	if (has_duplicate) {
-		first_iteration = search_first_occurrence(list, value);
-	}
-	*/
 	return std::tuple<bool, Default32squareroot, int, int>(has_duplicate, value, first_iteration, last_iteration);
 }
 
