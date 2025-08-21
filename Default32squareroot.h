@@ -70,6 +70,8 @@ public:
 	std::tuple<int, int> multiplication_operator_normalize_exponent(int exponent, double mantissa_decimal);
 	int multiplication_operator_exponent_calc(Default32squareroot a);
 
+	Default32squareroot operator/(Default32squareroot a); // nur mit Konvertern
+
 	// Überprüfung des Ergebnisses der Rechenoperatoren 
 	// => wirft exception
 	void operatorResultCheck(int sign, std::tuple<int, int> exp_mant);

@@ -376,6 +376,35 @@ int Default32squareroot::multiplication_operator_exponent_calc(Default32squarero
 	return this->getExponent() + a.getExponent() - this->getBias();
 }
 
+Default32squareroot Default32squareroot::operator/(Default32squareroot a) {
+	this->operatorBaseCheck(a);
+	int sign = 0;
+	std::tuple<int, int> exp_mant;
+
+	// Vorzeichen bestimmen
+	if (this->getSign() != a.getSign()) {
+		sign = 1;
+	}
+
+	if (a == Default32squareroot(this->getBase(), 0, 0, 0)) {
+		throw std::invalid_argument("division durch 0!");
+	}
+
+	if (*this == Default32squareroot(this->getBase(), 0, 0, 0)) {
+		return Default32squareroot(this->getBase(), sign, 0, 0);
+	}
+
+	long double calc = this->calcX() / a.calcX();
+
+	Default32squareroot result = convert_to_Default32squareroot(2, calc);
+
+	exp_mant = std::tuple<int, int>(result.getExponent(), result.getMantissa());
+
+	this->operatorResultCheck(sign, exp_mant);
+
+	return result;
+}
+
 void Default32squareroot::operatorResultCheck(int sign, std::tuple<int, int> exp_mant) {
 	int exp = std::get<0>(exp_mant);
 	int mant = std::get<1>(exp_mant);
