@@ -165,12 +165,116 @@ static void newtonVerfahren_Vergleich_MathSqrt(long double a, long double s, int
 	std::cout << "Float: " << counter_float << " Sqrt2: " << counter_sqrt2 << " gleich: " << counter_equal << '\n';
 }
 
+static void operatorTest() {
+	std::vector<long double> values_1 = { 16, 32, 64 };
+	std::vector<long double> values_2 = { 16, 32, 64 };
+
+	operatorTestPlus(values_1, values_2);
+	operatorTestMinus(values_1, values_2);
+	operatorTestMultiply(values_1, values_2);
+}
+
+static void operatorTestPlus(std::vector<long double> values_1, std::vector<long double> values_2) {
+	int counter_float = 0;
+	int counter_sqrt2 = 0;
+	int counter_equal = 0;
+	
+	Default32squareroot sqrt_result(2, 0, 126, 0);
+	float fl_result = 0;
+	long double comparator = 0;
+	
+	for (int i = 0; i < values_1.size(); i++) {
+		sqrt_result = Default32squareroot::convert_to_Default32squareroot(2, values_1[i]) + Default32squareroot::convert_to_Default32squareroot(2, values_2[i]);
+		fl_result = (float)values_1[i] + (float)values_2[i];
+		comparator = values_1[i] + values_2[i];
+
+		if (abs((long double)fl_result - comparator) < abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "Float ist besser" << '\n';
+			counter_float++;
+		}
+		else if (abs((long double)fl_result - comparator) == abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "beide gleich" << '\n';
+			counter_equal++;
+		}
+		else {
+			//std::cout << "Sqrt2 ist besser" << '\n';
+			counter_sqrt2++;
+		}
+	}
+}
+
+static void operatorTestMinus(std::vector<long double> values_1, std::vector<long double> values_2) {
+	int counter_float = 0;
+	int counter_sqrt2 = 0;
+	int counter_equal = 0;
+
+	Default32squareroot sqrt_result(2, 0, 126, 0);
+	float fl_result = 0;
+	long double comparator = 0;
+
+	for (int i = 0; i < values_1.size(); i++) {
+		sqrt_result = Default32squareroot::convert_to_Default32squareroot(2, values_1[i]) - Default32squareroot::convert_to_Default32squareroot(2, values_2[i]);
+		fl_result = (float)values_1[i] - (float)values_2[i];
+		comparator = values_1[i] - values_2[i];
+
+		if (abs((long double)fl_result - comparator) < abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "Float ist besser" << '\n';
+			counter_float++;
+		}
+		else if (abs((long double)fl_result - comparator) == abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "beide gleich" << '\n';
+			counter_equal++;
+		}
+		else {
+			//std::cout << "Sqrt2 ist besser" << '\n';
+			counter_sqrt2++;
+		}
+	}
+}
+
+static void operatorTestMultiply(std::vector<long double> values_1, std::vector<long double> values_2) {
+	int counter_float = 0;
+	int counter_sqrt2 = 0;
+	int counter_equal = 0;
+
+	Default32squareroot sqrt_result(2, 0, 126, 0);
+	float fl_result = 0;
+	long double comparator = 0;
+
+	for (int i = 0; i < values_1.size(); i++) {
+		sqrt_result = Default32squareroot::convert_to_Default32squareroot(2, values_1[i]) * Default32squareroot::convert_to_Default32squareroot(2, values_2[i]);
+		fl_result = (float)values_1[i] * (float)values_2[i];
+		comparator = values_1[i] * values_2[i];
+
+		if (abs((long double)fl_result - comparator) < abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "Float ist besser" << '\n';
+			counter_float++;
+		}
+		else if (abs((long double)fl_result - comparator) == abs(sqrt_result.calcX() - comparator)) {
+			//std::cout << "beide gleich" << '\n';
+			counter_equal++;
+		}
+		else {
+			//std::cout << "Sqrt2 ist besser" << '\n';
+			counter_sqrt2++;
+		}
+	}
+}
+
 
 int main()
 {
 	std::cout << "Start" << '\n';
 
-	long double max = 101.0;
+
+	operatorTest();
+
+
+
+
+
+	/*
+	long double max = 5001.0;
 
 	long double a = 2.0;
 	long double s = a;
@@ -184,7 +288,7 @@ int main()
 		newtonVerfahren_Vergleich_MathSqrt(a, s, i, max);
 	}
 
-	/*
+	
 	double start = 0.01;
 	double start_increment = 0.01;
 	double r = 4.0;
